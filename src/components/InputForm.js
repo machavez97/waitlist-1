@@ -413,7 +413,7 @@ const InputForm = () => {
           <button type="button" className="add-child-button" onClick={addChildField}>Add Child</button>
         </div>
         <div>
-            <h2>Income Information</h2>
+            <h1>Income Information</h1>
           </div>
 
         <div className="Income">
@@ -424,7 +424,6 @@ const InputForm = () => {
         <table className="grid">
           <thead>
             <tr>
-              <th></th> {/* Empty cell for spacing */}
               <th>Wages</th>
               <th>Child Support</th>
               <th>Alimony</th>
@@ -435,24 +434,24 @@ const InputForm = () => {
           </thead>
           <tbody>
             <tr>
-              <td>Monthly/Weekly</td>
+              
               <td>
-                <input placeholder="$weekly/Monthly" type="text" className="input-box"/>
+                <input placeholder="$ Weekly/Monthly" type="text" className="input-box"/>
               </td>
               <td>
-                <input type="text" className="input-box"/>
+                <input placeholder="$ Weekly/Monthly" type="text" className="input-box"/>
               </td>
               <td>
-                <input type="text" className="input-box"/>
+                <input placeholder="$ Weekly/Monthly"type="text" className="input-box"/>
               </td>
               <td>
-                <input type="text" className="input-box"/>
+                <input placeholder="$ Weekly/Monthly"type="text" className="input-box"/>
               </td>
               <td>
-                <input type="text" className="input-box"/>
+                <input placeholder="$ Weekly/Monthly"type="text" className="input-box"/>
               </td>
               <td>
-                <input type="text" className="input-box"/>
+                <input placeholder="$ Weekly/Monthly"type="text" className="input-box"/>
               </td>
             </tr>
           </tbody>
@@ -463,7 +462,6 @@ const InputForm = () => {
         <table className="grid">
           <thead>
             <tr>
-              <th></th> {/* Empty cell for spacing */}
               <th>Wages</th>
               <th>Child Support</th>
               <th>Alimony</th>
@@ -474,24 +472,24 @@ const InputForm = () => {
           </thead>
           <tbody>
             <tr>
-              <td>Monthly/Weekly</td>
+              
               <td>
-                <input type="text" className="input-box"/>
+                <input placeholder="$ Weekly/Monthly"type="text" className="input-box"/>
               </td>
               <td>
-                <input type="text" className="input-box"/>
+                <input placeholder="$ Weekly/Monthly"type="text" className="input-box"/>
               </td>
               <td>
-                <input type="text" className="input-box"/>
+                <input placeholder="$ Weekly/Monthly"type="text" className="input-box"/>
               </td>
               <td>
-                <input type="text" className="input-box"/>
+                <input placeholder="$ Weekly/Monthly"type="text" className="input-box"/>
               </td>
               <td>
-                <input type="text" className="input-box"/>
+                <input placeholder="$ Weekly/Monthly"type="text" className="input-box"/>
               </td>
               <td>
-                <input type="text" className="input-box"/>
+                <input placeholder="$ Weekly/Monthly"type="text" className="input-box"/>
               </td>
             </tr>
           </tbody>
@@ -499,13 +497,43 @@ const InputForm = () => {
 
         {/* Notes */}
         <div>
+          <div>
           <label htmlFor="notes" className="input-label">
-            Notes:
+            If no income, please explain how household is supported:
           </label>
+          </div>
           <textarea id="notes" rows="4" cols="50"></textarea>
         </div>
           </div>
         </div>
+        
+        <div className="table2">
+  <div>
+    <label className="input-label">
+      <h5>Please indicate if you are enrolled in any of the qualifying programs listed below</h5>
+    </label>
+  </div>
+
+  <table className="grid">
+    <tr>
+      <th>CALWorks</th>
+      <th>CALFresh</th>
+      <th>WIC</th>
+    </tr>
+    <tr>
+      <td>
+        <input placeholder="Amount per month" type="text" className="input-box" />
+      </td>
+      <td>
+        <input placeholder="Amount per month" type="text" className="input-box" />
+      </td>
+      <td>
+        <input placeholder="Amount per month" type="text" className="input-box" />
+      </td>
+    </tr>
+  </table>
+</div>
+
       
 
       </div>
