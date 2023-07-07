@@ -3,7 +3,7 @@ import { collection, addDoc } from "firebase/firestore";
 import { db } from '../firebase';
 import "../App.css";
 
-const InputForm = ({}) => {
+const InputForm = () => {
   const [PfirstName, PsetFirstName] = useState("");
   const [PlastName, PsetLastName] = useState("");
   const [PphoneNumber, PsetPhoneNumber] = useState("");
@@ -27,12 +27,19 @@ const InputForm = ({}) => {
   const [StextOK, SsettextOK] = useState(false);
 
   const [children, setChildren] = useState([
-    { name: "", birthday: "", fullTime: false, iepIfsp: false, needCare: false },
+    { name: "", birthday: "", fullTime: false, partTime: false, iepIfsp: false, needCare: false },
   ]);
 
   const addChildField = () => {
     setChildren([...children, { name: "", birthday: "", fullTime: false, iepIfsp: false, needCare: false }]);
   };
+
+  const handleDeleteChild = (index) => {
+    const updatedChildren = [...children];
+    updatedChildren.splice(index, 1);
+    setChildren(updatedChildren);
+  };
+  
 
   const handleChildFieldChange = (index, field, value) => {
     const updatedChildren = [...children];
@@ -124,7 +131,7 @@ const InputForm = ({}) => {
               onChange={(e) => PsetPhoneNumber(e.target.value)}
             />
             <label htmlFor="text" className="checkbox-label">
-                Text OK:
+                 Text OK:
             </label>
             <input
                 type="checkbox"
@@ -243,7 +250,7 @@ const InputForm = ({}) => {
               onChange={(e) => SsetPhoneNumber(e.target.value)}
             />
             <label htmlFor="text" className="checkbox-label">
-                Text OK:
+                 Text OK:
             </label>
             <input
                 type="checkbox"
@@ -355,33 +362,149 @@ const InputForm = ({}) => {
         onChange={(e) => handleChildFieldChange(index, "birthday", e.target.value)}
       />
     </div>
+    <div className="checkbox-group">
+            <label htmlFor={`child-need-care-${index}`} className="checkbox-label">
+        Need Care:
+      </label>
+      <input
+        type="checkbox"
+        id={`child-need-care-${index}`}
+        checked={child.needCare}
+        onChange={(e) => handleChildFieldChange(index, "needCare", e.target.checked)}
+        
+      />
+    </div>
 
-              <div className="checkbox-group">
-                <label htmlFor={`child-fulltime-${index}`} className="checkbox-label">
-                  Full Time IEP/IFSP:
-                </label>
-                <input
-                  type="checkbox"
-                  id={`child-fulltime-${index}`}
-                  checked={child.fullTime}
-                  onChange={(e) => handleChildFieldChange(index, "fullTime", e.target.checked)}
-                />
-              </div>
-
-              <div className="checkbox-group">
-                <label htmlFor={`child-care-${index}`} className="checkbox-label">
-                  Need Care:
-                </label>
-                <input
-                  type="checkbox"
-                  id={`child-care-${index}`}
-                  checked={child.needCare}
-                  onChange={(e) => handleChildFieldChange(index, "needCare", e.target.checked)}
-                />
-              </div>
-            </div>
-          ))}
+          <div className="checkbox-group">
+            <label htmlFor={`child-full-time-${index}`} className="checkbox-label">
+        Full Time:
+      </label>
+      <input
+        type="checkbox"
+        id={`child-full-time-${index}`}
+        checked={child.fullTime}
+        onChange={(e) => handleChildFieldChange(index, "fullTime", e.target.checked)}
+        disabled={!child.needCare || child.partTime} // Disable if needCare and fullTime are both true
+      />
+    </div>
+    
+    <div>
+      <label htmlFor={`child-part-time-${index}`} className="checkbox-label">
+        Part Time:
+      </label>
+      <input
+        type="checkbox"
+        id={`child-part-time-${index}`}
+        checked={child.partTime}
+        onChange={(e) => handleChildFieldChange(index, "partTime", e.target.checked)}
+        disabled={!child.needCare || child.fullTime} // Disable if needCare and fullTime are both true
+      />
+    </div>
+    {/* Delete Button */}
+    
+    <button
+      className="remove-child-button"
+      onClick={() => handleDeleteChild(index)}
+    >
+      Remove Child
+    </button>
+  </div>
+))}
           <button type="button" className="add-child-button" onClick={addChildField}>Add Child</button>
+        </div>
+        <div>
+            <h2>Income Information</h2>
+          </div>
+
+        <div className="Income">
+          
+          <div className="Form">
+          <h3>Primary Parent/Guardian</h3>
+        {/* Primary Parent column */}
+        <table className="grid">
+          <thead>
+            <tr>
+              <th></th> {/* Empty cell for spacing */}
+              <th>Wages</th>
+              <th>Child Support</th>
+              <th>Alimony</th>
+              <th>Social Security</th>
+              <th>Cash Aid</th>
+              <th>Other</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Monthly/Weekly</td>
+              <td>
+                <input placeholder="$weekly/Monthly" type="text" className="input-box"/>
+              </td>
+              <td>
+                <input type="text" className="input-box"/>
+              </td>
+              <td>
+                <input type="text" className="input-box"/>
+              </td>
+              <td>
+                <input type="text" className="input-box"/>
+              </td>
+              <td>
+                <input type="text" className="input-box"/>
+              </td>
+              <td>
+                <input type="text" className="input-box"/>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>Secondary Parent/Guardian</h3>
+        {/* Secondary Parent column */}
+        <table className="grid">
+          <thead>
+            <tr>
+              <th></th> {/* Empty cell for spacing */}
+              <th>Wages</th>
+              <th>Child Support</th>
+              <th>Alimony</th>
+              <th>Social Security</th>
+              <th>Cash Aid</th>
+              <th>Other</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Monthly/Weekly</td>
+              <td>
+                <input type="text" className="input-box"/>
+              </td>
+              <td>
+                <input type="text" className="input-box"/>
+              </td>
+              <td>
+                <input type="text" className="input-box"/>
+              </td>
+              <td>
+                <input type="text" className="input-box"/>
+              </td>
+              <td>
+                <input type="text" className="input-box"/>
+              </td>
+              <td>
+                <input type="text" className="input-box"/>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        {/* Notes */}
+        <div>
+          <label htmlFor="notes" className="input-label">
+            Notes:
+          </label>
+          <textarea id="notes" rows="4" cols="50"></textarea>
+        </div>
+          </div>
         </div>
       
 

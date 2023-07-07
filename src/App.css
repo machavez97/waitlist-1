@@ -59,28 +59,59 @@
 .submit-button:active {
   transform: translateY(4px);
 }
+.add-child-button:active {
+  transform: translateY(4px);
+}
 
 .add-child-button{
   background-color: white; 
   color: #000000;
-  border: 2px solid black;
+  border: 2px solid green;
   padding: 5px 10px;
   text-align: center;
   text-decoration-color: #000000;
   display: inline-block;
   font-size: 14px;
   border-radius: 10px;
-  margin-top: 20px;
+  margin-top: 10px;
 }
 
 .add-child-button:hover{
-  border: 2px solid black;
+  border: 2px solid green;
   background-color: gray; 
   color: white;
 }
-.add-child-button:active {
+.remove-child-button:active {
   transform: translateY(4px);
 }
+.remove-child-button{
+  background-color: white; 
+  color: #000000;
+  border: 2px solid red;
+  padding: 5px 10px;
+  text-align: center;
+  text-decoration-color: #000000;
+  display: inline-block;
+  font-size: 14px;
+  border-radius: 10px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+
+}
+
+.remove-child-button:hover{
+  border: 2px solid red;
+  background-color: gray; 
+  color: white;
+}
+
+.Income{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
 
 .App-link {
   color: #61dafb;
