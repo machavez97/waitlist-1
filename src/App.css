@@ -23,6 +23,64 @@
   font-size: calc(10px + 2vmin);
   color: white;
 }
+.input-label {
+  font-size: 1rem;
+  padding: 5px;
+}
+.input-box {
+  padding: 0.5rem;
+  font-size: 1rem;
+  text-align: center;
+  border-radius: 0.5rem;
+  border: none;
+  margin-bottom: 1rem;
+  background-color: lightgray;
+
+}
+
+.submit-button{
+  background-color: white; 
+  color: #000000;
+  border: 2px solid black;
+  padding: 10px 28px;
+  text-align: center;
+  text-decoration-color: #000000;
+  display: inline-block;
+  font-size: 18px;
+  border-radius: 10px;
+  margin-top: 20px;
+}
+
+.submit-button:hover{
+  border: 2px solid black;
+  background-color: green; 
+  color: white;
+}
+.submit-button:active {
+  transform: translateY(4px);
+}
+
+.add-child-button{
+  background-color: white; 
+  color: #000000;
+  border: 2px solid black;
+  padding: 5px 10px;
+  text-align: center;
+  text-decoration-color: #000000;
+  display: inline-block;
+  font-size: 14px;
+  border-radius: 10px;
+  margin-top: 20px;
+}
+
+.add-child-button:hover{
+  border: 2px solid black;
+  background-color: gray; 
+  color: white;
+}
+.add-child-button:active {
+  transform: translateY(4px);
+}
 
 .App-link {
   color: #61dafb;
