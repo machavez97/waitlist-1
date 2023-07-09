@@ -1,9 +1,11 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { collection, addDoc } from "firebase/firestore";
 import { db } from '../firebase';
 import "../App.css";
 
 const InputForm = () => {
+  const navigate = useNavigate();
   const [PfirstName, PsetFirstName] = useState("");
   const [PlastName, PsetLastName] = useState("");
   const [PphoneNumber, PsetPhoneNumber] = useState("");
@@ -55,6 +57,7 @@ const InputForm = () => {
   const [preschoolCPS, setPreSchoolCPS] = useState(false);
   const [preSchoolIEP, setPreSchoolIEP] = useState(false);
 
+
   const [CALWorks, setCalWorks] = useState("");
   const [CALFresh, setCALFresh] = useState("");
   const [WIC, setWIC] = useState("");
@@ -83,6 +86,11 @@ const InputForm = () => {
 
   const submitForm = async (e) => {
     e.preventDefault();
+    let isValid = true;
+    if (PfirstName.trim() === ''){
+      isValid = false;
+    }
+    if(isValid){
     try {
       const docRef = await addDoc(collection(db, "Applicants"), {
         PfirstName,
@@ -146,6 +154,7 @@ const InputForm = () => {
     } catch (e) {
       console.error("Error adding document: ", e);
     }
+  }
   };
 
   return (
@@ -158,25 +167,26 @@ const InputForm = () => {
         <h3>Primary Parent/Guardian</h3>
         <div className="group1">
             
-          
             <label htmlFor="first-name" className="input-label">
-              First Name:
+            <span className="required-indicator">*</span>First Name: 
             </label>
             <input
               type="text"
               id="first-name"
               className="input-box"
               value={PfirstName}
+              required 
               onChange={(e) => PsetFirstName(e.target.value)}
             />
                     
             <label htmlFor="last-name" className="input-label">
-              Last Name:
+            <span className="required-indicator">*</span>Last Name:
             </label>
             <input
               type="text"
               id="last-name"
               className="input-box"
+              required
               value={PlastName}
               onChange={(e) => PsetLastName(e.target.value)}
             />
@@ -765,6 +775,9 @@ const InputForm = () => {
       <div className="btn-container">
         <button type="submit" className="submit-button" onClick={submitForm}>
           Submit
+        </button>
+        <button type="cancel" className="cancel-button" onClick={() => navigate(-1)}>
+          Cancel
         </button>
       </div>
     </div>
