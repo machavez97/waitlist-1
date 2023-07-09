@@ -14,6 +14,19 @@ const InputForm = () => {
   const [Pzip, PsetZip] = useState("");
   const [PlivesInHome, PsetLivesInHome] = useState(false);
   const [PtextOK, PsettextOK] = useState(false);
+  const [Pwages, PsetWages] = useState("");
+  const [PchildSupport, PsetChildSupport] = useState("");
+  const [PAlimony, PsetAlimony] = useState("");
+  const [PSocialSecurity, PsetSocialSecurity] = useState("");
+  const [PCashAid, PsetCashAid] = useState("");
+  const [POther, PsetOther] = useState("");
+  const [incomeExplaination, setincomeExplaination] = useState("");
+  const [Pworking, Psetworking] = useState(false);
+  const [PlookingForWorking, PsetlookingForWorking] = useState(false);
+  const [PgoingToSchool, PsetgoingToSchool] = useState(false);
+  const [PCPSorAtRisk, PsetCPSorAtRisk] = useState(false);
+  const [PIncapacitated, PsetIncapacitate] = useState(false);
+  const [PIEPpreschoolOnly, PsetIEPpreschoolOnly] = useState(false);
 
   const [SfirstName, SsetFirstName] = useState("");
   const [SlastName, SsetLastName] = useState("");
@@ -25,6 +38,27 @@ const InputForm = () => {
   const [Szip, SsetZip] = useState("");
   const [SlivesInHome, SsetLivesInHome] = useState(false);
   const [StextOK, SsettextOK] = useState(false);
+  const [Swages, SsetWages] = useState("");
+  const [SchildSupport, SsetChildSupport] = useState("");
+  const [SAlimony, SsetAlimony] = useState("");
+  const [SSocialSecurity, SsetSocialSecurity] = useState("");
+  const [SCashAid, SsetCashAid] = useState("");
+  const [SOther, SsetOther] = useState("");
+  const [fullDayCareChecked, setFullDayCareChecked] = useState(false);
+  const [preschoolOnlyChecked, setPreschoolOnlyChecked] = useState(false);
+  const [Sworking, Ssetworking] = useState(false);
+  const [SlookingForWorking, SsetlookingForWorking] = useState(false);
+  const [SgoingToSchool, SsetgoingToSchool] = useState(false);
+  const [SCPSorAtRisk, SsetCPSorAtRisk] = useState(false);
+  const [SIncapacitated, SsetIncapacitate] = useState(false);
+  const [SIEPpreschoolOnly, SsetIEPpreschoolOnly] = useState(false);
+  const [preschoolCPS, setPreSchoolCPS] = useState(false);
+  const [preSchoolIEP, setPreSchoolIEP] = useState(false);
+
+  const [CALWorks, setCalWorks] = useState("");
+  const [CALFresh, setCALFresh] = useState("");
+  const [WIC, setWIC] = useState("");
+
 
   const [children, setChildren] = useState([
     { name: "", birthday: "", fullTime: false, partTime: false, iepIfsp: false, needCare: false },
@@ -61,6 +95,13 @@ const InputForm = () => {
         Pstate,
         Pzip,
         PlivesInHome,
+        Pwages,
+        PchildSupport,
+        PAlimony, 
+        PSocialSecurity,
+        PCashAid,
+        POther,
+        incomeExplaination,
         
         SfirstName,
         SlastName,
@@ -72,10 +113,34 @@ const InputForm = () => {
         Sstate,
         Szip,
         SlivesInHome,
+        Swages,
+        SchildSupport,
+        SAlimony, 
+        SSocialSecurity,
+        SCashAid,
+        SOther,
+        preschoolOnlyChecked,
+        fullDayCareChecked,
+        Pworking,
+        PlookingForWorking,
+        PgoingToSchool,
+        PCPSorAtRisk,
+        PIncapacitated,
+        PIEPpreschoolOnly,
+        Sworking,
+        SlookingForWorking,
+        SgoingToSchool,
+        SCPSorAtRisk,
+        SIncapacitated,
+        SIEPpreschoolOnly,
+        preSchoolIEP,
+        preschoolCPS,
+        
+        CALFresh,
+        CALWorks,
+        WIC,
 
         children,
-
-
       });
       console.log("Document written with ID: ", docRef.id);
     } catch (e) {
@@ -348,9 +413,7 @@ const InputForm = () => {
         value={child.name}
         onChange={(e) => handleChildFieldChange(index, "name", e.target.value)}
       />
-    </div>
-
-    <div>
+   
       <label htmlFor={`child-birthday-${index}`} className="input-label">
         Birthday:
       </label>
@@ -436,22 +499,28 @@ const InputForm = () => {
             <tr>
               
               <td>
-                <input placeholder="$ Weekly/Monthly" type="text" className="input-box"/>
+                <input placeholder="$ Weekly/Monthly" type="text" className="input-box" value={Pwages}
+              onChange={(e) => PsetWages(e.target.value)}/>
               </td>
               <td>
-                <input placeholder="$ Weekly/Monthly" type="text" className="input-box"/>
+                <input placeholder="$ Weekly/Monthly" type="text" className="input-box" value={PchildSupport}
+              onChange={(e) => PsetChildSupport(e.target.value)}/>
               </td>
               <td>
-                <input placeholder="$ Weekly/Monthly"type="text" className="input-box"/>
+              <input placeholder="$ Weekly/Monthly" type="text" className="input-box" value={PAlimony}
+              onChange={(e) => PsetAlimony(e.target.value)}/>
               </td>
               <td>
-                <input placeholder="$ Weekly/Monthly"type="text" className="input-box"/>
+                <input placeholder="$ Weekly/Monthly"type="text" className="input-box" value={PSocialSecurity}
+              onChange={(e) => PsetSocialSecurity(e.target.value)}/>
               </td>
               <td>
-                <input placeholder="$ Weekly/Monthly"type="text" className="input-box"/>
+                <input placeholder="$ Weekly/Monthly"type="text" className="input-box" value={PCashAid}
+              onChange={(e) => PsetCashAid(e.target.value)}/>
               </td>
               <td>
-                <input placeholder="$ Weekly/Monthly"type="text" className="input-box"/>
+                <input placeholder="$ Weekly/Monthly"type="text" className="input-box" value={POther}
+              onChange={(e) => PsetOther(e.target.value)}/>
               </td>
             </tr>
           </tbody>
@@ -474,22 +543,28 @@ const InputForm = () => {
             <tr>
               
               <td>
-                <input placeholder="$ Weekly/Monthly"type="text" className="input-box"/>
+                <input placeholder="$ Weekly/Monthly" type="text" className="input-box" value={Swages}
+              onChange={(e) => SsetWages(e.target.value)}/>
               </td>
               <td>
-                <input placeholder="$ Weekly/Monthly"type="text" className="input-box"/>
+                <input placeholder="$ Weekly/Monthly" type="text" className="input-box" value={SchildSupport}
+              onChange={(e) => SsetChildSupport(e.target.value)}/>
               </td>
               <td>
-                <input placeholder="$ Weekly/Monthly"type="text" className="input-box"/>
+                <input placeholder="$ Weekly/Monthly" type="text" className="input-box" value={SAlimony}
+              onChange={(e) => SsetAlimony(e.target.value)}/>
               </td>
               <td>
-                <input placeholder="$ Weekly/Monthly"type="text" className="input-box"/>
+                <input placeholder="$ Weekly/Monthly"type="text" className="input-box" value={SSocialSecurity}
+              onChange={(e) => SsetSocialSecurity(e.target.value)}/>
               </td>
               <td>
-                <input placeholder="$ Weekly/Monthly"type="text" className="input-box"/>
+                <input placeholder="$ Weekly/Monthly"type="text" className="input-box" value={SCashAid}
+              onChange={(e) => SsetCashAid(e.target.value)}/>
               </td>
               <td>
-                <input placeholder="$ Weekly/Monthly"type="text" className="input-box"/>
+                <input placeholder="$ Weekly/Monthly"type="text" className="input-box" value={SOther}
+              onChange={(e) => SsetOther(e.target.value)}/>
               </td>
             </tr>
           </tbody>
@@ -502,7 +577,8 @@ const InputForm = () => {
             If no income, please explain how household is supported:
           </label>
           </div>
-          <textarea id="notes" rows="4" cols="50"></textarea>
+          <textarea id="notes" rows="4" cols="50" value={incomeExplaination}
+          onChange={(e) => setincomeExplaination(e.target.value)}></textarea>
         </div>
           </div>
         </div>
@@ -522,17 +598,165 @@ const InputForm = () => {
     </tr>
     <tr>
       <td>
-        <input placeholder="Amount per month" type="text" className="input-box" />
+        <input placeholder="Amount per month" type="text" className="input-box" value={CALWorks}
+              onChange={(e) => setCalWorks(e.target.value)}/>
       </td>
       <td>
-        <input placeholder="Amount per month" type="text" className="input-box" />
+        <input placeholder="Amount per month" type="text" className="input-box" value={CALFresh}
+              onChange={(e) => setCALFresh(e.target.value)}/>
       </td>
       <td>
-        <input placeholder="Amount per month" type="text" className="input-box" />
+        <input placeholder="Amount per month" type="text" className="input-box" value={WIC}
+              onChange={(e) => setWIC(e.target.value)}/>
       </td>
     </tr>
   </table>
 </div>
+<div>
+    <h1>Reason for Services</h1>
+    <div>
+         <h3>Type of Service Requested</h3>
+         <div>
+        <input
+          type="checkbox"
+          id="full-day-care"
+          checked={fullDayCareChecked}
+          onChange={(e) => setFullDayCareChecked(e.target.checked)}
+        />
+        <label htmlFor="full-day-care">Full Day Care</label>
+      </div>
+
+      {fullDayCareChecked && (
+        <div className="table2">
+            <h5>Please provide information as applicable to your reason for requesting full-day service.<h6>(Select all that apply)</h6></h5>
+            
+            <h3 className="header">Primary Parent/Guardian</h3>
+
+
+            <table className="grid">
+          <thead>
+            <tr>
+              <th className="tableCheckHeader">Working</th>
+              <th className="tableCheckHeader">Looking for Care</th>
+              <th className="tableCheckHeader">Going to School</th>
+              <th className="tableCheckHeader">CPS or At Risk</th>
+              <th className="tableCheckHeader">Incapacitated w/ Dr Note</th>
+              <th className="tableCheckHeader">IEP Preschool Only</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <input type="checkbox" checked={Pworking}
+                onChange={(e) => Psetworking(e.target.checked)}/>
+              </td>
+              <td>
+                <input type="checkbox" checked={PlookingForWorking}
+                onChange={(e) => PsetlookingForWorking(e.target.checked)}/>
+              </td>
+              <td>
+                <input type="checkbox" checked={PgoingToSchool}
+                onChange={(e) => PsetgoingToSchool(e.target.checked)}/>
+              </td>
+              <td>
+                <input type="checkbox" checked={PCPSorAtRisk}
+                onChange={(e) => PsetCPSorAtRisk(e.target.checked)}/>
+              </td>
+              <td>
+                <input type="checkbox" checked={PsetIncapacitate}
+                onChange={(e) => PsetIncapacitate(e.target.checked)}/>
+              </td>
+              <td>
+                <input type="checkbox" checked={PIEPpreschoolOnly}
+                onChange={(e) => PsetIEPpreschoolOnly(e.target.checked)}/>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+      <div>
+      <h3>Secondary Parent/Guardian</h3>
+
+        <table className="grid">
+          <thead>
+            <tr>
+              <th className="tableCheckHeader">Working</th>
+              <th className="tableCheckHeader">Looking for Care</th>
+              <th className="tableCheckHeader">Going to School</th>
+              <th className="tableCheckHeader">CPS or At Risk</th>
+              <th className="tableCheckHeader">Incapacitated w/ Dr Note</th>
+              <th className="tableCheckHeader">IEP Preschool Only</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+              <input type="checkbox" checked={Sworking}
+                onChange={(e) => Ssetworking(e.target.checked)}/>
+              </td>
+              <td>
+                <input type="checkbox" checked={SlookingForWorking}
+                onChange={(e) => SsetlookingForWorking(e.target.checked)}/>
+              </td>
+              <td>
+                <input type="checkbox" checked={SgoingToSchool}
+                onChange={(e) => SsetgoingToSchool(e.target.checked)}/>
+              </td>
+              <td>
+                <input type="checkbox" checked={SCPSorAtRisk}
+                onChange={(e) => SsetCPSorAtRisk(e.target.checked)}/>
+              </td>
+              <td>
+                <input type="checkbox" checked={SsetIncapacitate}
+                onChange={(e) => SsetIncapacitate(e.target.checked)}/>
+              </td>
+              <td>
+                <input type="checkbox" checked={SIEPpreschoolOnly}
+                onChange={(e) => SsetIEPpreschoolOnly(e.target.checked)}/>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        </div>
+        </div>
+
+      )}
+
+      <div>
+        <input
+          type="checkbox"
+          id="preschool-only"
+          checked={preschoolOnlyChecked}
+          onChange={(e) => setPreschoolOnlyChecked(e.target.checked)}
+        />
+        <label htmlFor="preschool-only">Preschool Only</label>
+      </div>
+
+      {preschoolOnlyChecked && (
+        <div className="table2">
+            <h5>For ranking purpose please indicate if child is CPS/At Risk or child has IEP</h5>
+          <table className="grid">
+            {/* Table for Preschool Only */}
+            <tr>
+                <th className="tableCheckHeader">CPS/At Risk</th>
+                <th className="tableCheckHeader">IEP</th>
+            </tr>
+            <tr>
+            <td>
+              <input type="checkbox" checked={preschoolCPS}
+                onChange={(e) => setPreSchoolCPS(e.target.checked)}/>
+              </td>
+              <td>
+                <input type="checkbox" checked={preSchoolIEP}
+                onChange={(e) => setPreSchoolIEP(e.target.checked)}/>
+              </td>
+            </tr>
+          </table>
+        </div>
+      )}
+    </div>
+</div>
+
 
       
 
