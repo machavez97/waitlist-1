@@ -1,21 +1,21 @@
 import React, {useState, useEffect} from 'react';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../firebase';
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { db } from '../firebase'
 import { collection, query, where, getDocs, updateDoc, doc, or } from 'firebase/firestore';
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { Link } from 'react-router-dom';
 
 
-
  
-const Search = () => {
+const SelectedResult = (result) => {
+    
+    const { docID } = useParams();
     const [searchQuery, setSearchQuery] = useState('');
     const [searchResults, setSearchResults] = useState([]);
     const [rank, setRank] = useState('');
     const [officeNotes, setOfficeNotes] = useState('');
-    const [docID, setDocID] = useState('');
 
     
     const navigate = useNavigate();
@@ -23,6 +23,17 @@ const Search = () => {
         let path = '/login';
         navigate(path);
     };
+
+    const findRecord = () => {
+        const fetchData = async () => {
+          const q = db.collection('Applicants').doc(docID);
+    
+          // Fetch matching documents from Firestore
+          const documents = q.get()
+          setSearchResults(documents);
+          
+        };
+      };
     const submitForm = async (e) => {
       e.preventDefault();
       console.log(docID);
@@ -45,46 +56,11 @@ const Search = () => {
         })
 
     }, [])
-    const searchRecords = () => {
-        const fetchData = async () => {
-          const q = query(collection(db, 'Applicants'), or (
-          (where('rank.rank', '==',  searchQuery)), 
-          (where('PfirstName', '==',  searchQuery)), 
-          (where('PlastName', '==',  searchQuery)), 
-          (where('SfirstName', '==',  searchQuery)), 
-          (where('SlastName', '==',  searchQuery)),) 
-          );
     
-          // Fetch matching documents from Firestore
-          const querySnapshot = await getDocs(q);
-          const documents = querySnapshot.docs.map((doc) => ({
-            id: doc.id,
-            data: doc.data(),
-          }));
-          setSearchResults(documents.map((doc) => doc.data));
-
-
-          
-        };
-    
-        if (searchQuery !== '') {
-          fetchData();
-        }
-      };
-       
-    const handleSearch = (e) => {
-        e.preventDefault();
-        setSearchResults([]);
-        if (searchQuery !== ''){
-            setSearchQuery(searchQuery);
-        }
+    const handleGeneratePDF = () => {
+      // Generate the PDF for the selected result when the button is clicked
+      // ...
     };
-    const handleResultClick = (index) => {
-      const selectedResult = searchResults[index];
-      console.log(selectedResult);
-      navigate(`/result/${selectedResult.id}`);
-    };
-  
  
     return (
       <div>
@@ -93,27 +69,13 @@ const Search = () => {
 
             </nav>
         <div>
-          <form onSubmit={handleSearch}>
-            <input
-              className='search-box'
-              type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Enter search query"
-            />
-            <div>
-            <button className="submit-button" type="submit" onClick={searchRecords}>Search</button>
-            </div>
-          </form>
     
           {searchResults.length > 0 ? (
           <div className="results-container">
             <h3>Search Results:</h3>
-            {searchResults.map((result, index) => (
+            {searchResults.map((result) => (
               
               <div key={result.id}>
-                <button onClick={() => handleResultClick(index)}>Select</button>
-
                 <h1>Family Information</h1>
                 <div> 
                 <h3 className='leftHeader'>Rank</h3>
@@ -719,13 +681,20 @@ const Search = () => {
 
           </div>
           ))}
-          
+          <div className="btn-container">
+        <button type="submit" className="submit-button" onClick={submitForm}>
+          Submit
+        </button>
+        <button type="cancel" className="cancel-button" onClick={() => navigate(-1)}>
+          Cancel
+        </button>
+      </div>
           </div>
         ) : (
           <p>No search results found.</p>
         )}
 
-      
+        
 
 
         
@@ -734,4 +703,4 @@ const Search = () => {
       );
     };
     
-    export default Search;
+    export default SelectedResult;

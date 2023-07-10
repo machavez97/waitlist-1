@@ -155,6 +155,8 @@ const InputForm = () => {
     } catch (e) {
       console.error("Error adding document: ", e);
     }
+    window.location.reload();
+
   }
   };
 
@@ -174,7 +176,7 @@ const InputForm = () => {
               type="text"
               id="first-name"
               className="input-box"
-              value={PfirstName}
+              value={PfirstName.trim()}
               required 
               onChange={(e) => PsetFirstName(e.target.value)}
             />
@@ -187,7 +189,7 @@ const InputForm = () => {
               id="last-name"
               className="input-box"
               required
-              value={PlastName}
+              value={PlastName.trim()}
               onChange={(e) => PsetLastName(e.target.value)}
             />
           
@@ -295,7 +297,7 @@ const InputForm = () => {
               type="text"
               id="first-name"
               className="input-box"
-              value={SfirstName}
+              value={SfirstName.trim()}
               onChange={(e) => SsetFirstName(e.target.value)}
             />
                     
@@ -306,7 +308,7 @@ const InputForm = () => {
               type="text"
               id="last-name"
               className="input-box"
-              value={SlastName}
+              value={SlastName.trim()}
               onChange={(e) => SsetLastName(e.target.value)}
             />
           
