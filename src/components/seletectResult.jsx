@@ -38,8 +38,8 @@ const SelectedResult = (result) => {
       e.preventDefault();
       console.log(docID);
       await updateDoc(doc(db, "Applicants",docID), {
-        rank: {rank},
-        officeNotes: {officeNotes}
+        rank,
+        officeNotes
       });
       window.location.reload();
 
