@@ -149,6 +149,7 @@ const InputForm = () => {
         WIC,
 
         children,
+       
       });
       console.log("Document written with ID: ", docRef.id);
     } catch (e) {
@@ -166,7 +167,6 @@ const InputForm = () => {
       <div className="Form">
         <h3>Primary Parent/Guardian</h3>
         <div className="group1">
-            
             <label htmlFor="first-name" className="input-label">
             <span className="required-indicator">*</span>First Name: 
             </label>

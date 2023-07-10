@@ -36,7 +36,15 @@
   border: none;
   margin-bottom: 1rem;
   background-color: lightgray;
-
+}
+.search-box {
+  padding: 0.5rem;
+  font-size: 1rem;
+  text-align: center;
+  border-radius: 0.5rem;
+  border: none;
+  margin-top: 1rem;
+  background-color: lightgray;
 }
 
 .submit-button{
@@ -196,9 +204,24 @@
   text-align: center;
   border-radius: 0.5rem;
   border: none;
-  margin-bottom: 1rem;
+  margin: auto;
   background-color: lightgray;
   width: max-content;
   height: fit-content;
 }
-
+.results-container {
+  text-align: center;
+}
+.leftHeader{
+  justify-content: left;
+}
+.rank-box {
+  padding: 0.5rem;
+  font-size: 1rem;
+  text-align: center;
+  border-radius: 0.5rem;
+  border: none;
+  background-color: lightgray;
+  width: 50px;
+  height: fit-content;
+}
