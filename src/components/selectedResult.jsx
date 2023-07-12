@@ -358,6 +358,8 @@ const SelectedResult = () => {
             />
             </div>
         </div>
+        <h3>Children</h3> 
+
 
       {result.children.map((child, index) => (
   <div key={index} className="child-field">

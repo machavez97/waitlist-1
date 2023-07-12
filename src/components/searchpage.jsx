@@ -3,9 +3,10 @@ import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../firebase';
 import { useNavigate } from 'react-router-dom'
 import { db } from '../firebase'
-import { collection, query, where, getDocs, updateDoc, doc, or } from 'firebase/firestore';
+import { collection, query, where, getDocs, updateDoc, doc, or, and } from 'firebase/firestore';
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { Link } from 'react-router-dom';
+
 
 
 
@@ -13,10 +14,12 @@ import { Link } from 'react-router-dom';
 const Search = () => {
     const [searchQuery, setSearchQuery] = useState('');
     const [searchResults, setSearchResults] = useState([]);
-    const [rank, setRank] = useState('');
-    const [officeNotes, setOfficeNotes] = useState('');
     const [docID, setDocID] = useState('');
     const [documents, setDocuments] = useState([]);
+    const [isFullTimeChecked, setIsFullTimeChecked] = useState(false);
+    const [isPartTimeChecked, setIsPartTimeChecked] = useState(false);
+
+
 
     
     const navigate = useNavigate();
@@ -24,18 +27,7 @@ const Search = () => {
         let path = '/login';
         navigate(path);
     };
-    const submitForm = async (e) => {
-      e.preventDefault();
-      console.log(docID);
-      await updateDoc(doc(db, "Applicants",docID), {
-        rank: {rank},
-        officeNotes: {officeNotes}
-      });
-      window.location.reload();
-
-      
-    
-    };
+   
     useEffect(() => {
         const authToken = getAuth();
         onAuthStateChanged(authToken, (user) =>{
@@ -50,14 +42,16 @@ const Search = () => {
     const handleSearch = async (e) => {
       e.preventDefault();
       setSearchResults([]);
-      if (searchQuery !== '') {
-        const q = query(collection(db, 'Applicants'), or(
+      if (searchQuery !== '' && !isFullTimeChecked && !isPartTimeChecked) {
+        const q = query(collection(db, 'Applicants'), 
+        or(
           where('rank.rank', '==', searchQuery),
           where('PfirstName', '==', searchQuery),
           where('PlastName', '==', searchQuery),
           where('SfirstName', '==', searchQuery),
           where('SlastName', '==', searchQuery),
         ));
+        
     
         const querySnapshot = await getDocs(q);
         const fetchedDocuments = querySnapshot.docs.map((doc) => ({
@@ -67,7 +61,53 @@ const Search = () => {
         setDocuments(fetchedDocuments);
         setSearchResults(fetchedDocuments.map((doc) => doc.data));
       }
+      else if (searchQuery !== '' && isFullTimeChecked) {
+        const q = query(collection(db, 'Applicants'), and(
+        where('fullDayCareChecked', '==', isFullTimeChecked),
+        or(
+          where('rank.rank', '==', searchQuery),
+          where('PfirstName', '==', searchQuery),
+          where('PlastName', '==', searchQuery),
+          where('SfirstName', '==', searchQuery),
+          where('SlastName', '==', searchQuery),
+        )));
+   
+    
+        const querySnapshot = await getDocs(q);
+        const fetchedDocuments = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          data: doc.data(),
+        }));
+        setDocuments(fetchedDocuments);
+        setSearchResults(fetchedDocuments.map((doc) => doc.data));
+      }
+
+      else if (searchQuery !== '' && isPartTimeChecked) {
+        const q = query(collection(db, 'Applicants'), and( 
+        where('preschoolOnlyChecked', '==', isPartTimeChecked),
+        or(
+          where('rank.rank', '==', searchQuery),
+          where('PfirstName', '==', searchQuery),
+          where('PlastName', '==', searchQuery),
+          where('SfirstName', '==', searchQuery),
+          where('SlastName', '==', searchQuery),
+        )));
+   
+    
+        const querySnapshot = await getDocs(q);
+        const fetchedDocuments = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          data: doc.data(),
+        }));
+        setDocuments(fetchedDocuments);
+        setSearchResults(fetchedDocuments.map((doc) => doc.data));
+      }
+      
+      
     };
+    
+    
+    
     
     const handleResultClick = (index) => {
       const selectedResult = documents[index];
@@ -90,6 +130,24 @@ const Search = () => {
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Enter search query"
             />
+            <div>
+        <input
+          type="checkbox"
+          id="preschool-only"
+          checked={isPartTimeChecked}
+          onChange={(e) => setIsPartTimeChecked(e.target.checked)}
+        />
+        <label htmlFor="preschool-only">Preschool Only</label>
+      </div>
+      <div>
+        <input
+          type="checkbox"
+          id="full-day-care"
+          checked={isFullTimeChecked}
+          onChange={(e) => setIsFullTimeChecked(e.target.checked)}
+        />
+        <label htmlFor="full-day-care">Full Day Care</label>
+      </div>
             <div>
             <button className="submit-button" type="submit" onClick={handleSearch}>Search</button>
             </div>
@@ -345,6 +403,8 @@ const Search = () => {
             />
             </div>
         </div>
+        <h3>Children</h3> 
+
 
       {result.children.map((child, index) => (
   <div key={index} className="child-field">
