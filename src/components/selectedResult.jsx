@@ -3,15 +3,19 @@ import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../firebase';
 import { useNavigate, useParams } from 'react-router-dom'
 import { db } from '../firebase'
-import { collection, query, where, getDocs, updateDoc, doc, or } from 'firebase/firestore';
+import { collection, query, where, getDoc, updateDoc, doc, or } from 'firebase/firestore';
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { Link } from 'react-router-dom';
+import html2canvas from 'html2canvas';
+import jsPDF from 'jspdf';
+
+
 
 
  
-const SelectedResult = (result) => {
+const SelectedResult = () => {
     
-    const { docID } = useParams();
+    const { id } = useParams();
     const [searchQuery, setSearchQuery] = useState('');
     const [searchResults, setSearchResults] = useState([]);
     const [rank, setRank] = useState('');
@@ -24,20 +28,32 @@ const SelectedResult = (result) => {
         navigate(path);
     };
 
-    const findRecord = () => {
-        const fetchData = async () => {
-          const q = db.collection('Applicants').doc(docID);
+    useEffect(() => {
+      const fetchData = async () => {
+        if (id) {
+          try {
+            const docRef = doc(db, 'Applicants', id);
+            const documentSnapshot = await getDoc(docRef);
     
-          // Fetch matching documents from Firestore
-          const documents = q.get()
-          setSearchResults(documents);
-          
-        };
+            if (documentSnapshot.exists()) {
+              const documentData = documentSnapshot.data();
+              setSearchResults([documentData]);
+            } else {
+              setSearchResults([]);
+            }
+          } catch (error) {
+            console.error('Error fetching document:', error);
+          }
+        }
       };
+    
+      fetchData();
+    }, [id]);
+    
     const submitForm = async (e) => {
       e.preventDefault();
-      console.log(docID);
-      await updateDoc(doc(db, "Applicants",docID), {
+      console.log(id);
+      await updateDoc(doc(db, "Applicants",id), {
         rank,
         officeNotes
       });
@@ -57,10 +73,30 @@ const SelectedResult = (result) => {
 
     }, [])
     
-    const handleGeneratePDF = () => {
-      // Generate the PDF for the selected result when the button is clicked
-      // ...
+    const generatePDF = () => {
+      // Select the element to convert to PDF
+      const element = document.getElementById('pdf-content');
+    
+      // Create a canvas from the element
+      html2canvas(element).then((canvas) => {
+        // Get the canvas data as an image URL
+        const imgData = canvas.toDataURL('image/png');
+    
+        // Initialize the PDF document
+        const pdf = new jsPDF();
+    
+        // Set the PDF content width and height to match the canvas
+        const pdfWidth = pdf.internal.pageSize.getWidth();
+        const pdfHeight = pdf.internal.pageSize.getHeight();
+    
+        // Add the canvas image to the PDF
+        pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+    
+        // Save the PDF file
+        pdf.save('document.pdf');
+      });
     };
+    
  
     return (
       <div>
@@ -69,12 +105,14 @@ const SelectedResult = (result) => {
 
             </nav>
         <div>
+        <button className='pdf-button' onClick={generatePDF}>Generate PDF</button>
+
     
           {searchResults.length > 0 ? (
           <div className="results-container">
             <h3>Search Results:</h3>
             {searchResults.map((result) => (
-              
+            <div id="pdf-content">
               <div key={result.id}>
                 <h1>Family Information</h1>
                 <div> 
@@ -83,7 +121,7 @@ const SelectedResult = (result) => {
                 type="text"
                 className='rank-box'
                 value={rank}
-                placeholder={result.rank?.rank || ''}
+                placeholder={result.rank?? ''}
                 onChange={(e) => setRank(e.target.value)}></input>
                 </div>
                 <h3>Primary Parent/Guardian</h3>
@@ -672,13 +710,15 @@ const SelectedResult = (result) => {
           <div>
           <h3>Office Notes</h3>
           </div>
-          <textarea placeholder={result.officeNotes?.officeNotes || ''} id="notes" rows="4" cols="50" value={officeNotes}
+          <textarea  id="notes" rows="4" cols="50"   
+          value={officeNotes || result.officeNotes}
           onChange={(e) => setOfficeNotes(e.target.value)}></textarea>
         </div>
 </div>
 
 
 
+          </div>
           </div>
           ))}
           <div className="btn-container">

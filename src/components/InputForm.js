@@ -649,7 +649,7 @@ const InputForm = () => {
           <thead>
             <tr>
               <th className="tableCheckHeader">Working</th>
-              <th className="tableCheckHeader">Looking for Care</th>
+              <th className="tableCheckHeader">Looking for Work</th>
               <th className="tableCheckHeader">Going to School</th>
               <th className="tableCheckHeader">CPS or At Risk</th>
               <th className="tableCheckHeader">Incapacitated w/ Dr Note</th>
@@ -675,7 +675,7 @@ const InputForm = () => {
                 onChange={(e) => PsetCPSorAtRisk(e.target.checked)}/>
               </td>
               <td>
-                <input type="checkbox" checked={PsetIncapacitate}
+                <input type="checkbox" checked={PIncapacitated}
                 onChange={(e) => PsetIncapacitate(e.target.checked)}/>
               </td>
               <td>
@@ -693,7 +693,7 @@ const InputForm = () => {
           <thead>
             <tr>
               <th className="tableCheckHeader">Working</th>
-              <th className="tableCheckHeader">Looking for Care</th>
+              <th className="tableCheckHeader">Looking for Work</th>
               <th className="tableCheckHeader">Going to School</th>
               <th className="tableCheckHeader">CPS or At Risk</th>
               <th className="tableCheckHeader">Incapacitated w/ Dr Note</th>
@@ -719,7 +719,7 @@ const InputForm = () => {
                 onChange={(e) => SsetCPSorAtRisk(e.target.checked)}/>
               </td>
               <td>
-                <input type="checkbox" checked={SsetIncapacitate}
+                <input type="checkbox" checked={SIncapacitated}
                 onChange={(e) => SsetIncapacitate(e.target.checked)}/>
               </td>
               <td>

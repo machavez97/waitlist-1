@@ -16,6 +16,7 @@ const Search = () => {
     const [rank, setRank] = useState('');
     const [officeNotes, setOfficeNotes] = useState('');
     const [docID, setDocID] = useState('');
+    const [documents, setDocuments] = useState([]);
 
     
     const navigate = useNavigate();
@@ -45,43 +46,31 @@ const Search = () => {
         })
 
     }, [])
-    const searchRecords = () => {
-        const fetchData = async () => {
-          const q = query(collection(db, 'Applicants'), or (
-          (where('rank.rank', '==',  searchQuery)), 
-          (where('PfirstName', '==',  searchQuery)), 
-          (where('PlastName', '==',  searchQuery)), 
-          (where('SfirstName', '==',  searchQuery)), 
-          (where('SlastName', '==',  searchQuery)),) 
-          );
+   
+    const handleSearch = async (e) => {
+      e.preventDefault();
+      setSearchResults([]);
+      if (searchQuery !== '') {
+        const q = query(collection(db, 'Applicants'), or(
+          where('rank.rank', '==', searchQuery),
+          where('PfirstName', '==', searchQuery),
+          where('PlastName', '==', searchQuery),
+          where('SfirstName', '==', searchQuery),
+          where('SlastName', '==', searchQuery),
+        ));
     
-          // Fetch matching documents from Firestore
-          const querySnapshot = await getDocs(q);
-          const documents = querySnapshot.docs.map((doc) => ({
-            id: doc.id,
-            data: doc.data(),
-          }));
-          setSearchResults(documents.map((doc) => doc.data));
-
-
-          
-        };
-    
-        if (searchQuery !== '') {
-          fetchData();
-        }
-      };
-       
-    const handleSearch = (e) => {
-        e.preventDefault();
-        setSearchResults([]);
-        if (searchQuery !== ''){
-            setSearchQuery(searchQuery);
-        }
+        const querySnapshot = await getDocs(q);
+        const fetchedDocuments = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          data: doc.data(),
+        }));
+        setDocuments(fetchedDocuments);
+        setSearchResults(fetchedDocuments.map((doc) => doc.data));
+      }
     };
+    
     const handleResultClick = (index) => {
-      const selectedResult = searchResults[index];
-      console.log(selectedResult);
+      const selectedResult = documents[index];
       navigate(`/result/${selectedResult.id}`);
     };
   
@@ -102,7 +91,7 @@ const Search = () => {
               placeholder="Enter search query"
             />
             <div>
-            <button className="submit-button" type="submit" onClick={searchRecords}>Search</button>
+            <button className="submit-button" type="submit" onClick={handleSearch}>Search</button>
             </div>
           </form>
     
@@ -112,17 +101,15 @@ const Search = () => {
             {searchResults.map((result, index) => (
               
               <div key={result.id}>
-                <button onClick={() => handleResultClick(index)}>Select</button>
-
+                
                 <h1>Family Information</h1>
                 <div> 
                 <h3 className='leftHeader'>Rank</h3>
                 <input
                 type="text"
                 className='rank-box'
-                value={rank}
-                placeholder={result.rank?.rank || ''}
-                onChange={(e) => setRank(e.target.value)}></input>
+                value={result.rank?? ''}
+                readOnly></input>
                 </div>
                 <h3>Primary Parent/Guardian</h3>
                 <div className="group1">
@@ -710,9 +697,10 @@ const Search = () => {
           <div>
           <h3>Office Notes</h3>
           </div>
-          <textarea placeholder={result.officeNotes?.officeNotes || ''} id="notes" rows="4" cols="50" value={officeNotes}
-          onChange={(e) => setOfficeNotes(e.target.value)}></textarea>
+          <textarea readOnly id="notes" rows="4" cols="50" value={result.officeNotes?? ''}
+          ></textarea>
         </div>
+        <button className= 'submit-button' onClick={() => handleResultClick(index)}>Select</button>
 </div>
 
 
