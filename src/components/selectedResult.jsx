@@ -725,8 +725,8 @@ const SelectedResult = () => {
         <button type="submit" className="submit-button" onClick={submitForm}>
           Submit
         </button>
-        <button type="cancel" className="cancel-button" onClick={() => navigate(-1)}>
-          Cancel
+        <button type="cancel" className="cancel-button" onClick={() => navigate('/search')}>
+          Back to Search
         </button>
       </div>
           </div>

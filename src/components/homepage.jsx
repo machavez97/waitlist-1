@@ -34,22 +34,16 @@ function HomePage({ handleLogout }) {
 
 			<br></br>
 			<div className="block5">
+				
+				<Link to = "signup">
+					<button type="Search" id="Search" className="HomePageButton" >Signup Form</button>
+				</Link>
 				<Link to = "Search">
 					<button type="Search" id="Search" className="HomePageButton" >Search</button>
 				</Link>
 			</div>
-			
-			<div className="block6">
-				<Link to = "signup">
-					<button type="Search" id="Search" className="HomePageButton" >Signup Form</button>
-				</Link>
-			</div>
 
-			<div className="block7">
-				<Link to = "Invoice">
-					<button type="Search" id="Search" className="HomePageButton" >Create PDF</button>
-				</Link>
-			</div>
+			
 			
 		</div>
 	);
