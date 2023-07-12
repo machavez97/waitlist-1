@@ -11,7 +11,7 @@ import InputForm from './components/InputForm';
 import HomePage from './components/homepage';
 import Login from './components/loginpage';
 import Search from './components/searchpage';
-import SelectedResult from './components/seletectResult';
+import SelectedResult from './components/selectedResult';
 
 
 
@@ -48,7 +48,7 @@ const handleLogout = () => {
           <Route path="/signup" element={<InputForm/>} />
           <Route path="/login" element={<Login/>} />
           <Route path="/search" element={<Search handleLogout={handleLogout} />} />
-          <Route path="/result/:id" element={<Search handleLogout={handleLogout} />} />
+          <Route path="/result/:id" element={<SelectedResult handleLogout={handleLogout} />} />
 
 
         </Routes>
