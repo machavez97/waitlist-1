@@ -79,21 +79,21 @@ const SelectedResult = () => {
     
       // Create a canvas from the element
       html2canvas(element).then((canvas) => {
-        // Get the canvas data as an image URL
-        const imgData = canvas.toDataURL('image/png');
-    
-        // Initialize the PDF document
-        const pdf = new jsPDF();
-    
-        // Set the PDF content width and height to match the canvas
-        const pdfWidth = pdf.internal.pageSize.getWidth();
-        const pdfHeight = pdf.internal.pageSize.getHeight();
-    
-        // Add the canvas image to the PDF
-        pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-    
-        // Save the PDF file
-        pdf.save('document.pdf');
+        const imgWidth = 208;
+        const pageHeight = 295;
+        const imgHeight = (canvas.height * imgWidth) / canvas.width;
+        let heightLeft = imgHeight;
+        let position = 0;
+        heightLeft -= pageHeight;
+        const doc = new jsPDF('p', 'mm');
+        doc.addImage(canvas, 'PNG', 0, position, imgWidth, imgHeight, '', 'FAST');
+        while (heightLeft >= 0) {
+          position = heightLeft - imgHeight;
+          doc.addPage();
+          doc.addImage(canvas, 'PNG', 0, position, imgWidth, imgHeight, '', 'FAST');
+          heightLeft -= pageHeight;
+        }
+        doc.save('Application.pdf');
       });
     };
     
