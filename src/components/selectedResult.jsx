@@ -105,12 +105,9 @@ const SelectedResult = () => {
 
             </nav>
         <div>
-        <button className='pdf-button' onClick={generatePDF}>Generate PDF</button>
-
-    
+   
           {searchResults.length > 0 ? (
           <div className="results-container">
-            <h3>Search Results:</h3>
             {searchResults.map((result) => (
             <div id="pdf-content">
               <div key={result.id}>
@@ -124,6 +121,14 @@ const SelectedResult = () => {
                 placeholder={result.rank?? ''}
                 onChange={(e) => setRank(e.target.value)}></input>
                 </div>
+                <div>
+                <div>
+                <h3>Office Notes</h3>
+                </div>
+                <textarea  id="notes" rows="4" cols="50"   
+                value={officeNotes || result.officeNotes}
+                onChange={(e) => setOfficeNotes(e.target.value)}></textarea>
+              </div>
                 <h3>Primary Parent/Guardian</h3>
                 <div className="group1">
                <label htmlFor="first-name" className="input-label">
@@ -361,70 +366,74 @@ const SelectedResult = () => {
         <h3>Children</h3> 
 
 
-      {result.children.map((child, index) => (
-  <div key={index} className="child-field">
-    <div>
-      <label htmlFor={`child-name-${index}`} className="input-label">
-        Full Name:
-      </label>
-      <input
-        type="text"
-        id={`child-name-${index}`}
-        className="input-box"
-        value={child.name}
-        readOnly
-      />
-   
-      <label htmlFor={`child-birthday-${index}`} className="input-label">
-        Birthday:
-      </label>
-      <input
-        type="date"
-        id={`child-birthday-${index}`}
-        className="input-box"
-        value={child.birthday}
-        readOnly
-      />
+        <div className="children-display-container">
+  {result.children.map((child, index) => (
+    <div key={index} className="child-display-field">
+      <div className="child-display-info">
+        <div className='stack'>
+          <label htmlFor={`child-name-${index}`} className="input-label">
+            Full Name:
+          </label>
+          <input
+            type="text"
+            id={`child-name-${index}`}
+            className="input-box"
+            value={child.name}
+            readOnly
+          />
+        
+          <label htmlFor={`child-birthday-${index}`} className="input-label">
+            Birthday:
+          </label>
+          <input
+            type="date"
+            id={`child-birthday-${index}`}
+            className="input-box"
+            value={child.birthday}
+            readOnly
+          />
+        
+        <div className="checkbox-group">
+          <label htmlFor={`child-need-care-${index}`} className="checkbox-label">
+            Need Care:
+          </label>
+          <input
+            type="checkbox"
+            id={`child-need-care-${index}`}
+            checked={child.needCare}
+            readOnly
+          />
+        </div>
+        <div className="checkbox-group">
+          <label htmlFor={`child-full-time-${index}`} className="checkbox-label">
+            Full Time:
+          </label>
+          <input
+            type="checkbox"
+            id={`child-full-time-${index}`}
+            checked={child.fullTime}
+            readOnly
+            disabled={!child.needCare || child.partTime}
+          />
+        </div>
+        <div className="checkbox-group">
+          <label htmlFor={`child-part-time-${index}`} className="checkbox-label">
+            Part Time:
+          </label>
+          <input
+            type="checkbox"
+            id={`child-part-time-${index}`}
+            checked={child.partTime}
+            readOnly
+            disabled={!child.needCare || child.fullTime}
+          />
+        </div>
+        </div>
+      </div>
     </div>
-    <div className="checkbox-group">
-      <label htmlFor={`child-need-care-${index}`} className="checkbox-label">
-        Need Care:
-      </label>
-      <input
-        type="checkbox"
-        id={`child-need-care-${index}`}
-        checked={child.needCare}
-        readOnly
-      />
-    </div>
+  ))}
+</div>
 
-    <div className="checkbox-group">
-      <label htmlFor={`child-full-time-${index}`} className="checkbox-label">
-        Full Time:
-      </label>
-      <input
-        type="checkbox"
-        id={`child-full-time-${index}`}
-        checked={child.fullTime}
-        readOnly
-        disabled={!child.needCare || child.partTime}
-      />
-    </div>
-    
-    <div>
-      <label htmlFor={`child-part-time-${index}`} className="checkbox-label">
-        Part Time:
-      </label>
-      <input
-        type="checkbox"
-        id={`child-part-time-${index}`}
-        checked={child.partTime}
-        readOnly
-        disabled={!child.needCare || child.fullTime}
-      />
-    </div>
-    </div>
-      ))}
 
           <div>
             <h1>Income Information</h1>
@@ -708,14 +717,7 @@ const SelectedResult = () => {
         </div>
       )}
     </div>
-    <div>
-          <div>
-          <h3>Office Notes</h3>
-          </div>
-          <textarea  id="notes" rows="4" cols="50"   
-          value={officeNotes || result.officeNotes}
-          onChange={(e) => setOfficeNotes(e.target.value)}></textarea>
-        </div>
+    
 </div>
 
 
@@ -723,6 +725,7 @@ const SelectedResult = () => {
           </div>
           </div>
           ))}
+          <button className='pdf-button' onClick={generatePDF}>Generate PDF</button>
           <div className="btn-container">
         <button type="submit" className="submit-button" onClick={submitForm}>
           Submit
@@ -730,6 +733,8 @@ const SelectedResult = () => {
         <button type="cancel" className="cancel-button" onClick={() => navigate('/search')}>
           Back to Search
         </button>
+        
+
       </div>
           </div>
         ) : (

@@ -36,7 +36,7 @@ function HomePage({ handleLogout }) {
 			<div className="block5">
 				
 				<Link to = "signup">
-					<button type="Search" id="Search" className="HomePageButton" >Signup Form</button>
+					<button type="Search" id="Search" className="HomePageButton" >Application</button>
 				</Link>
 				<Link to = "Search">
 					<button type="Search" id="Search" className="HomePageButton" >Search</button>

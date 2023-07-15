@@ -83,7 +83,35 @@ const InputForm = () => {
     updatedChildren[index][field] = value;
     setChildren(updatedChildren);
   };
+  const formatPhoneNumber = (input) => {
+    const digitsOnly = input.replace(/\D/g, '');
+    const formattedNumber = digitsOnly
+      .replace(/(\d{0,3})(\d{0,3})(\d{0,4})/, (match, part1, part2, part3) => {
+        if (part1 && part2 && part3) {
+          return `(${part1}) ${part2}-${part3}`;
+        } else if (part1 && part2) {
+          return `(${part1}) ${part2}`;
+        } else if (part1) {
+          return `(${part1}`;
+        }
+        return '';
+      });
+    return formattedNumber;
+  };
 
+  const changePPhone = (e) => {
+    const input = e.target.value;
+    const formattedNumber = formatPhoneNumber(input);
+    PsetPhoneNumber(formattedNumber);
+  };
+
+  const changeSPhone = (e) => {
+    const input = e.target.value;
+    const formattedNumber = formatPhoneNumber(input);
+    SsetPhoneNumber(formattedNumber);
+  };
+
+  
   const submitForm = async (e) => {
     e.preventDefault();
     let isValid = true;
@@ -155,6 +183,7 @@ const InputForm = () => {
     } catch (e) {
       console.error("Error adding document: ", e);
     }
+    alert("Submission Successful")
     window.location.reload();
 
   }
@@ -197,7 +226,7 @@ const InputForm = () => {
 
         <div className="group2">
           
-            <label htmlFor="phone-number" className="input-label">
+              <label htmlFor="phone-number" className="input-label">
               Phone Number:
             </label>
             <input
@@ -205,7 +234,10 @@ const InputForm = () => {
               id="phone-number"
               className="input-box"
               value={PphoneNumber}
-              onChange={(e) => PsetPhoneNumber(e.target.value)}
+              onChange={changePPhone}
+              maxLength={14}
+              pattern="\(\d{0,3}\) \d{0,3}-\d{0,4}"
+              placeholder="(XXX) XXX-XXXX"
             />
             <label htmlFor="text" className="checkbox-label">
                  Text OK:
@@ -324,7 +356,10 @@ const InputForm = () => {
               id="phone-number"
               className="input-box"
               value={SphoneNumber}
-              onChange={(e) => SsetPhoneNumber(e.target.value)}
+              onChange={changeSPhone}
+              maxLength={14}
+              pattern="\(\d{0,3}\) \d{0,3}-\d{0,4}"
+              placeholder="(XXX) XXX-XXXX"
             />
             <label htmlFor="text" className="checkbox-label">
                  Text OK:
@@ -409,83 +444,85 @@ const InputForm = () => {
 
         <div className="children-section">
           <h3>Children</h3> 
-          
-          
-          
-          {children.map((child, index) => (
-  <div key={index} className="child-field">
-    <div>
-      <label htmlFor={`child-name-${index}`} className="input-label">
-        Full Name:
-      </label>
-      <input
-        type="text"
-        id={`child-name-${index}`}
-        className="input-box"
-        value={child.name}
-        onChange={(e) => handleChildFieldChange(index, "name", e.target.value)}
-      />
-   
-      <label htmlFor={`child-birthday-${index}`} className="input-label">
-        Birthday:
-      </label>
-      <input
-        type="date"
-        id={`child-birthday-${index}`}
-        className="input-box"
-        value={child.birthday}
-        onChange={(e) => handleChildFieldChange(index, "birthday", e.target.value)}
-      />
-    </div>
-    <div className="checkbox-group">
-            <label htmlFor={`child-need-care-${index}`} className="checkbox-label">
-        Need Care:
-      </label>
-      <input
-        type="checkbox"
-        id={`child-need-care-${index}`}
-        checked={child.needCare}
-        onChange={(e) => handleChildFieldChange(index, "needCare", e.target.checked)}
-        
-      />
-    </div>
 
-          <div className="checkbox-group">
-            <label htmlFor={`child-full-time-${index}`} className="checkbox-label">
-        Full Time:
-      </label>
-      <input
-        type="checkbox"
-        id={`child-full-time-${index}`}
-        checked={child.fullTime}
-        onChange={(e) => handleChildFieldChange(index, "fullTime", e.target.checked)}
-        disabled={!child.needCare || child.partTime} // Disable if needCare and fullTime are both true
-      />
-    </div>
+          
+          
+   <div className="children-container">
+      {children.map((child, index) => (
     
-    <div>
-      <label htmlFor={`child-part-time-${index}`} className="checkbox-label">
-        Part Time:
-      </label>
-      <input
-        type="checkbox"
-        id={`child-part-time-${index}`}
-        checked={child.partTime}
-        onChange={(e) => handleChildFieldChange(index, "partTime", e.target.checked)}
-        disabled={!child.needCare || child.fullTime} // Disable if needCare and fullTime are both true
-      />
+        <div key={index} className="child-field">
+          <div className="child-info">
+            <div>
+              <label htmlFor={`child-name-${index}`} className="input-label">
+                Full Name:
+              </label>
+              <input
+                type="text"
+                id={`child-name-${index}`}
+                className="input-box"
+                value={child.name}
+                onChange={(e) => handleChildFieldChange(index, "name", e.target.value)}
+              />
+            </div>
+            <div>
+            <label htmlFor={`child-birthday-${index}`} className="input-label">
+              Birthday:
+            </label>
+            <input
+              type="date"
+              id={`child-birthday-${index}`}
+              className="input-box"
+              value={child.birthday}
+              onChange={(e) => handleChildFieldChange(index, "birthday", e.target.value)}
+            />
+              </div>
+              <div className="checkbox-group">
+                <label htmlFor={`child-need-care-${index}`} className="checkbox-label">
+                  Need Care:
+                </label>
+                <input
+                  type="checkbox"
+                  id={`child-need-care-${index}`}
+                  checked={child.needCare}
+                  onChange={(e) => handleChildFieldChange(index, "needCare", e.target.checked)}
+                />
+              </div>
+            <div className="checkbox-group">
+              <label htmlFor={`child-full-time-${index}`} className="checkbox-label">
+                Full Time:
+              </label>
+              <input
+                type="checkbox"
+                id={`child-full-time-${index}`}
+                checked={child.fullTime}
+                onChange={(e) => handleChildFieldChange(index, "fullTime", e.target.checked)}
+                disabled={!child.needCare || child.partTime}
+              />
+            </div>
+            <div className="checkbox-group">
+              <label htmlFor={`child-part-time-${index}`} className="checkbox-label">
+                Part Time:
+              </label>
+              <input
+                type="checkbox"
+                id={`child-part-time-${index}`}
+                checked={child.partTime}
+                onChange={(e) => handleChildFieldChange(index, "partTime", e.target.checked)}
+                disabled={!child.needCare || child.fullTime}
+              />
+        </div>
+      </div>
+      {/* Delete Button */}
+      <button className="remove-child-button" onClick={() => handleDeleteChild(index)}>
+        Remove Child
+      </button>
     </div>
-    {/* Delete Button */}
-    
-    <button
-      className="remove-child-button"
-      onClick={() => handleDeleteChild(index)}
-    >
-      Remove Child
-    </button>
-  </div>
-))}
-          <button type="button" className="add-child-button" onClick={addChildField}>Add Child</button>
+  ))}
+  
+</div>
+<button type="button" className="add-child-button" onClick={addChildField}>Add Child</button>
+
+
         </div>
         <div>
             <h1>Income Information</h1>

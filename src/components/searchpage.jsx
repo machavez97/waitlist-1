@@ -45,7 +45,7 @@ const Search = () => {
       if (searchQuery !== '' && !isFullTimeChecked && !isPartTimeChecked) {
         const q = query(collection(db, 'Applicants'), 
         or(
-          where('rank.rank', '==', searchQuery),
+          where('rank', '==', searchQuery),
           where('PfirstName', '==', searchQuery),
           where('PlastName', '==', searchQuery),
           where('SfirstName', '==', searchQuery),
@@ -65,7 +65,7 @@ const Search = () => {
         const q = query(collection(db, 'Applicants'), and(
         where('fullDayCareChecked', '==', isFullTimeChecked),
         or(
-          where('rank.rank', '==', searchQuery),
+          where('rank', '==', searchQuery),
           where('PfirstName', '==', searchQuery),
           where('PlastName', '==', searchQuery),
           where('SfirstName', '==', searchQuery),
@@ -86,7 +86,7 @@ const Search = () => {
         const q = query(collection(db, 'Applicants'), and( 
         where('preschoolOnlyChecked', '==', isPartTimeChecked),
         or(
-          where('rank.rank', '==', searchQuery),
+          where('rank', '==', searchQuery),
           where('PfirstName', '==', searchQuery),
           where('PlastName', '==', searchQuery),
           where('SfirstName', '==', searchQuery),
@@ -159,14 +159,28 @@ const Search = () => {
             {searchResults.map((result, index) => (
               
               <div key={result.id}>
-                <div> 
-                <h3 className='leftHeader'>Rank</h3>
-                <input
-                type="text"
-                className='rank-box'
-                value={result.rank?? ''}
-                readOnly></input>
+                
+                <div className="rank-container">
+                  <h3 className='leftHeader'>Rank</h3>
+                  <input
+                    type="text"
+                    className='rank-box'
+                    value={result.rank ?? ''}
+                    readOnly
+                  />
                 </div>
+                <div className="office-notes-container">
+                  <h3>Office Notes</h3>
+                  <textarea
+                    readOnly
+                    id="notes"
+                    rows="4"
+                    cols="50"
+                    value={result.officeNotes ?? ''}
+                  ></textarea>
+                </div>
+              
+
                 <h3>Primary Parent/Guardian</h3>
                 <div className="group1">
                <label htmlFor="first-name" className="input-label">
@@ -222,10 +236,12 @@ const Search = () => {
 
         <h3>Children</h3> 
 
+        <div className="children-display-container">
 
       {result.children.map((child, index) => (
-  <div key={index} className="child-field">
-    <div>
+  <div key={index} className="child-display-field">
+    <div className="child-display-info">
+        <div className='stack'>
       <label htmlFor={`child-name-${index}`} className="input-label">
         Full Name:
       </label>
@@ -247,7 +263,7 @@ const Search = () => {
         value={child.birthday}
         readOnly
       />
-    </div>
+    
     <div className="checkbox-group">
       <label htmlFor={`child-need-care-${index}`} className="checkbox-label">
         Need Care:
@@ -286,18 +302,16 @@ const Search = () => {
       />
     </div>
     </div>
+    </div>
+    </div>
       ))}
+          </div>
+
 
           
 
       <div>
-    <div>
-          <div>
-          <h3>Office Notes</h3>
-          </div>
-          <textarea readOnly id="notes" rows="4" cols="50" value={result.officeNotes?? ''}
-          ></textarea>
-        </div>
+    
         <button className= 'submit-button' onClick={() => handleResultClick(index)}>Select</button>
 </div>
 
