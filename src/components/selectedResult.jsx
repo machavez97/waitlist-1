@@ -20,6 +20,8 @@ const SelectedResult = () => {
     const [searchResults, setSearchResults] = useState([]);
     const [rank, setRank] = useState('');
     const [officeNotes, setOfficeNotes] = useState('');
+    const [formData, setFormData] = useState({});
+
 
     
     const navigate = useNavigate();
@@ -34,44 +36,69 @@ const SelectedResult = () => {
           try {
             const docRef = doc(db, 'Applicants', id);
             const documentSnapshot = await getDoc(docRef);
-    
+  
             if (documentSnapshot.exists()) {
               const documentData = documentSnapshot.data();
               setSearchResults([documentData]);
+              setFormData(documentData);
             } else {
               setSearchResults([]);
+              setFormData({});
             }
           } catch (error) {
             console.error('Error fetching document:', error);
           }
         }
       };
-    
+  
       fetchData();
     }, [id]);
+
+    const formatPhoneNumber = (input) => {
+      const digitsOnly = input.replace(/\D/g, '');
+      const formattedNumber = digitsOnly
+        .replace(/(\d{0,3})(\d{0,3})(\d{0,4})/, (match, part1, part2, part3) => {
+          if (part1 && part2 && part3) {
+            return `(${part1}) ${part2}-${part3}`;
+          } else if (part1 && part2) {
+            return `(${part1}) ${part2}`;
+          } else if (part1) {
+            return `(${part1}`;
+          }
+          return '';
+        });
+      return formattedNumber;
+    };
+  
+    const changePPhone = (e) => {
+      const input = e.target.value;
+
+      const formattedNumber = formatPhoneNumber(input);
+      setFormData({ ...formData, PphoneNumber: formattedNumber })
+    };
+  
+    const changeSPhone = (e) => {
+      const input = e.target.value;
+
+      const formattedNumber = formatPhoneNumber(input);
+      setFormData({ ...formData, SphoneNumber: formattedNumber })
+    };
     
     const submitForm = async (e) => {
       e.preventDefault();
-      console.log(id);
-      await updateDoc(doc(db, "Applicants",id), {
-        rank,
-        officeNotes
-      });
+  
+      await updateDoc(doc(db, 'Applicants', id), formData);
       window.location.reload();
-
-      
-    
     };
+    
     useEffect(() => {
-        const authToken = getAuth();
-        onAuthStateChanged(authToken, (user) =>{
-            if (!user) {
-                routeChange();
-
-            }
-        })
-
-    }, [])
+      const authToken = getAuth();
+      onAuthStateChanged(authToken, (user) => {
+        if (!user) {
+          routeChange();
+        }
+      });
+    }, []);
     
     const generatePDF = () => {
       // Select the element to convert to PDF
@@ -96,6 +123,8 @@ const SelectedResult = () => {
         doc.save('Application.pdf');
       });
     };
+
+
     
  
     return (
@@ -115,19 +144,21 @@ const SelectedResult = () => {
                 <div> 
                 <h3 className='leftHeader'>Rank</h3>
                 <input
-                type="text"
-                className='rank-box'
-                value={rank}
-                placeholder={result.rank?? ''}
-                onChange={(e) => setRank(e.target.value)}></input>
+                  type="text"
+                  className="rank-box"
+                  value={formData.rank}
+                  onChange={(e) => setFormData({ ...formData, rank: e.target.value })}
+                />
+
+
                 </div>
                 <div>
                 <div>
                 <h3>Office Notes</h3>
                 </div>
                 <textarea  id="notes" rows="4" cols="50"   
-                value={officeNotes || result.officeNotes}
-                onChange={(e) => setOfficeNotes(e.target.value)}></textarea>
+                value={formData.officeNotes}
+                onChange={(e) => setFormData({ ...formData, officeNotes: e.target.value })}></textarea>
               </div>
                 <h3>Primary Parent/Guardian</h3>
                 <div className="group1">
@@ -138,8 +169,9 @@ const SelectedResult = () => {
               type="text"
               id="first-name"
               className="input-box"
-              value={result.PfirstName}
-              readOnly 
+              value={formData.PfirstName}
+              onChange={(e) => setFormData({ ...formData, PfirstName: e.target.value })}
+ 
               
             />
 
@@ -150,8 +182,8 @@ const SelectedResult = () => {
               type="text"
               id="last-name"
               className="input-box"
-              readOnly
-              value={result.PlastName}
+              onChange={(e) => setFormData({ ...formData, PlastName: e.target.value })}
+              value={formData.PlastName}
             />
               </div>
 
@@ -163,16 +195,21 @@ const SelectedResult = () => {
               type="text"
               id="phone-number"
               className="input-box"
-              value={result.PphoneNumber}
-              readOnly/>
+              value={formData.PphoneNumber}
+              onChange={changePPhone}
+              maxLength={14}
+              pattern="\(\d{0,3}\) \d{0,3}-\d{0,4}"
+            />
             <label htmlFor="text" className="checkbox-label">
                  Text OK:
             </label>
             <input
                 type="checkbox"
                 id="text"
-                checked={result.PtextOK}
-                readOnly/>
+                checked={formData.PtextOK}
+                onChange={(e) => setFormData({...formData, PtextOK: e.target.checked})}
+
+                />
          
             <label htmlFor="email" className="input-label">
               Email:
@@ -181,8 +218,9 @@ const SelectedResult = () => {
               type="text"
               id="email"
               className="input-box"
-              value={result.Pemail}
-               readOnly
+              value={formData.Pemail}
+              onChange={(e) => setFormData({ ...formData, Pemail: e.target.value })}
+
             />
             </div>
 
@@ -195,8 +233,9 @@ const SelectedResult = () => {
               type="text"
               id="street"
               className="input-box"
-              value={result.Pstreet}
-              readOnly
+              value={formData.Pstreet}
+              onChange={(e) => setFormData({ ...formData, Pstreet: e.target.value })}
+
             />
           
             <label htmlFor="city" className="input-label">
@@ -206,8 +245,9 @@ const SelectedResult = () => {
               type="text"
               id="city"
               className="input-box"
-              value={result.Pcity}
-              readOnly
+              value={formData.Pcity}
+              onChange={(e) => setFormData({ ...formData, Pcity: e.target.value })}
+
             />
           
             <label htmlFor="state" className="input-label">
@@ -217,8 +257,9 @@ const SelectedResult = () => {
               type="text"
               id="state"
               className="input-box"
-              value={result.Pstate}
-              readOnly
+              value={formData.Pstate}
+              onChange={(e) => setFormData({ ...formData, Pstate: e.target.value })}
+
             />
 
             <label htmlFor="zip" className="input-label">
@@ -228,36 +269,28 @@ const SelectedResult = () => {
               type="text"
               id="zip"
               className="input-box"
-              value={result.Pzip}
-              readOnly
+              value={formData.Pzip}
+              onChange={(e) => setFormData({ ...formData, Pzip: e.target.value })}
+
             />
-            <div>
-            <label htmlFor="lives-in-home" className="checkbox-label">
-                Lives in home:
-            </label>
-            <input
-                type="checkbox"
-                id="lives-in-home"
-                checked={result.PlivesInHome}
-                readOnly
-            />
-            </div>
+            
         </div>
 
         <h3>Secondary Parent/Guardian</h3>
         <div className="group1">
-          
-            <label htmlFor="first-name" className="input-label">
-              First Name:
-            </label>
+               <label htmlFor="first-name" className="input-label">
+              First Name: 
+              </label>
             <input
               type="text"
               id="first-name"
               className="input-box"
-              value={result.SfirstName}
-              readOnly
+              value={formData.SfirstName}
+              onChange={(e) => setFormData({ ...formData, SfirstName: e.target.value })}
+ 
+              
             />
-                    
+
             <label htmlFor="last-name" className="input-label">
               Last Name:
             </label>
@@ -265,14 +298,12 @@ const SelectedResult = () => {
               type="text"
               id="last-name"
               className="input-box"
-              value={result.SlastName}
-              readOnly
+              onChange={(e) => setFormData({ ...formData, SlastName: e.target.value })}
+              value={formData.SlastName}
             />
-          
-        </div>
+              </div>
 
-        <div className="group2">
-          
+            <div className="group2">
             <label htmlFor="phone-number" className="input-label">
               Phone Number:
             </label>
@@ -280,8 +311,10 @@ const SelectedResult = () => {
               type="text"
               id="phone-number"
               className="input-box"
-              value={result.SphoneNumber}
-              readOnly
+              value={formData.SphoneNumber}
+              onChange={changeSPhone}
+              maxLength={14}
+              pattern="\(\d{0,3}\) \d{0,3}-\d{0,4}"
             />
             <label htmlFor="text" className="checkbox-label">
                  Text OK:
@@ -289,9 +322,10 @@ const SelectedResult = () => {
             <input
                 type="checkbox"
                 id="text"
-                checked={result.StextOK}
-                readOnly
-            />
+                checked={formData.StextOK}
+                onChange={(e) => setFormData({...formData, StextOK: e.target.checked})}
+
+                />
          
             <label htmlFor="email" className="input-label">
               Email:
@@ -300,14 +334,14 @@ const SelectedResult = () => {
               type="text"
               id="email"
               className="input-box"
-              value={result.Semail}
-              readOnly
-            />
-          
-        </div>
+              value={formData.Semail}
+              onChange={(e) => setFormData({ ...formData, Semail: e.target.value })}
 
-        <div className="group3">
-          
+            />
+            </div>
+
+
+            <div className="group3">
             <label htmlFor="street" className="input-label">
               Street:
             </label>
@@ -315,8 +349,9 @@ const SelectedResult = () => {
               type="text"
               id="street"
               className="input-box"
-              value={result.Sstreet}
-              readOnly
+              value={formData.Sstreet}
+              onChange={(e) => setFormData({ ...formData, Sstreet: e.target.value })}
+
             />
           
             <label htmlFor="city" className="input-label">
@@ -326,8 +361,9 @@ const SelectedResult = () => {
               type="text"
               id="city"
               className="input-box"
-              value={result.Scity}
-              readOnly
+              value={formData.Scity}
+              onChange={(e) => setFormData({ ...formData, Scity: e.target.value })}
+
             />
           
             <label htmlFor="state" className="input-label">
@@ -337,8 +373,9 @@ const SelectedResult = () => {
               type="text"
               id="state"
               className="input-box"
-              value={result.Sstate}
-              readOnly
+              value={formData.Sstate}
+              onChange={(e) => setFormData({ ...formData, Sstate: e.target.value })}
+
             />
 
             <label htmlFor="zip" className="input-label">
@@ -348,20 +385,11 @@ const SelectedResult = () => {
               type="text"
               id="zip"
               className="input-box"
-              value={result.Szip}
-              readOnly
+              value={formData.Szip}
+              onChange={(e) => setFormData({ ...formData, Szip: e.target.value })}
+
             />
-            <div>
-            <label htmlFor="lives-in-home" className="checkbox-label">
-                Lives in home:
-            </label>
-            <input
-                type="checkbox"
-                id="lives-in-home"
-                checked={result.SlivesInHome}
-                readOnly
-            />
-            </div>
+            
         </div>
         <h3>Children</h3> 
 

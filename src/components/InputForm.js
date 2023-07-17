@@ -61,7 +61,7 @@ const InputForm = () => {
   const [CALWorks, setCalWorks] = useState("");
   const [CALFresh, setCALFresh] = useState("");
   const [WIC, setWIC] = useState("");
-
+  
 
   const [children, setChildren] = useState([
     { name: "", birthday: "", fullTime: false, partTime: false, iepIfsp: false, needCare: false },
@@ -177,6 +177,7 @@ const InputForm = () => {
         WIC,
 
         children,
+        
        
       });
       console.log("Document written with ID: ", docRef.id);
@@ -205,9 +206,9 @@ const InputForm = () => {
               type="text"
               id="first-name"
               className="input-box"
-              value={PfirstName.trim()}
+              value={PfirstName}
               required 
-              onChange={(e) => PsetFirstName(e.target.value)}
+              onChange={(e) => PsetFirstName(e.target.value.trim())}
             />
                     
             <label htmlFor="last-name" className="input-label">
@@ -218,8 +219,8 @@ const InputForm = () => {
               id="last-name"
               className="input-box"
               required
-              value={PlastName.trim()}
-              onChange={(e) => PsetLastName(e.target.value)}
+              value={PlastName}
+              onChange={(e) => PsetLastName(e.target.value.trim())}
             />
           
         </div>
@@ -329,8 +330,8 @@ const InputForm = () => {
               type="text"
               id="first-name"
               className="input-box"
-              value={SfirstName.trim()}
-              onChange={(e) => SsetFirstName(e.target.value)}
+              value={SfirstName}
+              onChange={(e) => SsetFirstName(e.target.value.trim())}
             />
                     
             <label htmlFor="last-name" className="input-label">
@@ -340,8 +341,8 @@ const InputForm = () => {
               type="text"
               id="last-name"
               className="input-box"
-              value={SlastName.trim()}
-              onChange={(e) => SsetLastName(e.target.value)}
+              value={SlastName}
+              onChange={(e) => SsetLastName(e.target.value.trim())}
             />
           
         </div>
@@ -444,6 +445,7 @@ const InputForm = () => {
 
         <div className="children-section">
           <h3>Children</h3> 
+          <h6>Please List All Childeren under 18</h6>
 
           
           

@@ -9,20 +9,15 @@ import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 function HomePage({ handleLogout }) {
 	const navigate = useNavigate();
-	const routeChange = () => {
-        let path = '/login';
-        navigate(path);
-    };
+	
     useEffect(() => {
-        const authToken = getAuth();
-        onAuthStateChanged(authToken, (user) =>{
-            if (!user) {
-                routeChange();
-
-            }
-        })
-
-    }, [])
+		const authToken = getAuth();
+		onAuthStateChanged(authToken, (user) => {
+		  if (!user) {
+			navigate('/login');
+		  }
+		});
+	  }, []);
 
 
  	return (

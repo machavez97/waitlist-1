@@ -44,15 +44,16 @@ const Search = () => {
       e.preventDefault();
       setSearchResults([]);
       console.log(searchRank)
-      if (searchQuery !== '' && !isFullTimeChecked && !isPartTimeChecked) {
-        const q = query(collection(db, 'Applicants'), and(
-        where('rank', '==', searchRank),
+      if (searchQuery !== '' && !isFullTimeChecked && !isPartTimeChecked && !searchRank) {
+        console.log(searchQuery)
+        const q = query(collection(db, 'Applicants'), 
+        
         or(
           where('PfirstName', '==', searchQuery),
           where('PlastName', '==', searchQuery),
           where('SfirstName', '==', searchQuery),
           where('SlastName', '==', searchQuery),
-        )));
+        ));
         
     
         const querySnapshot = await getDocs(q);
@@ -149,7 +150,30 @@ const Search = () => {
       }
       
       
-    };
+   
+    else if (searchQuery && searchRank && !isFullTimeChecked && !isPartTimeChecked) {
+      const q = query(collection(db, 'Applicants'), and(
+      where('rank', '==', searchRank),
+      or(
+        where('PfirstName', '==', searchQuery),
+        where('PlastName', '==', searchQuery),
+        where('SfirstName', '==', searchQuery),
+        where('SlastName', '==', searchQuery),
+      )
+      ));
+  
+      const querySnapshot = await getDocs(q);
+      const fetchedDocuments = querySnapshot.docs.map((doc) => ({
+        id: doc.id,
+        data: doc.data(),
+      }));
+      setDocuments(fetchedDocuments);
+      setSearchResults(fetchedDocuments.map((doc) => doc.data));
+    }
+  };
+    
+    
+ 
     
     
     
