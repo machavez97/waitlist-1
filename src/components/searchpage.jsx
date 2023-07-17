@@ -13,6 +13,7 @@ import { Link } from 'react-router-dom';
  
 const Search = () => {
     const [searchQuery, setSearchQuery] = useState('');
+    const [searchRank, setSearchRank] = useState('');
     const [searchResults, setSearchResults] = useState([]);
     const [docID, setDocID] = useState('');
     const [documents, setDocuments] = useState([]);
@@ -42,15 +43,16 @@ const Search = () => {
     const handleSearch = async (e) => {
       e.preventDefault();
       setSearchResults([]);
+      console.log(searchRank)
       if (searchQuery !== '' && !isFullTimeChecked && !isPartTimeChecked) {
-        const q = query(collection(db, 'Applicants'), 
+        const q = query(collection(db, 'Applicants'), and(
+        where('rank', '==', searchRank),
         or(
-          where('rank', '==', searchQuery),
           where('PfirstName', '==', searchQuery),
           where('PlastName', '==', searchQuery),
           where('SfirstName', '==', searchQuery),
           where('SlastName', '==', searchQuery),
-        ));
+        )));
         
     
         const querySnapshot = await getDocs(q);
@@ -64,8 +66,8 @@ const Search = () => {
       else if (searchQuery !== '' && isFullTimeChecked) {
         const q = query(collection(db, 'Applicants'), and(
         where('fullDayCareChecked', '==', isFullTimeChecked),
+        where('rank', '==', searchRank),
         or(
-          where('rank', '==', searchQuery),
           where('PfirstName', '==', searchQuery),
           where('PlastName', '==', searchQuery),
           where('SfirstName', '==', searchQuery),
@@ -85,14 +87,57 @@ const Search = () => {
       else if (searchQuery !== '' && isPartTimeChecked) {
         const q = query(collection(db, 'Applicants'), and( 
         where('preschoolOnlyChecked', '==', isPartTimeChecked),
+        where('rank', '==', searchRank),
         or(
-          where('rank', '==', searchQuery),
           where('PfirstName', '==', searchQuery),
           where('PlastName', '==', searchQuery),
           where('SfirstName', '==', searchQuery),
           where('SlastName', '==', searchQuery),
         )));
    
+    
+        const querySnapshot = await getDocs(q);
+        const fetchedDocuments = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          data: doc.data(),
+        }));
+        setDocuments(fetchedDocuments);
+        setSearchResults(fetchedDocuments.map((doc) => doc.data));
+      }
+      else if (!searchQuery && searchRank && isPartTimeChecked) {
+        const q = query(collection(db, 'Applicants'), and( 
+        where('preschoolOnlyChecked', '==', isPartTimeChecked),
+        where('rank', '==', searchRank),
+        ));
+    
+        const querySnapshot = await getDocs(q);
+        const fetchedDocuments = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          data: doc.data(),
+        }));
+        setDocuments(fetchedDocuments);
+        setSearchResults(fetchedDocuments.map((doc) => doc.data));
+      }
+
+      else if (!searchQuery && searchRank && isFullTimeChecked) {
+        const q = query(collection(db, 'Applicants'), and( 
+        where('fullDayCareChecked', '==', isFullTimeChecked),
+        where('rank', '==', searchRank),
+        ));
+    
+        const querySnapshot = await getDocs(q);
+        const fetchedDocuments = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          data: doc.data(),
+        }));
+        setDocuments(fetchedDocuments);
+        setSearchResults(fetchedDocuments.map((doc) => doc.data));
+      }
+
+      else if (!searchQuery && searchRank && !isFullTimeChecked && !isPartTimeChecked) {
+        const q = query(collection(db, 'Applicants'), 
+        where('rank', '==', searchRank),
+        );
     
         const querySnapshot = await getDocs(q);
         const fetchedDocuments = querySnapshot.docs.map((doc) => ({
@@ -128,8 +173,17 @@ const Search = () => {
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Enter search query"
+              placeholder="First Name/Last Name"
             />
+            <div>
+            <input
+              className='rank-box'
+              type="text"
+              value={searchRank}
+              onChange={(e) => setSearchRank(e.target.value)}
+              placeholder="Rank"
+            />
+            </div>
             <div>
         <input
           type="checkbox"
