@@ -400,32 +400,32 @@ const SelectedResult = () => {
 
 
         <div className="children-display-container">
-        {formData.children.map((child, index) => (
-  <div key={index} className="child-display-field">
-    <div className="child-display-info">
-      <div className='stack'>
-        <label htmlFor={`child-name-${index}`} className="input-label">
-          Full Name:
-        </label>
-        <input
-          type="text"
-          id={`child-name-${index}`}
-          className="input-box"
-          value={child.name}
-          onChange={(e) => handleChildChange(index, 'name', e.target.value)}
-        />
-
-        <label htmlFor={`child-birthday-${index}`} className="input-label">
-          Birthday:
-        </label>
-        <input
-          type="date"
-          id={`child-birthday-${index}`}
-          className="input-box"
-          value={child.birthday}
-          onChange={(e) => handleChildChange(index, 'birthday', e.target.value)}
-        />
-
+  {formData.children.map((child, index) => (
+    <div key={index} className="child-display-field">
+      <div className="child-display-info">
+        <div className='stack'>
+          <label htmlFor={`child-name-${index}`} className="input-label">
+            Full Name:
+          </label>
+          <input
+            type="text"
+            id={`child-name-${index}`}
+            className="input-box"
+            value={child.name}
+            readOnly
+          />
+        
+          <label htmlFor={`child-birthday-${index}`} className="input-label">
+            Birthday:
+          </label>
+          <input
+            type="date"
+            id={`child-birthday-${index}`}
+            className="input-box"
+            value={child.birthday}
+            readOnly
+          />
+        
         <div className="checkbox-group">
           <label htmlFor={`child-need-care-${index}`} className="checkbox-label">
             Need Care:
@@ -434,7 +434,7 @@ const SelectedResult = () => {
             type="checkbox"
             id={`child-need-care-${index}`}
             checked={child.needCare}
-            onChange={(e) => handleChildChange(index, 'needCare', e.target.checked)}
+            readOnly
           />
         </div>
         <div className="checkbox-group">
@@ -445,7 +445,7 @@ const SelectedResult = () => {
             type="checkbox"
             id={`child-full-time-${index}`}
             checked={child.fullTime}
-            onChange={(e) => handleChildChange(index, 'fullTime', e.target.checked)}
+            readOnly
             disabled={!child.needCare || child.partTime}
           />
         </div>
@@ -457,15 +457,14 @@ const SelectedResult = () => {
             type="checkbox"
             id={`child-part-time-${index}`}
             checked={child.partTime}
-            onChange={(e) => handleChildChange(index, 'partTime', e.target.checked)}
+            readOnly
             disabled={!child.needCare || child.fullTime}
           />
         </div>
+        </div>
       </div>
     </div>
-  </div>
-))}
-
+  ))}
 </div>
 
 
@@ -493,30 +492,29 @@ const SelectedResult = () => {
             <tr>
               
               <td>
-                <input  type="text" className="input-box" value={formData.Pwages}
-                onChange={(e) => setFormData({...formData, Pwages: e.target.value})}/>
-
+                <input  type="text" className="input-box" value={result.Pwages}
+              readOnly/>
               </td>
               <td>
-                <input  type="text" className="input-box" value={formData.PchildSupport}
-                onChange={(e) => setFormData({...formData, PchildSupport: e.target.value})}/>
-                </td>
+                <input  type="text" className="input-box" value={result.PchildSupport}
+              readOnly/>
+              </td>
               <td>
-              <input  type="text" className="input-box" value={formData.PAlimony}
-                onChange={(e) => setFormData({...formData, PAlimony: e.target.value})}/>
-                </td>
+              <input  type="text" className="input-box" value={result.PAlimony}
+              readOnly/>
+              </td>
               <td>
-                <input type="text" className="input-box" value={formData.PSocialSecurity}
-                onChange={(e) => setFormData({...formData, PSocialSecurity: e.target.value})}/>
-                </td>
+                <input type="text" className="input-box" value={result.PSocialSecurity}
+              readOnly/>
+              </td>
               <td>
-                <input type="text" className="input-box" value={formData.PCashAid}
-                onChange={(e) => setFormData({...formData, PCashAid: e.target.value})}/>
-                </td>
+                <input type="text" className="input-box" value={result.PCashAid}
+              readOnly/>
+              </td>
               <td>
-                <input type="text" className="input-box" value={formData.POther}
-                onChange={(e) => setFormData({...formData, POther: e.target.value})}/>
-                </td>
+                <input type="text" className="input-box" value={result.POther}
+              readOnly/>
+              </td>
             </tr>
           </tbody>
         </table>
@@ -535,33 +533,32 @@ const SelectedResult = () => {
             </tr>
           </thead>
           <tbody>
-          <tr>
+            <tr>
               
               <td>
-                <input  type="text" className="input-box" value={formData.Swages}
-                onChange={(e) => setFormData({...formData, Swages: e.target.value})}/>
-
+                <input  type="text" className="input-box" value={result.Swages}
+              readOnly/>
               </td>
               <td>
-                <input  type="text" className="input-box" value={formData.SchildSupport}
-                onChange={(e) => setFormData({...formData, SchildSupport: e.target.value})}/>
-                </td>
+                <input  type="text" className="input-box" value={result.SchildSupport}
+              readOnly/>
+              </td>
               <td>
-              <input  type="text" className="input-box" value={formData.SAlimony}
-                onChange={(e) => setFormData({...formData, SAlimony: e.target.value})}/>
-                </td>
+                <input  type="text" className="input-box" value={result.SAlimony}
+              readOnly/>
+              </td>
               <td>
-                <input type="text" className="input-box" value={formData.SSocialSecurity}
-                onChange={(e) => setFormData({...formData, SSocialSecurity: e.target.value})}/>
-                </td>
+                <input type="text" className="input-box" value={result.SSocialSecurity}
+              readOnly/>
+              </td>
               <td>
-                <input type="text" className="input-box" value={formData.SCashAid}
-                onChange={(e) => setFormData({...formData, SCashAid: e.target.value})}/>
-                </td>
+                <input type="text" className="input-box" value={result.SCashAid}
+              readOnly/>
+              </td>
               <td>
-                <input type="text" className="input-box" value={formData.SOther}
-                onChange={(e) => setFormData({...formData, SOther: e.target.value})}/>
-                </td>
+                <input type="text" className="input-box" value={result.SOther}
+              readOnly/>
+              </td>
             </tr>
           </tbody>
         </table>
@@ -573,8 +570,8 @@ const SelectedResult = () => {
             If no income, please explain how household is supported:
           </label>
           </div>
-          <textarea id="notes" rows="4" cols="50" value={formData.incomeExplaination}
-          onChange={(e) => setFormData({...formData, incomeExplaination: e.target.value})}></textarea>
+          <textarea id="notes" rows="4" cols="50" value={result.incomeExplaination}
+          readOnly></textarea>
         </div>
           </div>
         </div>
@@ -595,16 +592,16 @@ const SelectedResult = () => {
           </tr>
           <tr>
             <td>
-              <input placeholder="Amount per month" type="text" className="input-box" value={formData.CALWorks}
-                    onChange={(e) => setFormData({...formData, CALWorks: e.target.value})}/>
+              <input placeholder="Amount per month" type="text" className="input-box" value={result.CALWorks}
+                    readOnly/>
             </td>
             <td>
-              <input placeholder="Amount per month" type="text" className="input-box" value={formData.CALFresh}
-                    onChange={(e) => setFormData({...formData, CALFresh: e.target.value})}/>
+              <input placeholder="Amount per month" type="text" className="input-box" value={result.CALFresh}
+                    readOnly/>
             </td>
             <td>
-              <input placeholder="Amount per month" type="text" className="input-box" value={formData.WIC}
-                    onChange={(e) => setFormData({...formData, WIC: e.target.value})}/>
+              <input placeholder="Amount per month" type="text" className="input-box" value={result.WIC}
+                    readOnly/>
             </td>
           </tr>
         </table>
@@ -618,9 +615,8 @@ const SelectedResult = () => {
         <input
           type="checkbox"
           id="full-day-care"
-          checked={formData.fullDayCareChecked}
-          onChange={(e) => setFormData({...formData, fullDayCareChecked: e.target.checked})}
-
+          checked={result.fullDayCareChecked}
+          readOnly
         />
         <label htmlFor="full-day-care">Full Day Care</label>
       </div>
@@ -646,29 +642,28 @@ const SelectedResult = () => {
           <tbody>
             <tr>
               <td>
-                <input type="checkbox" checked={formData.Pworking}
-                onChange={(e) => setFormData({...formData, Pworking: e.target.checked})}
-                />
+                <input type="checkbox" checked={result.Pworking}
+                readOnly/>
               </td>
               <td>
-                <input type="checkbox" checked={formData.PlookingForWorking}
-                onChange={(e) => setFormData({...formData, PlookingForWorking: e.target.checked})}/>
+                <input type="checkbox" checked={result.PlookingForWorking}
+                readOnly/>
               </td>
               <td>
-                <input type="checkbox" checked={formData.PgoingToSchool}
-                onChange={(e) => setFormData({...formData, PgoingToSchool: e.target.checked})}/>
+                <input type="checkbox" checked={result.PgoingToSchool}
+                readOnly/>
               </td>
               <td>
-                <input type="checkbox" checked={formData.PCPSorAtRisk}
-                onChange={(e) => setFormData({...formData, PCPSorAtRisk: e.target.checked})}/>
+                <input type="checkbox" checked={result.PCPSorAtRisk}
+                readOnly/>
               </td>
               <td>
-                <input type="checkbox" checked={formData.PsetIncapacitate}
-                onChange={(e) => setFormData({...formData, PsetIncapacitate: e.target.checked})}/>
+                <input type="checkbox" checked={result.PsetIncapacitate}
+                readOnly/>
               </td>
               <td>
-                <input type="checkbox" checked={formData.PIEPpreschoolOnly}
-                onChange={(e) => setFormData({...formData, PIEPpreschoolOnly: e.target.checked})}/>
+                <input type="checkbox" checked={result.PIEPpreschoolOnly}
+                readOnly/>
               </td>
             </tr>
           </tbody>
@@ -689,31 +684,30 @@ const SelectedResult = () => {
             </tr>
           </thead>
           <tbody>
-          <tr>
+            <tr>
               <td>
-                <input type="checkbox" checked={formData.Sworking}
-                onChange={(e) => setFormData({...formData, Sworking: e.target.checked})}
-                />
+              <input type="checkbox" checked={result.Sworking}
+                readOnly/>
               </td>
               <td>
-                <input type="checkbox" checked={formData.SlookingForWorking}
-                onChange={(e) => setFormData({...formData, SlookingForWorking: e.target.checked})}/>
+                <input type="checkbox" checked={result.SlookingForWorking}
+                readOnly/>
               </td>
               <td>
-                <input type="checkbox" checked={formData.SgoingToSchool}
-                onChange={(e) => setFormData({...formData, SgoingToSchool: e.target.checked})}/>
+                <input type="checkbox" checked={result.SgoingToSchool}
+                readOnly/>
               </td>
               <td>
-                <input type="checkbox" checked={formData.SCPSorAtRisk}
-                onChange={(e) => setFormData({...formData, SCPSorAtRisk: e.target.checked})}/>
+                <input type="checkbox" checked={result.SCPSorAtRisk}
+                readOnly/>
               </td>
               <td>
-                <input type="checkbox" checked={formData.SsetIncapacitate}
-                onChange={(e) => setFormData({...formData, SsetIncapacitate: e.target.checked})}/>
+                <input type="checkbox" checked={result.SsetIncapacitate}
+                readOnly/>
               </td>
               <td>
-                <input type="checkbox" checked={formData.SIEPpreschoolOnly}
-                onChange={(e) => setFormData({...formData, SIEPpreschoolOnly: e.target.checked})}/>
+                <input type="checkbox" checked={result.SIEPpreschoolOnly}
+                readOnly/>
               </td>
             </tr>
           </tbody>
@@ -727,13 +721,13 @@ const SelectedResult = () => {
         <input
           type="checkbox"
           id="preschool-only"
-          checked={formData.preschoolOnlyChecked}
-          onChange={(e) => setFormData({...formData, preschoolOnlyChecked: e.target.checked})}
-          />
+          checked={result.preschoolOnlyChecked}
+          readOnly
+        />
         <label htmlFor="preschool-only">Preschool Only</label>
       </div>
 
-      {formData.preschoolOnlyChecked && (
+      {result.preschoolOnlyChecked && (
         <div className="table2">
             <h5>For ranking purpose please indicate if child is CPS/At Risk or child has IEP</h5>
           <table className="grid">
@@ -744,13 +738,13 @@ const SelectedResult = () => {
             </tr>
             <tr>
             <td>
-              <input type="checkbox" checked={formData.preschoolCPS}
-                onChange={(e) => setFormData({...formData, preschoolCPS: e.target.checked})}/>
-                </td>
+              <input type="checkbox" checked={result.preschoolCPS}
+                readOnly/>
+              </td>
               <td>
-                <input type="checkbox" checked={formData.preSchoolIEP}
-                onChange={(e) => setFormData({...formData, preSchoolIEP: e.target.checked})}/>
-                </td>
+                <input type="checkbox" checked={result.preSchoolIEP}
+                readOnly/>
+              </td>
             </tr>
           </table>
         </div>

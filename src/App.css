@@ -306,4 +306,31 @@
   display: flex;
   flex-direction: column;
 }
+/* CSS for select dropdowns */
+select {
+  font-family: Arial, sans-serif;
+  font-size: 16px;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-position: right 8px center;
+  background-repeat: no-repeat;
+  background-size: 16px;
+}
+
+
+
+/* Optional: Style for the disabled state */
+select:disabled {
+  background-color: #f0f0f0;
+  color: #888;
+}
+
+/* Optional: Add some margin to separate the dropdown from the input box */
+.input-box + select {
+  margin-left: 8px;
+}
+
+
+
 

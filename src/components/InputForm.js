@@ -56,6 +56,22 @@ const InputForm = () => {
   const [preschoolCPS, setPreSchoolCPS] = useState(false);
   const [preSchoolIEP, setPreSchoolIEP] = useState(false);
 
+  // Primary Parent/Guardian additional state variables
+  const [PwagesFrequency, setPwagesFrequency] = useState("");
+  const [PchildSupportFrequency, setPchildSupportFrequency] = useState("");
+  const [PAlimonyFrequency, setPAlimonyFrequency] = useState("");
+  const [PSocialSecurityFrequency, setPSocialSecurityFrequency] = useState("");
+  const [PCashAidFrequency, setPCashAidFrequency] = useState("");
+  const [POtherFrequency, setPOtherFrequency] = useState("");
+
+  // Secondary Parent/Guardian additional state variables
+  const [SwagesFrequency, setSwagesFrequency] = useState("");
+  const [SchildSupportFrequency, setSchildSupportFrequency] = useState("");
+  const [SAlimonyFrequency, setSAlimonyFrequency] = useState("");
+  const [SSocialSecurityFrequency, setSSocialSecurityFrequency] = useState("");
+  const [SCashAidFrequency, setSCashAidFrequency] = useState("");
+  const [SOtherFrequency, setSOtherFrequency] = useState("");
+
 
   const [CALWorks, setCalWorks] = useState("");
   const [CALFresh, setCALFresh] = useState("");
@@ -538,28 +554,149 @@ const InputForm = () => {
             <tr>
               
               <td>
-                <input placeholder="$ Weekly/Monthly" type="text" className="input-box" value={Pwages}
-              onChange={(e) => PsetWages(e.target.value)}/>
+              <input
+                type="text"
+                className="input-box"
+                value={Pwages === '' ? '$' : '$' + Pwages}
+                onChange={(e) => {
+                  const inputVal = e.target.value.replace(/^\$/, '');
+                  if (/^\d*$/.test(inputVal)) {
+                    PsetWages(inputVal);
+                  }
+                }}
+                pattern="\d*"
+                title="Please enter numbers only." />
+
+              <select
+                    value={PwagesFrequency}
+                    onChange={(e) => setPwagesFrequency(e.target.value)}
+                  >
+                    <option value="" disabled>
+                      Select Weekly/Monthly
+                    </option>
+                    <option value="weekly">Weekly</option>
+                    <option value="monthly">Monthly</option>
+                  </select>
               </td>
               <td>
-                <input placeholder="$ Weekly/Monthly" type="text" className="input-box" value={PchildSupport}
-              onChange={(e) => PsetChildSupport(e.target.value)}/>
+              <input
+                type="text"
+                className="input-box"
+                value={PchildSupport === '' ? '$' : '$' + PchildSupport}
+                onChange={(e) => {
+                  const inputVal = e.target.value.replace(/^\$/, '');
+                  if (/^\d*$/.test(inputVal)) {
+                    PsetChildSupport(inputVal);
+                  }
+                }}
+                pattern="\d*"
+                title="Please enter numbers only." />
+              <select
+                    value={PchildSupportFrequency}
+                    onChange={(e) => setPchildSupportFrequency(e.target.value)}
+                  >
+                    <option value="" disabled>
+                      Select Weekly/Monthly
+                    </option>
+                    <option value="weekly">Weekly</option>
+                    <option value="monthly">Monthly</option>
+                  </select>
               </td>
               <td>
-              <input placeholder="$ Weekly/Monthly" type="text" className="input-box" value={PAlimony}
-              onChange={(e) => PsetAlimony(e.target.value)}/>
+              <input
+                type="text"
+                className="input-box"
+                value={PAlimony === '' ? '$' : '$' + PAlimony}
+                onChange={(e) => {
+                  const inputVal = e.target.value.replace(/^\$/, '');
+                  if (/^\d*$/.test(inputVal)) {
+                    PsetAlimony(inputVal);
+                  }
+                }}
+                pattern="\d*"
+                title="Please enter numbers only." />
+              <select
+                    value={PAlimonyFrequency}
+                    onChange={(e) => setPAlimonyFrequency(e.target.value)}
+                  >
+                    <option value="" disabled>
+                      Select Weekly/Monthly
+                    </option>
+                    <option value="weekly">Weekly</option>
+                    <option value="monthly">Monthly</option>
+                  </select>
               </td>
               <td>
-                <input placeholder="$ Weekly/Monthly"type="text" className="input-box" value={PSocialSecurity}
-              onChange={(e) => PsetSocialSecurity(e.target.value)}/>
+              <input
+                type="text"
+                className="input-box"
+                value={PSocialSecurity === '' ? '$' : '$' + PSocialSecurity}
+                onChange={(e) => {
+                  const inputVal = e.target.value.replace(/^\$/, '');
+                  if (/^\d*$/.test(inputVal)) {
+                    PsetSocialSecurity(inputVal);
+                  }
+                }}
+                pattern="\d*"
+                title="Please enter numbers only." />
+              <select
+                    value={PSocialSecurityFrequency}
+                    onChange={(e) => setPSocialSecurityFrequency(e.target.value)}
+                  >
+                    <option value="" disabled>
+                      Select Weekly/Monthly
+                    </option>
+                    <option value="weekly">Weekly</option>
+                    <option value="monthly">Monthly</option>
+                  </select>
               </td>
               <td>
-                <input placeholder="$ Weekly/Monthly"type="text" className="input-box" value={PCashAid}
-              onChange={(e) => PsetCashAid(e.target.value)}/>
+              <input
+                type="text"
+                className="input-box"
+                value={PCashAid === '' ? '$' : '$' + PCashAid}
+                onChange={(e) => {
+                  const inputVal = e.target.value.replace(/^\$/, '');
+                  if (/^\d*$/.test(inputVal)) {
+                    PsetCashAid(inputVal);
+                  }
+                }}
+                pattern="\d*"
+                title="Please enter numbers only." />
+              <select
+                    value={PCashAidFrequency}
+                    onChange={(e) => setPCashAidFrequency(e.target.value)}
+                  >
+                    <option value="" disabled>
+                      Select Weekly/Monthly
+                    </option>
+                    <option value="weekly">Weekly</option>
+                    <option value="monthly">Monthly</option>
+                  </select>
               </td>
               <td>
-                <input placeholder="$ Weekly/Monthly"type="text" className="input-box" value={POther}
-              onChange={(e) => PsetOther(e.target.value)}/>
+              <input
+                type="text"
+                className="input-box"
+                value={POther === '' ? '$' : '$' + POther}
+                onChange={(e) => {
+                  const inputVal = e.target.value.replace(/^\$/, '');
+                  if (/^\d*$/.test(inputVal)) {
+                    PsetOther(inputVal);
+                  }
+                }}
+                pattern="\d*"
+                title="Please enter numbers only." />
+              <select
+                    value={POtherFrequency}
+                    onChange={(e) => setPOtherFrequency(e.target.value)}
+                  >
+                    <option value="" disabled>
+                      Select Weekly/Monthly
+                    </option>
+                    <option value="weekly">Weekly</option>
+                    <option value="monthly">Monthly</option>
+                  </select>
               </td>
             </tr>
           </tbody>
@@ -579,31 +716,152 @@ const InputForm = () => {
             </tr>
           </thead>
           <tbody>
-            <tr>
+          <tr>
               
               <td>
-                <input placeholder="$ Weekly/Monthly" type="text" className="input-box" value={Swages}
-              onChange={(e) => SsetWages(e.target.value)}/>
+              <input
+                type="text"
+                className="input-box"
+                value={Swages === '' ? '$' : '$' + Swages}
+                onChange={(e) => {
+                  const inputVal = e.target.value.replace(/^\$/, '');
+                  if (/^\d*$/.test(inputVal)) {
+                    SsetWages(inputVal);
+                  }
+                }}
+                pattern="\d*"
+                title="Please enter numbers only." />
+
+              <select
+                    value={SwagesFrequency}
+                    onChange={(e) => setSwagesFrequency(e.target.value)}
+                  >
+                    <option value="" disabled>
+                      Select Weekly/Monthly
+                    </option>
+                    <option value="weekly">Weekly</option>
+                    <option value="monthly">Monthly</option>
+                  </select>
               </td>
               <td>
-                <input placeholder="$ Weekly/Monthly" type="text" className="input-box" value={SchildSupport}
-              onChange={(e) => SsetChildSupport(e.target.value)}/>
+              <input
+                type="text"
+                className="input-box"
+                value={SchildSupport === '' ? '$' : '$' + SchildSupport}
+                onChange={(e) => {
+                  const inputVal = e.target.value.replace(/^\$/, '');
+                  if (/^\d*$/.test(inputVal)) {
+                    SsetChildSupport(inputVal);
+                  }
+                }}
+                pattern="\d*"
+                title="Please enter numbers only." />
+              <select
+                    value={SchildSupportFrequency}
+                    onChange={(e) => setSchildSupportFrequency(e.target.value)}
+                  >
+                    <option value="" disabled>
+                      Select Weekly/Monthly
+                    </option>
+                    <option value="weekly">Weekly</option>
+                    <option value="monthly">Monthly</option>
+                  </select>
               </td>
               <td>
-                <input placeholder="$ Weekly/Monthly" type="text" className="input-box" value={SAlimony}
-              onChange={(e) => SsetAlimony(e.target.value)}/>
+              <input
+                type="text"
+                className="input-box"
+                value={SAlimony === '' ? '$' : '$' + SAlimony}
+                onChange={(e) => {
+                  const inputVal = e.target.value.replace(/^\$/, '');
+                  if (/^\d*$/.test(inputVal)) {
+                    SsetAlimony(inputVal);
+                  }
+                }}
+                pattern="\d*"
+                title="Please enter numbers only." />
+              <select
+                    value={SAlimonyFrequency}
+                    onChange={(e) => setSAlimonyFrequency(e.target.value)}
+                  >
+                    <option value="" disabled>
+                      Select Weekly/Monthly
+                    </option>
+                    <option value="weekly">Weekly</option>
+                    <option value="monthly">Monthly</option>
+                  </select>
               </td>
               <td>
-                <input placeholder="$ Weekly/Monthly"type="text" className="input-box" value={SSocialSecurity}
-              onChange={(e) => SsetSocialSecurity(e.target.value)}/>
+              <input
+                type="text"
+                className="input-box"
+                value={SSocialSecurity === '' ? '$' : '$' + SSocialSecurity}
+                onChange={(e) => {
+                  const inputVal = e.target.value.replace(/^\$/, '');
+                  if (/^\d*$/.test(inputVal)) {
+                    SsetSocialSecurity(inputVal);
+                  }
+                }}
+                pattern="\d*"
+                title="Please enter numbers only." />
+              <select
+                    value={SSocialSecurityFrequency}
+                    onChange={(e) => setSSocialSecurityFrequency(e.target.value)}
+                  >
+                    <option value="" disabled>
+                      Select Weekly/Monthly
+                    </option>
+                    <option value="weekly">Weekly</option>
+                    <option value="monthly">Monthly</option>
+                  </select>
               </td>
               <td>
-                <input placeholder="$ Weekly/Monthly"type="text" className="input-box" value={SCashAid}
-              onChange={(e) => SsetCashAid(e.target.value)}/>
+              <input
+                type="text"
+                className="input-box"
+                value={SCashAid === '' ? '$' : '$' + SCashAid}
+                onChange={(e) => {
+                  const inputVal = e.target.value.replace(/^\$/, '');
+                  if (/^\d*$/.test(inputVal)) {
+                    SsetCashAid(inputVal);
+                  }
+                }}
+                pattern="\d*"
+                title="Please enter numbers only." />
+              <select
+                    value={SCashAidFrequency}
+                    onChange={(e) => setSCashAidFrequency(e.target.value)}
+                  >
+                    <option value="" disabled>
+                      Select Weekly/Monthly
+                    </option>
+                    <option value="weekly">Weekly</option>
+                    <option value="monthly">Monthly</option>
+                  </select>
               </td>
               <td>
-                <input placeholder="$ Weekly/Monthly"type="text" className="input-box" value={SOther}
-              onChange={(e) => SsetOther(e.target.value)}/>
+              <input
+                type="text"
+                className="input-box"
+                value={SOther === '' ? '$' : '$' + SOther}
+                onChange={(e) => {
+                  const inputVal = e.target.value.replace(/^\$/, '');
+                  if (/^\d*$/.test(inputVal)) {
+                    SsetOther(inputVal);
+                  }
+                }}
+                pattern="\d*"
+                title="Please enter numbers only." />
+              <select
+                    value={SOtherFrequency}
+                    onChange={(e) => setSOtherFrequency(e.target.value)}
+                  >
+                    <option value="" disabled>
+                      Select Weekly/Monthly
+                    </option>
+                    <option value="weekly">Weekly</option>
+                    <option value="monthly">Monthly</option>
+                  </select>
               </td>
             </tr>
           </tbody>
