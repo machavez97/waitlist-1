@@ -14,7 +14,6 @@ const InputForm = () => {
   const [Pcity, PsetCity] = useState("");
   const [Pstate, PsetState] = useState("");
   const [Pzip, PsetZip] = useState("");
-  const [PlivesInHome, PsetLivesInHome] = useState(false);
   const [PtextOK, PsettextOK] = useState(false);
   const [Pwages, PsetWages] = useState("");
   const [PchildSupport, PsetChildSupport] = useState("");
@@ -64,11 +63,11 @@ const InputForm = () => {
   
 
   const [children, setChildren] = useState([
-    { name: "", birthday: "", fullTime: false, partTime: false, iepIfsp: false, needCare: false },
+    { name: "", birthday: "", needCare: false, iepIfsp: false},
   ]);
 
   const addChildField = () => {
-    setChildren([...children, { name: "", birthday: "", fullTime: false, iepIfsp: false, needCare: false }]);
+    setChildren([...children, { name: "", birthday: "", needCare: false, iepIfsp: false }]);
   };
 
   const handleDeleteChild = (index) => {
@@ -130,7 +129,6 @@ const InputForm = () => {
         Pcity,
         Pstate,
         Pzip,
-        PlivesInHome,
         Pwages,
         PchildSupport,
         PAlimony, 
@@ -227,7 +225,7 @@ const InputForm = () => {
 
         <div className="group2">
           
-              <label htmlFor="phone-number" className="input-label">
+            <label htmlFor="phone-number" className="input-label">
               Phone Number:
             </label>
             <input
@@ -309,139 +307,141 @@ const InputForm = () => {
               onChange={(e) => PsetZip(e.target.value)}
             />
             <div>
-            <label htmlFor="lives-in-home" className="checkbox-label">
-                Lives in home:
-            </label>
-            <input
-                type="checkbox"
-                id="lives-in-home"
-                checked={PlivesInHome}
-                onChange={(e) => PsetLivesInHome(e.target.checked)}
-            />
+            
             </div>
         </div>
         <h3>Secondary Parent/Guardian</h3>
-        <div className="group1">
-          
-            <label htmlFor="first-name" className="input-label">
-              First Name:
-            </label>
-            <input
-              type="text"
-              id="first-name"
-              className="input-box"
-              value={SfirstName}
-              onChange={(e) => SsetFirstName(e.target.value.trim())}
-            />
-                    
-            <label htmlFor="last-name" className="input-label">
-              Last Name:
-            </label>
-            <input
-              type="text"
-              id="last-name"
-              className="input-box"
-              value={SlastName}
-              onChange={(e) => SsetLastName(e.target.value.trim())}
-            />
-          
-        </div>
+<div className="group1">
+  <div>
+    <label htmlFor="lives-in-home" className="checkbox-label">
+      Lives in home:
+    </label>
+    <input
+      type="checkbox"
+      id="lives-in-home"
+      checked={SlivesInHome}
+      onChange={(e) => SsetLivesInHome(e.target.checked)}
+    />
+  </div>
 
-        <div className="group2">
-          
-            <label htmlFor="phone-number" className="input-label">
-              Phone Number:
-            </label>
-            <input
-              type="text"
-              id="phone-number"
-              className="input-box"
-              value={SphoneNumber}
-              onChange={changeSPhone}
-              maxLength={14}
-              pattern="\(\d{0,3}\) \d{0,3}-\d{0,4}"
-              placeholder="(XXX) XXX-XXXX"
-            />
-            <label htmlFor="text" className="checkbox-label">
-                 Text OK:
-            </label>
-            <input
-                type="checkbox"
-                id="text"
-                checked={StextOK}
-                onChange={(e) => SsettextOK(e.target.checked)}
-            />
-         
-            <label htmlFor="email" className="input-label">
-              Email:
-            </label>
-            <input
-              type="text"
-              id="email"
-              className="input-box"
-              value={Semail}
-              onChange={(e) => SsetEmail(e.target.value)}
-            />
-          
-        </div>
+  <div>
+    <label htmlFor="first-name" className="input-label">
+      First Name:
+    </label>
+    <input
+      type="text"
+      id="first-name"
+      className={`input-box ${SlivesInHome ? '' : 'disabled'}`}
+      value={SfirstName}
+      onChange={(e) => SsetFirstName(e.target.value.trim())}
+      disabled={!SlivesInHome}
+    />
 
-        <div className="group3">
-          
-            <label htmlFor="street" className="input-label">
-              Street:
-            </label>
-            <input
-              type="text"
-              id="street"
-              className="input-box"
-              value={Sstreet}
-              onChange={(e) => SsetStreet(e.target.value)}
-            />
-          
-            <label htmlFor="city" className="input-label">
-              City:
-            </label>
-            <input
-              type="text"
-              id="city"
-              className="input-box"
-              value={Scity}
-              onChange={(e) => SsetCity(e.target.value)}
-            />
-          
-            <label htmlFor="state" className="input-label">
-              State:
-            </label>
-            <input
-              type="text"
-              id="state"
-              className="input-box"
-              value={Sstate}
-              onChange={(e) => SsetState(e.target.value)}
-            />
+    <label htmlFor="last-name" className="input-label">
+      Last Name:
+    </label>
+    <input
+      type="text"
+      id="last-name"
+      className={`input-box ${SlivesInHome ? '' : 'disabled'}`}
+      value={SlastName}
+      onChange={(e) => SsetLastName(e.target.value.trim())}
+      disabled={!SlivesInHome}
+    />
+  </div>
 
-            <label htmlFor="zip" className="input-label">
-              Zip:
-            </label>
-            <input
-              type="text"
-              id="zip"
-              className="input-box"
-              value={Szip}
-              onChange={(e) => SsetZip(e.target.value)}
-            />
-            <div>
-            <label htmlFor="lives-in-home" className="checkbox-label">
-                Lives in home:
-            </label>
-            <input
-                type="checkbox"
-                id="lives-in-home"
-                checked={SlivesInHome}
-                onChange={(e) => SsetLivesInHome(e.target.checked)}
-            />
-            </div>
-        </div>
+  <div className="group2">
+    <label htmlFor="phone-number" className="input-label">
+      Phone Number:
+    </label>
+    <input
+      type="text"
+      id="phone-number"
+      className={`input-box ${SlivesInHome ? '' : 'disabled'}`}
+      value={SphoneNumber}
+      onChange={changeSPhone}
+      maxLength={14}
+      pattern="\(\d{0,3}\) \d{0,3}-\d{0,4}"
+      placeholder="(XXX) XXX-XXXX"
+      disabled={!SlivesInHome}
+    />
+
+    <label htmlFor="text" className="checkbox-label">
+      Text OK:
+    </label>
+    <input
+      type="checkbox"
+      id="text"
+      checked={StextOK}
+      onChange={(e) => SsettextOK(e.target.checked)}
+      disabled={!SlivesInHome}
+    />
+
+    <label htmlFor="email" className="input-label">
+      Email:
+    </label>
+    <input
+      type="text"
+      id="email"
+      className={`input-box ${SlivesInHome ? '' : 'disabled'}`}
+      value={Semail}
+      onChange={(e) => SsetEmail(e.target.value)}
+      disabled={!SlivesInHome}
+    />
+  </div>
+
+  <div className="group3">
+    <label htmlFor="street" className="input-label">
+      Street:
+    </label>
+    <input
+      type="text"
+      id="street"
+      className={`input-box ${SlivesInHome ? '' : 'disabled'}`}
+      value={Sstreet}
+      onChange={(e) => SsetStreet(e.target.value)}
+      disabled={!SlivesInHome}
+    />
+
+    <label htmlFor="city" className="input-label">
+      City:
+    </label>
+    <input
+      type="text"
+      id="city"
+      className={`input-box ${SlivesInHome ? '' : 'disabled'}`}
+      value={Scity}
+      onChange={(e) => SsetCity(e.target.value)}
+      disabled={!SlivesInHome}
+    />
+
+    <label htmlFor="state" className="input-label">
+      State:
+    </label>
+    <input
+      type="text"
+      id="state"
+      className={`input-box ${SlivesInHome ? '' : 'disabled'}`}
+      value={Sstate}
+      onChange={(e) => SsetState(e.target.value)}
+      disabled={!SlivesInHome}
+    />
+
+    <label htmlFor="zip" className="input-label">
+      Zip:
+    </label>
+    <input
+      type="text"
+      id="zip"
+      className={`input-box ${SlivesInHome ? '' : 'disabled'}`}
+      value={Szip}
+      onChange={(e) => SsetZip(e.target.value)}
+      disabled={!SlivesInHome}
+    />
+  </div>
+</div>
+
+
 
         <div className="children-section">
           <h3>Children</h3> 
@@ -491,28 +491,16 @@ const InputForm = () => {
               </div>
             <div className="checkbox-group">
               <label htmlFor={`child-full-time-${index}`} className="checkbox-label">
-                Full Time:
+                IEP/ISFP:
               </label>
               <input
                 type="checkbox"
                 id={`child-full-time-${index}`}
-                checked={child.fullTime}
-                onChange={(e) => handleChildFieldChange(index, "fullTime", e.target.checked)}
-                disabled={!child.needCare || child.partTime}
+                checked={child.iepisfp}
+                onChange={(e) => handleChildFieldChange(index, "iepisfp", e.target.checked)}
               />
             </div>
-            <div className="checkbox-group">
-              <label htmlFor={`child-part-time-${index}`} className="checkbox-label">
-                Part Time:
-              </label>
-              <input
-                type="checkbox"
-                id={`child-part-time-${index}`}
-                checked={child.partTime}
-                onChange={(e) => handleChildFieldChange(index, "partTime", e.target.checked)}
-                disabled={!child.needCare || child.fullTime}
-              />
-        </div>
+            
       </div>
       {/* Delete Button */}
       <button className="remove-child-button" onClick={() => handleDeleteChild(index)}>
