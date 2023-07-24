@@ -53,8 +53,9 @@ const InputForm = () => {
   const [SCPSorAtRisk, SsetCPSorAtRisk] = useState(false);
   const [SIncapacitated, SsetIncapacitate] = useState(false);
   const [SIEPpreschoolOnly, SsetIEPpreschoolOnly] = useState(false);
-  const [preschoolCPS, setPreSchoolCPS] = useState(false);
-  const [preSchoolIEP, setPreSchoolIEP] = useState(false);
+ 
+  const [understandPartDayYear, setUnderstandPartDayYear] = useState(false);
+
 
   // Primary Parent/Guardian additional state variables
   const [PwagesFrequency, setPwagesFrequency] = useState("");
@@ -126,12 +127,37 @@ const InputForm = () => {
     SsetPhoneNumber(formattedNumber);
   };
 
+  // Helper function to format input as dollar and cents
+  const formatCurrencyInput = (input) => {
+    // Remove non-numeric characters from input
+    const numericInput = input.replace(/[^0-9.]/g, '');
+
+    // Split the input into dollars and cents
+    const [dollars, cents] = numericInput.split('.');
+
+    // Format dollars with commas
+    const formattedDollars = dollars.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+
+    // Combine dollars and cents (up to 2 decimal places)
+    let formattedInput = formattedDollars;
+    if (cents !== undefined) {
+      formattedInput += `.${cents.slice(0, 2)}`;
+    }
+
+    // Add dollar sign
+    formattedInput = `$${formattedInput}`;
+
+    return formattedInput;
+  };
+
+
   
   const submitForm = async (e) => {
     e.preventDefault();
     let isValid = true;
-    if (PfirstName.trim() === ''){
+    if (PfirstName.trim() === '' || PlastName.trim() === ''){
       isValid = false;
+      alert("Please fill out all required fields")
     }
     if(isValid){
     try {
@@ -183,9 +209,7 @@ const InputForm = () => {
         SCPSorAtRisk,
         SIncapacitated,
         SIEPpreschoolOnly,
-        preSchoolIEP,
-        preschoolCPS,
-        
+               
         CALFresh,
         CALWorks,
         WIC,
@@ -512,7 +536,7 @@ const InputForm = () => {
               <input
                 type="checkbox"
                 id={`child-full-time-${index}`}
-                checked={child.iepisfp}
+                checked={child.iepIfsp}
                 onChange={(e) => handleChildFieldChange(index, "iepisfp", e.target.checked)}
               />
             </div>
@@ -557,15 +581,11 @@ const InputForm = () => {
               <input
                 type="text"
                 className="input-box"
-                value={Pwages === '' ? '$' : '$' + Pwages}
+                value={Pwages === '' ? '$' : formatCurrencyInput(Pwages)}
                 onChange={(e) => {
-                  const inputVal = e.target.value.replace(/^\$/, '');
-                  if (/^\d*$/.test(inputVal)) {
-                    PsetWages(inputVal);
-                  }
-                }}
-                pattern="\d*"
-                title="Please enter numbers only." />
+                  const inputVal = e.target.value.replace(/[^0-9.]/g, '');
+                  PsetWages(inputVal);
+                }} />
 
               <select
                     value={PwagesFrequency}
@@ -582,15 +602,11 @@ const InputForm = () => {
               <input
                 type="text"
                 className="input-box"
-                value={PchildSupport === '' ? '$' : '$' + PchildSupport}
+                value={PchildSupport === '' ? '$' : formatCurrencyInput(PchildSupport)}
                 onChange={(e) => {
-                  const inputVal = e.target.value.replace(/^\$/, '');
-                  if (/^\d*$/.test(inputVal)) {
-                    PsetChildSupport(inputVal);
-                  }
-                }}
-                pattern="\d*"
-                title="Please enter numbers only." />
+                  const inputVal = e.target.value.replace(/[^0-9.]/g, '');
+                  PsetChildSupport(inputVal);
+                }} />
               <select
                     value={PchildSupportFrequency}
                     onChange={(e) => setPchildSupportFrequency(e.target.value)}
@@ -606,15 +622,11 @@ const InputForm = () => {
               <input
                 type="text"
                 className="input-box"
-                value={PAlimony === '' ? '$' : '$' + PAlimony}
+                value={PAlimony === '' ? '$' : formatCurrencyInput(PAlimony)}
                 onChange={(e) => {
-                  const inputVal = e.target.value.replace(/^\$/, '');
-                  if (/^\d*$/.test(inputVal)) {
-                    PsetAlimony(inputVal);
-                  }
-                }}
-                pattern="\d*"
-                title="Please enter numbers only." />
+                  const inputVal = e.target.value.replace(/[^0-9.]/g, '');
+                  PsetAlimony(inputVal);
+                }} />
               <select
                     value={PAlimonyFrequency}
                     onChange={(e) => setPAlimonyFrequency(e.target.value)}
@@ -630,15 +642,11 @@ const InputForm = () => {
               <input
                 type="text"
                 className="input-box"
-                value={PSocialSecurity === '' ? '$' : '$' + PSocialSecurity}
+                value={PSocialSecurity === '' ? '$' : formatCurrencyInput(PSocialSecurity)}
                 onChange={(e) => {
-                  const inputVal = e.target.value.replace(/^\$/, '');
-                  if (/^\d*$/.test(inputVal)) {
-                    PsetSocialSecurity(inputVal);
-                  }
-                }}
-                pattern="\d*"
-                title="Please enter numbers only." />
+                  const inputVal = e.target.value.replace(/[^0-9.]/g, '');
+                  PsetSocialSecurity(inputVal);
+                }} />
               <select
                     value={PSocialSecurityFrequency}
                     onChange={(e) => setPSocialSecurityFrequency(e.target.value)}
@@ -654,15 +662,11 @@ const InputForm = () => {
               <input
                 type="text"
                 className="input-box"
-                value={PCashAid === '' ? '$' : '$' + PCashAid}
+                value={PCashAid === '' ? '$' : formatCurrencyInput(PCashAid)}
                 onChange={(e) => {
-                  const inputVal = e.target.value.replace(/^\$/, '');
-                  if (/^\d*$/.test(inputVal)) {
-                    PsetCashAid(inputVal);
-                  }
-                }}
-                pattern="\d*"
-                title="Please enter numbers only." />
+                  const inputVal = e.target.value.replace(/[^0-9.]/g, '');
+                  PsetCashAid(inputVal);
+                }}/>
               <select
                     value={PCashAidFrequency}
                     onChange={(e) => setPCashAidFrequency(e.target.value)}
@@ -678,15 +682,11 @@ const InputForm = () => {
               <input
                 type="text"
                 className="input-box"
-                value={POther === '' ? '$' : '$' + POther}
+                value={POther === '' ? '$' : formatCurrencyInput(POther)}
                 onChange={(e) => {
-                  const inputVal = e.target.value.replace(/^\$/, '');
-                  if (/^\d*$/.test(inputVal)) {
-                    PsetOther(inputVal);
-                  }
-                }}
-                pattern="\d*"
-                title="Please enter numbers only." />
+                  const inputVal = e.target.value.replace(/[^0-9.]/g, '');
+                  PsetOther(inputVal);
+                }} />
               <select
                     value={POtherFrequency}
                     onChange={(e) => setPOtherFrequency(e.target.value)}
@@ -717,20 +717,15 @@ const InputForm = () => {
           </thead>
           <tbody>
           <tr>
-              
               <td>
               <input
                 type="text"
                 className="input-box"
-                value={Swages === '' ? '$' : '$' + Swages}
+                value={Swages === '' ? '$' : formatCurrencyInput(Swages)}
                 onChange={(e) => {
-                  const inputVal = e.target.value.replace(/^\$/, '');
-                  if (/^\d*$/.test(inputVal)) {
-                    SsetWages(inputVal);
-                  }
-                }}
-                pattern="\d*"
-                title="Please enter numbers only." />
+                  const inputVal = e.target.value.replace(/[^0-9.]/g, '');
+                  SsetWages(inputVal);
+                }}/>
 
               <select
                     value={SwagesFrequency}
@@ -747,15 +742,11 @@ const InputForm = () => {
               <input
                 type="text"
                 className="input-box"
-                value={SchildSupport === '' ? '$' : '$' + SchildSupport}
+                value={SchildSupport === '' ? '$' : formatCurrencyInput(SchildSupport)}
                 onChange={(e) => {
-                  const inputVal = e.target.value.replace(/^\$/, '');
-                  if (/^\d*$/.test(inputVal)) {
-                    SsetChildSupport(inputVal);
-                  }
-                }}
-                pattern="\d*"
-                title="Please enter numbers only." />
+                  const inputVal = e.target.value.replace(/[^0-9.]/g, '');
+                  SsetChildSupport(inputVal);
+                }}/>
               <select
                     value={SchildSupportFrequency}
                     onChange={(e) => setSchildSupportFrequency(e.target.value)}
@@ -771,15 +762,11 @@ const InputForm = () => {
               <input
                 type="text"
                 className="input-box"
-                value={SAlimony === '' ? '$' : '$' + SAlimony}
+                value={SAlimony === '' ? '$' : formatCurrencyInput(SAlimony)}
                 onChange={(e) => {
-                  const inputVal = e.target.value.replace(/^\$/, '');
-                  if (/^\d*$/.test(inputVal)) {
-                    SsetAlimony(inputVal);
-                  }
-                }}
-                pattern="\d*"
-                title="Please enter numbers only." />
+                  const inputVal = e.target.value.replace(/[^0-9.]/g, '');
+                  SsetAlimony(inputVal);
+                }}/>
               <select
                     value={SAlimonyFrequency}
                     onChange={(e) => setSAlimonyFrequency(e.target.value)}
@@ -795,15 +782,11 @@ const InputForm = () => {
               <input
                 type="text"
                 className="input-box"
-                value={SSocialSecurity === '' ? '$' : '$' + SSocialSecurity}
+                value={SSocialSecurity === '' ? '$' : formatCurrencyInput(SSocialSecurity)}
                 onChange={(e) => {
-                  const inputVal = e.target.value.replace(/^\$/, '');
-                  if (/^\d*$/.test(inputVal)) {
-                    SsetSocialSecurity(inputVal);
-                  }
-                }}
-                pattern="\d*"
-                title="Please enter numbers only." />
+                  const inputVal = e.target.value.replace(/[^0-9.]/g, '');
+                  SsetSocialSecurity(inputVal);
+                }}/>
               <select
                     value={SSocialSecurityFrequency}
                     onChange={(e) => setSSocialSecurityFrequency(e.target.value)}
@@ -819,15 +802,12 @@ const InputForm = () => {
               <input
                 type="text"
                 className="input-box"
-                value={SCashAid === '' ? '$' : '$' + SCashAid}
+                value={SCashAid === '' ? '$' : formatCurrencyInput(SCashAid)}
                 onChange={(e) => {
-                  const inputVal = e.target.value.replace(/^\$/, '');
-                  if (/^\d*$/.test(inputVal)) {
-                    SsetCashAid(inputVal);
-                  }
+                  const inputVal = e.target.value.replace(/[^0-9.]/g, '');
+                  SsetCashAid(inputVal);
                 }}
-                pattern="\d*"
-                title="Please enter numbers only." />
+                />
               <select
                     value={SCashAidFrequency}
                     onChange={(e) => setSCashAidFrequency(e.target.value)}
@@ -843,15 +823,12 @@ const InputForm = () => {
               <input
                 type="text"
                 className="input-box"
-                value={SOther === '' ? '$' : '$' + SOther}
+                value={SOther === '' ? '$' : formatCurrencyInput(SOther)}
                 onChange={(e) => {
-                  const inputVal = e.target.value.replace(/^\$/, '');
-                  if (/^\d*$/.test(inputVal)) {
-                    SsetOther(inputVal);
-                  }
+                  const inputVal = e.target.value.replace(/[^0-9.]/g, '');
+                  SsetOther(inputVal);
                 }}
-                pattern="\d*"
-                title="Please enter numbers only." />
+              />
               <select
                     value={SOtherFrequency}
                     onChange={(e) => setSOtherFrequency(e.target.value)}
@@ -874,7 +851,7 @@ const InputForm = () => {
             If no income, please explain how household is supported:
           </label>
           </div>
-          <textarea id="notes" rows="4" cols="50" value={incomeExplaination}
+          <textarea style ={{resize: "none"}} id="notes" rows="4" cols="50" value={incomeExplaination}
           onChange={(e) => setincomeExplaination(e.target.value)}></textarea>
         </div>
           </div>
@@ -894,19 +871,43 @@ const InputForm = () => {
       <th>WIC</th>
     </tr>
     <tr>
-      <td>
-        <input placeholder="Amount per month" type="text" className="input-box" value={CALWorks}
-              onChange={(e) => setCalWorks(e.target.value)}/>
-      </td>
-      <td>
-        <input placeholder="Amount per month" type="text" className="input-box" value={CALFresh}
-              onChange={(e) => setCALFresh(e.target.value)}/>
-      </td>
-      <td>
-        <input placeholder="Amount per month" type="text" className="input-box" value={WIC}
-              onChange={(e) => setWIC(e.target.value)}/>
-      </td>
-    </tr>
+          <td>
+            <input
+              placeholder="Amount per month"
+              type="text"
+              className="input-box"
+              value={CALWorks === '' ? '' : formatCurrencyInput(CALWorks)}
+              onChange={(e) => {
+                const inputVal = e.target.value.replace(/[^0-9.]/g, '');
+                setCalWorks(inputVal);
+              }}
+            />
+          </td>
+          <td>
+            <input
+              placeholder="Amount per month"
+              type="text"
+              className="input-box"
+              value={CALFresh === '' ? '' : formatCurrencyInput(CALFresh)}
+              onChange={(e) => {
+                const inputVal = e.target.value.replace(/[^0-9.]/g, '');
+                setCALFresh(inputVal);
+              }}
+            />
+          </td>
+          <td>
+            <input
+              placeholder="Amount per month"
+              type="text"
+              className="input-box"
+              value={WIC === '' ? '' : formatCurrencyInput(WIC)}
+              onChange={(e) => {
+                const inputVal = e.target.value.replace(/[^0-9.]/g, '');
+                setWIC(inputVal);
+              }}
+            />
+          </td>
+        </tr>
   </table>
 </div>
 <div>
@@ -1030,25 +1031,17 @@ const InputForm = () => {
       </div>
 
       {preschoolOnlyChecked && (
-        <div className="table2">
-            <h5>For ranking purpose please indicate if child is CPS/At Risk or child has IEP</h5>
-          <table className="grid">
-            {/* Table for Preschool Only */}
-            <tr>
-                <th className="tableCheckHeader">CPS/At Risk</th>
-                <th className="tableCheckHeader">IEP</th>
-            </tr>
-            <tr>
-            <td>
-              <input type="checkbox" checked={preschoolCPS}
-                onChange={(e) => setPreSchoolCPS(e.target.checked)}/>
-              </td>
-              <td>
-                <input type="checkbox" checked={preSchoolIEP}
-                onChange={(e) => setPreSchoolIEP(e.target.checked)}/>
-              </td>
-            </tr>
-          </table>
+        <div className="partDayYearCheckbox">
+          <input
+            type="checkbox"
+            id="part-day-year-checkbox"
+            checked={understandPartDayYear}
+            onChange={(e) => setUnderstandPartDayYear(e.target.checked)}
+            required
+          />
+          <label htmlFor="part-day-year-checkbox">
+            I understand this is part day/year
+          </label>
         </div>
       )}
     </div>

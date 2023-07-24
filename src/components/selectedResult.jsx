@@ -83,11 +83,51 @@ const SelectedResult = () => {
       const formattedNumber = formatPhoneNumber(input);
       setFormData({ ...formData, SphoneNumber: formattedNumber })
     };
-    const handleChildChange = (index, field, value) => {
+
+    const addChildField = () => {
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        children: [
+          ...prevFormData.children,
+          { name: "", birthday: "", needCare: false, iepIfsp: false }
+        ],
+      }));
+    };
+    
+  
+    const handleDeleteChild = (index) => {
+      const updatedChildren = [...formData.children];
+      updatedChildren.splice(index, 1);
+      setFormData((prevFormData) => ({ ...prevFormData, children: updatedChildren }));
+    };
+    
+    const handleChildFieldChange = (index, field, value) => {
       const updatedChildren = [...formData.children];
       updatedChildren[index][field] = value;
-      setFormData({...formData, children: updatedChildren});
+      setFormData((prevFormData) => ({ ...prevFormData, children: updatedChildren }));
     };
+    // Helper function to format input as dollar and cents
+  const formatCurrencyInput = (input) => {
+    // Remove non-numeric characters from input
+    const numericInput = input.replace(/[^0-9.]/g, '');
+
+    // Split the input into dollars and cents
+    const [dollars, cents] = numericInput.split('.');
+
+    // Format dollars with commas
+    const formattedDollars = dollars.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+
+    // Combine dollars and cents (up to 2 decimal places)
+    let formattedInput = formattedDollars;
+    if (cents !== undefined) {
+      formattedInput += `.${cents.slice(0, 2)}`;
+    }
+
+    // Add dollar sign
+    formattedInput = `$${formattedInput}`;
+
+    return formattedInput;
+  };
     
     const submitForm = async (e) => {
       e.preventDefault();
@@ -401,31 +441,32 @@ const SelectedResult = () => {
 
         <div className="children-display-container">
   {formData.children.map((child, index) => (
-    <div key={index} className="child-display-field">
-      <div className="child-display-info">
-        <div className='stack'>
-          <label htmlFor={`child-name-${index}`} className="input-label">
-            Full Name:
-          </label>
-          <input
-            type="text"
-            id={`child-name-${index}`}
-            className="input-box"
-            value={child.name}
-            readOnly
-          />
-        
-          <label htmlFor={`child-birthday-${index}`} className="input-label">
-            Birthday:
-          </label>
-          <input
-            type="date"
-            id={`child-birthday-${index}`}
-            className="input-box"
-            value={child.birthday}
-            readOnly
-          />
-        
+    <div key={index} className="child-field">
+    <div className="child-info">
+      <div>
+        <label htmlFor={`child-name-${index}`} className="input-label">
+          Full Name:
+        </label>
+        <input
+          type="text"
+          id={`child-name-${index}`}
+          className="input-box"
+          value={child.name}
+          onChange={(e) => handleChildFieldChange(index, "name", e.target.value)}
+        />
+      </div>
+      <div>
+      <label htmlFor={`child-birthday-${index}`} className="input-label">
+        Birthday:
+      </label>
+      <input
+        type="date"
+        id={`child-birthday-${index}`}
+        className="input-box"
+        value={child.birthday}
+        onChange={(e) => handleChildFieldChange(index, "birthday", e.target.value)}
+      />
+        </div>
         <div className="checkbox-group">
           <label htmlFor={`child-need-care-${index}`} className="checkbox-label">
             Need Care:
@@ -434,38 +475,31 @@ const SelectedResult = () => {
             type="checkbox"
             id={`child-need-care-${index}`}
             checked={child.needCare}
-            readOnly
+            onChange={(e) => handleChildFieldChange(index, "needCare", e.target.checked)}
           />
         </div>
-        <div className="checkbox-group">
-          <label htmlFor={`child-full-time-${index}`} className="checkbox-label">
-            Full Time:
-          </label>
-          <input
-            type="checkbox"
-            id={`child-full-time-${index}`}
-            checked={child.fullTime}
-            readOnly
-            disabled={!child.needCare || child.partTime}
-          />
-        </div>
-        <div className="checkbox-group">
-          <label htmlFor={`child-part-time-${index}`} className="checkbox-label">
-            Part Time:
-          </label>
-          <input
-            type="checkbox"
-            id={`child-part-time-${index}`}
-            checked={child.partTime}
-            readOnly
-            disabled={!child.needCare || child.fullTime}
-          />
-        </div>
-        </div>
+      <div className="checkbox-group">
+        <label htmlFor={`child-full-time-${index}`} className="checkbox-label">
+          IEP/ISFP:
+        </label>
+        <input
+          type="checkbox"
+          id={`child-full-time-${index}`}
+          checked={child.iepIfsp}
+          onChange={(e) => handleChildFieldChange(index, "iepisfp", e.target.checked)}
+        />
       </div>
-    </div>
+      
+</div>
+{/* Delete Button */}
+<button className="remove-child-button" onClick={() => handleDeleteChild(index)}>
+  Remove Child
+</button>
+</div>
   ))}
 </div>
+<button type="button" className="add-child-button" onClick={addChildField}>Add Child</button>
+
 
 
           <div>
@@ -492,28 +526,121 @@ const SelectedResult = () => {
             <tr>
               
               <td>
-                <input  type="text" className="input-box" value={result.Pwages}
-              readOnly/>
+              <input
+                type="text"
+                className="input-box"
+                value={formData.Pwages === '' ? '$' : formatCurrencyInput(formData.Pwages)}
+                onChange={(e) => {
+                  const inputVal = e.target.value.replace(/[^0-9.]/g, '');
+                  setFormData({ ...formData, Pwages: inputVal });
+                }}
+              />
+              <select
+                value={formData.PwagesFrequency || ''}
+                onChange={(e) => setFormData({ ...formData, PwagesFrequency: e.target.value })}
+              >
+                <option value="" disabled>Select Weekly/Monthly</option>
+                <option value="weekly">Weekly</option>
+                <option value="monthly">Monthly</option>
+              </select>
               </td>
               <td>
-                <input  type="text" className="input-box" value={result.PchildSupport}
-              readOnly/>
+              <input
+                type="text"
+                className="input-box"
+                value={formData.PchildSupport === '' ? '$' : formatCurrencyInput(formData.PchildSupport)}
+                onChange={(e) => {
+                  const inputVal = e.target.value.replace(/[^0-9.]/g, '');
+                  setFormData({ ...formData, PchildSupport: inputVal });
+                }}
+              />
+              <select
+                value={formData.PchildSupportFrequency || ''}
+                onChange={(e) => setFormData({ ...formData, PchildSupportFrequency: e.target.value })}
+              >
+                <option value="" disabled>Select Weekly/Monthly</option>
+                <option value="weekly">Weekly</option>
+                <option value="monthly">Monthly</option>
+              </select>
               </td>
               <td>
-              <input  type="text" className="input-box" value={result.PAlimony}
-              readOnly/>
+              <input
+                type="text"
+                className="input-box"
+                value={formData.PAlimony === '' ? '$' : formatCurrencyInput(formData.PAlimony)}
+                onChange={(e) => {
+                  const inputVal = e.target.value.replace(/[^0-9.]/g, '');
+                  setFormData({ ...formData, PAlimony: inputVal });
+                }}
+              />
+              <select
+                value={formData.PAlimonyFrequency || ''}
+                onChange={(e) => setFormData({ ...formData, PAlimonyFrequency: e.target.value })}
+              >
+                <option value="" disabled>Select Weekly/Monthly</option>
+                <option value="weekly">Weekly</option>
+                <option value="monthly">Monthly</option>
+              </select>
               </td>
               <td>
-                <input type="text" className="input-box" value={result.PSocialSecurity}
-              readOnly/>
+              <input
+                type="text"
+                className="input-box"
+                value={formData.PSocialSecurity === '' ? '$' : formatCurrencyInput(formData.PSocialSecurity)}
+                onChange={(e) => {
+                  const inputVal = e.target.value.replace(/[^0-9.]/g, '');
+                  setFormData({...formData, PSocialSecurity: inputVal});
+                }} />
+              <select
+                    value={formData.PSocialSecurityFrequency}
+                    onChange={(e) => setFormData({ ...formData, PSocialSecurityFrequency: e.target.value})}
+                  >
+                    <option value="" disabled>
+                      Select Weekly/Monthly
+                    </option>
+                    <option value="weekly">Weekly</option>
+                    <option value="monthly">Monthly</option>
+                  </select>
               </td>
               <td>
-                <input type="text" className="input-box" value={result.PCashAid}
-              readOnly/>
+              <input
+                type="text"
+                className="input-box"
+                value={formData.PCashAid === '' ? '$' : formatCurrencyInput(formData.PCashAid)}
+                onChange={(e) => {
+                  const inputVal = e.target.value.replace(/[^0-9.]/g, '');
+                  setFormData({...formData, PCashAid: inputVal});
+                }}/>
+              <select
+                    value={formData.PCashAidFrequency}
+                    onChange={(e) => setFormData({ ...formData, PCashAidFrequency: e.target.value})}
+                  >
+                    <option value="" disabled>
+                      Select Weekly/Monthly
+                    </option>
+                    <option value="weekly">Weekly</option>
+                    <option value="monthly">Monthly</option>
+                  </select>
               </td>
               <td>
-                <input type="text" className="input-box" value={result.POther}
-              readOnly/>
+              <input
+                type="text"
+                className="input-box"
+                value={formData.POther === '' ? '$' : formatCurrencyInput(formData.POther)}
+                onChange={(e) => {
+                  const inputVal = e.target.value.replace(/[^0-9.]/g, '');
+                  setFormData({...formData, POther: inputVal});
+                }} />
+              <select
+                    value={formData.POtherFrequency}
+                    onChange={(e) => setFormData({ ...formData, POtherFrequency: e.target.value})}
+                  >
+                    <option value="" disabled>
+                      Select Weekly/Monthly
+                    </option>
+                    <option value="weekly">Weekly</option>
+                    <option value="monthly">Monthly</option>
+                  </select>
               </td>
             </tr>
           </tbody>
@@ -536,28 +663,121 @@ const SelectedResult = () => {
             <tr>
               
               <td>
-                <input  type="text" className="input-box" value={result.Swages}
-              readOnly/>
+              <input
+                type="text"
+                className="input-box"
+                value={formData.Swages === '' ? '$' : formatCurrencyInput(formData.Swages)}
+                onChange={(e) => {
+                  const inputVal = e.target.value.replace(/[^0-9.]/g, '');
+                  setFormData({ ...formData, Swages: inputVal });
+                }}
+              />
+              <select
+                value={formData.SwagesFrequency || ''}
+                onChange={(e) => setFormData({ ...formData, SwagesFrequency: e.target.value })}
+              >
+                <option value="" disabled>Select Weekly/Monthly</option>
+                <option value="weekly">Weekly</option>
+                <option value="monthly">Monthly</option>
+              </select>
               </td>
               <td>
-                <input  type="text" className="input-box" value={result.SchildSupport}
-              readOnly/>
+              <input
+                type="text"
+                className="input-box"
+                value={formData.SchildSupport === '' ? '$' : formatCurrencyInput(formData.SchildSupport)}
+                onChange={(e) => {
+                  const inputVal = e.target.value.replace(/[^0-9.]/g, '');
+                  setFormData({ ...formData, SchildSupport: inputVal });
+                }}
+              />
+              <select
+                value={formData.SchildSupportFrequency || ''}
+                onChange={(e) => setFormData({ ...formData, SchildSupportFrequency: e.target.value })}
+              >
+                <option value="" disabled>Select Weekly/Monthly</option>
+                <option value="weekly">Weekly</option>
+                <option value="monthly">Monthly</option>
+              </select>
               </td>
               <td>
-                <input  type="text" className="input-box" value={result.SAlimony}
-              readOnly/>
+              <input
+                type="text"
+                className="input-box"
+                value={formData.SAlimony === '' ? '$' : formatCurrencyInput(formData.SAlimony)}
+                onChange={(e) => {
+                  const inputVal = e.target.value.replace(/[^0-9.]/g, '');
+                  setFormData({ ...formData, SAlimony: inputVal });
+                }}
+              />
+              <select
+                value={formData.SAlimonyFrequency || ''}
+                onChange={(e) => setFormData({ ...formData, SAlimonyFrequency: e.target.value })}
+              >
+                <option value="" disabled>Select Weekly/Monthly</option>
+                <option value="weekly">Weekly</option>
+                <option value="monthly">Monthly</option>
+              </select>
               </td>
               <td>
-                <input type="text" className="input-box" value={result.SSocialSecurity}
-              readOnly/>
+              <input
+                type="text"
+                className="input-box"
+                value={formData.SSocialSecurity === '' ? '$' : formatCurrencyInput(formData.SSocialSecurity)}
+                onChange={(e) => {
+                  const inputVal = e.target.value.replace(/[^0-9.]/g, '');
+                  setFormData({...formData, SSocialSecurity: inputVal});
+                }} />
+              <select
+                    value={formData.SSocialSecurityFrequency}
+                    onChange={(e) => setFormData({ ...formData, SSocialSecurityFrequency: e.target.value})}
+                  >
+                    <option value="" disabled>
+                      Select Weekly/Monthly
+                    </option>
+                    <option value="weekly">Weekly</option>
+                    <option value="monthly">Monthly</option>
+                  </select>
               </td>
               <td>
-                <input type="text" className="input-box" value={result.SCashAid}
-              readOnly/>
+              <input
+                type="text"
+                className="input-box"
+                value={formData.SCashAid === '' ? '$' : formatCurrencyInput(formData.SCashAid)}
+                onChange={(e) => {
+                  const inputVal = e.target.value.replace(/[^0-9.]/g, '');
+                  setFormData({...formData, SCashAid: inputVal});
+                }}/>
+              <select
+                    value={formData.SCashAidFrequency}
+                    onChange={(e) => setFormData({ ...formData, SCashAidFrequency: e.target.value})}
+                  >
+                    <option value="" disabled>
+                      Select Weekly/Monthly
+                    </option>
+                    <option value="weekly">Weekly</option>
+                    <option value="monthly">Monthly</option>
+                  </select>
               </td>
               <td>
-                <input type="text" className="input-box" value={result.SOther}
-              readOnly/>
+              <input
+                type="text"
+                className="input-box"
+                value={formData.SOther === '' ? '$' : formatCurrencyInput(formData.SOther)}
+                onChange={(e) => {
+                  const inputVal = e.target.value.replace(/[^0-9.]/g, '');
+                  setFormData({...formData, SOther: inputVal});
+                }} />
+              <select
+                    value={formData.SOtherFrequency}
+                    onChange={(e) => setFormData({ ...formData, SOtherFrequency: e.target.value})}
+                  >
+                    <option value="" disabled>
+                      Select Weekly/Monthly
+                    </option>
+                    <option value="weekly">Weekly</option>
+                    <option value="monthly">Monthly</option>
+                  </select>
               </td>
             </tr>
           </tbody>
@@ -592,16 +812,28 @@ const SelectedResult = () => {
           </tr>
           <tr>
             <td>
-              <input placeholder="Amount per month" type="text" className="input-box" value={result.CALWorks}
-                    readOnly/>
+              <input placeholder="Amount per month" type="text" className="input-box" 
+              value={formData.CALWorks === '' ? '' : formatCurrencyInput(formData.CALWorks)}
+              onChange={(e) => {
+                const inputVal = e.target.value.replace(/[^0-9.]/g, '');
+                setFormData({...formData, CALWorks: inputVal});
+              }}/>
             </td>
             <td>
-              <input placeholder="Amount per month" type="text" className="input-box" value={result.CALFresh}
-                    readOnly/>
+              <input placeholder="Amount per month" type="text" className="input-box" 
+              value={formData.CALFresh === '' ? '' : formatCurrencyInput(formData.CALFresh)}
+              onChange={(e) => {
+                const inputVal = e.target.value.replace(/[^0-9.]/g, '');
+                setFormData({...formData, CALFresh: inputVal});
+              }}/>
             </td>
             <td>
-              <input placeholder="Amount per month" type="text" className="input-box" value={result.WIC}
-                    readOnly/>
+              <input placeholder="Amount per month" type="text" className="input-box" 
+              value={formData.WIC === '' ? '' : formatCurrencyInput(formData.WIC)}
+              onChange={(e) => {
+                const inputVal = e.target.value.replace(/[^0-9.]/g, '');
+                setFormData({...formData, WIC: inputVal});
+              }}/>
             </td>
           </tr>
         </table>
@@ -615,13 +847,13 @@ const SelectedResult = () => {
         <input
           type="checkbox"
           id="full-day-care"
-          checked={result.fullDayCareChecked}
-          readOnly
+          checked={formData.fullDayCareChecked}
+          onChange={(e) => setFormData({...formData, fullDayCareChecked: e.target.checked})}
         />
         <label htmlFor="full-day-care">Full Day Care</label>
       </div>
 
-      {result.fullDayCareChecked && (
+      {formData.fullDayCareChecked && (
         <div className="table2">
             <h5>Please provide information as applicable to your reason for requesting full-day service.<h6>(Select all that apply)</h6></h5>
             
@@ -642,29 +874,29 @@ const SelectedResult = () => {
           <tbody>
             <tr>
               <td>
-                <input type="checkbox" checked={result.Pworking}
-                readOnly/>
-              </td>
+                <input type="checkbox" checked={formData.Pworking}
+                onChange={(e) => setFormData({...formData, Pworking: e.target.checked})}/>
+                </td>
               <td>
-                <input type="checkbox" checked={result.PlookingForWorking}
-                readOnly/>
-              </td>
+                <input type="checkbox" checked={formData.PlookingForWorking}
+                onChange={(e) => setFormData({...formData, PlookingForWorking: e.target.checked})}/>
+                </td>
               <td>
-                <input type="checkbox" checked={result.PgoingToSchool}
-                readOnly/>
-              </td>
+                <input type="checkbox" checked={formData.PgoingToSchool}
+                onChange={(e) => setFormData({...formData, PgoingToSchool: e.target.checked})}/>
+                </td>
               <td>
-                <input type="checkbox" checked={result.PCPSorAtRisk}
-                readOnly/>
-              </td>
+                <input type="checkbox" checked={formData.PCPSorAtRisk}
+                onChange={(e) => setFormData({...formData, PCPSorAtRisk: e.target.checked})}/>
+                </td>
               <td>
-                <input type="checkbox" checked={result.PsetIncapacitate}
-                readOnly/>
-              </td>
+                <input type="checkbox" checked={formData.PsetIncapacitate}
+                onChange={(e) => setFormData({...formData, PsetIncapacitate: e.target.checked})}/>
+                </td>
               <td>
-                <input type="checkbox" checked={result.PIEPpreschoolOnly}
-                readOnly/>
-              </td>
+                <input type="checkbox" checked={formData.PIEPpreschoolOnly}
+                onChange={(e) => setFormData({...formData, PIEPpreschoolOnly: e.target.checked})}/>
+                </td>
             </tr>
           </tbody>
         </table>
@@ -684,31 +916,31 @@ const SelectedResult = () => {
             </tr>
           </thead>
           <tbody>
-            <tr>
+          <tr>
               <td>
-              <input type="checkbox" checked={result.Sworking}
-                readOnly/>
-              </td>
+                <input type="checkbox" checked={formData.Sworking}
+                onChange={(e) => setFormData({...formData, Sworking: e.target.checked})}/>
+                </td>
               <td>
-                <input type="checkbox" checked={result.SlookingForWorking}
-                readOnly/>
-              </td>
+                <input type="checkbox" checked={formData.SlookingForWorking}
+                onChange={(e) => setFormData({...formData, SlookingForWorking: e.target.checked})}/>
+                </td>
               <td>
-                <input type="checkbox" checked={result.SgoingToSchool}
-                readOnly/>
-              </td>
+                <input type="checkbox" checked={formData.SgoingToSchool}
+                onChange={(e) => setFormData({...formData, SgoingToSchool: e.target.checked})}/>
+                </td>
               <td>
-                <input type="checkbox" checked={result.SCPSorAtRisk}
-                readOnly/>
-              </td>
+                <input type="checkbox" checked={formData.SCPSorAtRisk}
+                onChange={(e) => setFormData({...formData, SCPSorAtRisk: e.target.checked})}/>
+                </td>
               <td>
-                <input type="checkbox" checked={result.SsetIncapacitate}
-                readOnly/>
-              </td>
+                <input type="checkbox" checked={formData.SsetIncapacitate}
+                onChange={(e) => setFormData({...formData, SsetIncapacitate: e.target.checked})}/>
+                </td>
               <td>
-                <input type="checkbox" checked={result.SIEPpreschoolOnly}
-                readOnly/>
-              </td>
+                <input type="checkbox" checked={formData.SIEPpreschoolOnly}
+                onChange={(e) => setFormData({...formData, SIEPpreschoolOnly: e.target.checked})}/>
+                </td>
             </tr>
           </tbody>
         </table>
@@ -721,34 +953,13 @@ const SelectedResult = () => {
         <input
           type="checkbox"
           id="preschool-only"
-          checked={result.preschoolOnlyChecked}
-          readOnly
-        />
+          checked={formData.preschoolOnlyChecked}
+          onChange={(e) => setFormData({...formData, preschoolOnlyChecked: e.target.checked})}/>
+         
         <label htmlFor="preschool-only">Preschool Only</label>
       </div>
 
-      {result.preschoolOnlyChecked && (
-        <div className="table2">
-            <h5>For ranking purpose please indicate if child is CPS/At Risk or child has IEP</h5>
-          <table className="grid">
-            {/* Table for Preschool Only */}
-            <tr>
-                <th className="tableCheckHeader">CPS/At Risk</th>
-                <th className="tableCheckHeader">IEP</th>
-            </tr>
-            <tr>
-            <td>
-              <input type="checkbox" checked={result.preschoolCPS}
-                readOnly/>
-              </td>
-              <td>
-                <input type="checkbox" checked={result.preSchoolIEP}
-                readOnly/>
-              </td>
-            </tr>
-          </table>
-        </div>
-      )}
+      
     </div>
     
 </div>
@@ -763,9 +974,14 @@ const SelectedResult = () => {
         <button type="submit" className="submit-button" onClick={submitForm}>
           Submit
         </button>
-        <button type="cancel" className="cancel-button" onClick={() => navigate('/search')}>
+        <button type="cancel" className="cancel-button" onClick={() => navigate(-1)}>
+          Cancel
+        </button>
+        <div>
+        <button type="cancel" className="cancel-button" onClick={() => {window.location.reload();}}>
           Back to Search
         </button>
+        </div>
         
 
       </div>
