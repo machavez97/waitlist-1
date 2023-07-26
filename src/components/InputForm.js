@@ -1056,9 +1056,13 @@ const InputForm = () => {
         <button type="submit" className="submit-button" onClick={submitForm}>
           Submit
         </button>
-        <button type="cancel" className="cancel-button" onClick={() => navigate(-1)}>
-          Cancel
-        </button>
+        <button
+        type="button"
+        className="cancel-button"
+        onClick={() => (window.location.href = 'https://concordchildcare.org/eligibility%2F-enrollment#355f4dda-9cba-48c0-9e75-a6ffbc980258')}
+      >
+        Cancel
+      </button>
       </div>
     </div>
   );
