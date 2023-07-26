@@ -179,6 +179,29 @@
   background-color: gray; 
   color: white;
 }
+
+.language-button:active {
+  transform: translateY(4px);
+}
+
+.language-button{
+  background-color: white; 
+  color: #000000;
+  border: 2px solid rgb(93, 181, 222);
+  padding: 5px 10px;
+  text-align: center;
+  text-decoration-color: #000000;
+  display: inline-block;
+  font-size: 14px;
+  border-radius: 10px;
+  margin-bottom: 10px;
+}
+
+.language-button:hover{
+  border: 2px solid rgb(93, 181, 222);
+  background-color: rgb(93, 181, 222); 
+  color: white;
+}
 .remove-child-button:active {
   transform: translateY(4px);
 }
