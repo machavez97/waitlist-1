@@ -17,6 +17,10 @@
 .right-nav{
   justify-content: right;
 }
+.small-text {
+  font-size: 12px; 
+}
+
 .input-label {
   font-size: 1rem;
   padding: 5px;
@@ -89,6 +93,48 @@
   background-color: white; 
 }
 .cancel-button:active {
+  transform: translateY(4px);
+}
+.delete-button{
+  background-color: white; 
+  color: #000000;
+  border: 2px solid black;
+  padding: 10px 28px;
+  text-align: center;
+  text-decoration-color: #000000;
+  display: inline-block;
+  font-size: 18px;
+  border-radius: 10px;
+  margin-top: 20px;
+  margin-left: 5px;
+}
+
+.delete-button:hover{
+  border: 2px solid black;
+  background-color: red; 
+}
+.delete-button:active {
+  transform: translateY(4px);
+}
+.home-button{
+  background-color: white; 
+  color: #000000;
+  border: 2px solid black;
+  padding: 10px 28px;
+  text-align: center;
+  text-decoration-color: #000000;
+  display: inline-block;
+  font-size: 18px;
+  border-radius: 10px;
+  margin-top: 20px;
+  
+}
+
+.home-button:hover{
+  border: 2px solid rgb(93, 181, 222);
+  background-color: white; 
+}
+.home-button:active {
   transform: translateY(4px);
 }
 .logout-button{

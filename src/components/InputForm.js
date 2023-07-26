@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React, {useState, useEffect} from 'react';
 import { useNavigate } from "react-router-dom";
 import { collection, addDoc } from "firebase/firestore";
 import { db } from '../firebase';
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+
 import "../App.css";
 
 const InputForm = () => {
@@ -77,11 +79,22 @@ const InputForm = () => {
   const [CALWorks, setCalWorks] = useState("");
   const [CALFresh, setCALFresh] = useState("");
   const [WIC, setWIC] = useState("");
+  const [auth, setAuth] = useState(false)
   
 
   const [children, setChildren] = useState([
     { name: "", birthday: "", needCare: false, iepIfsp: false},
   ]);
+  useEffect(() => {
+    const authToken = getAuth();
+    onAuthStateChanged(authToken, (user) =>{
+        if (user) {
+            setAuth(true);
+
+        }
+    })
+
+}, [])
 
   const addChildField = () => {
     setChildren([...children, { name: "", birthday: "", needCare: false, iepIfsp: false }]);
@@ -230,6 +243,13 @@ const InputForm = () => {
 
   return (
     <div>
+      <button
+        type="button"
+        className="cancel-button"
+        onClick={() => (window.location.href = 'https://concordchildcare.org/eligibility%2F-enrollment#355f4dda-9cba-48c0-9e75-a6ffbc980258')}
+      >
+        Back to Website
+      </button>
       <div>
         <h1>Family Information</h1>
       </div>
@@ -326,14 +346,14 @@ const InputForm = () => {
             />
           
             <label htmlFor="state" className="input-label">
-              State:
+              State: <span class="small-text">(must reside in CA)</span> 
             </label>
             <input
               type="text"
               id="state"
               className="input-box"
-              value={Pstate}
-              onChange={(e) => PsetState(e.target.value)}
+              value= 'CA'
+              onChange={(e) => PsetState('CA')}
             />
 
             <label htmlFor="zip" className="input-label">
@@ -462,7 +482,7 @@ const InputForm = () => {
       type="text"
       id="state"
       className={`input-box ${SlivesInHome ? '' : 'disabled'}`}
-      value={Sstate}
+      value="CA"
       onChange={(e) => SsetState(e.target.value)}
       disabled={!SlivesInHome}
     />
@@ -1059,7 +1079,14 @@ const InputForm = () => {
         <button
         type="button"
         className="cancel-button"
-        onClick={() => (window.location.href = 'https://concordchildcare.org/eligibility%2F-enrollment#355f4dda-9cba-48c0-9e75-a6ffbc980258')}
+        onClick={() => { if(!auth){
+          (window.location.href = 
+            'https://concordchildcare.org/eligibility%2F-enrollment#355f4dda-9cba-48c0-9e75-a6ffbc980258')
+        }
+      else {
+        navigate('/');
+      }
+      }}
       >
         Cancel
       </button>

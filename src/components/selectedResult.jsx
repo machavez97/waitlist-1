@@ -3,7 +3,7 @@ import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../firebase';
 import { useNavigate, useParams } from 'react-router-dom'
 import { db } from '../firebase'
-import { collection, query, where, getDoc, updateDoc, doc, or } from 'firebase/firestore';
+import { collection, query, where, getDoc, updateDoc, doc, deleteDoc, or } from 'firebase/firestore';
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { Link } from 'react-router-dom';
 import html2canvas from 'html2canvas';
@@ -135,6 +135,20 @@ const SelectedResult = () => {
       await updateDoc(doc(db, 'Applicants', id), formData);
       window.location.reload();
     };
+
+    const handleDelete = async () => {
+      const confirmed = window.confirm('Are you sure you would like to delete this application?');
+      if (confirmed) {
+        try {
+          // Delete the document from Firestore
+          await deleteDoc(doc(db, 'Applicants', id));
+          navigate(-1);
+          console.log('Document deleted successfully!');
+        } catch (error) {
+          console.error('Error deleting document:', error);
+        }
+      }
+    };
     
     useEffect(() => {
       const authToken = getAuth();
@@ -175,13 +189,17 @@ const SelectedResult = () => {
     return (
       <div>
       <nav className='right-nav'>
-      <Link className="cancel-button" to="/">Home</Link>
+      <Link className="home-button" to="/">Home</Link>
 
             </nav>
         <div>
+        <div>
+        <button className="delete-button" onClick={handleDelete}>Delete</button>
+        </div>
    
           {searchResults.length > 0 ? (
           <div className="results-container">
+            
             {searchResults.map((result) => (
             <div id="pdf-content">
               <div key={result.id}>
@@ -974,11 +992,12 @@ const SelectedResult = () => {
         <button type="submit" className="submit-button" onClick={submitForm}>
           Submit
         </button>
-        <button type="cancel" className="cancel-button" onClick={() => navigate(-1)}>
+        <button type="cancel" className="cancel-button" onClick={() => {window.location.reload();}}>
           Cancel
         </button>
+        
         <div>
-        <button type="cancel" className="cancel-button" onClick={() => {window.location.reload();}}>
+        <button type="cancel" className="cancel-button" onClick={() => navigate(-1)}>
           Back to Search
         </button>
         </div>

@@ -43,9 +43,7 @@ const Search = () => {
     const handleSearch = async (e) => {
       e.preventDefault();
       setSearchResults([]);
-      console.log(searchRank)
       if (searchQuery !== '' && !isFullTimeChecked && !isPartTimeChecked && !searchRank) {
-        console.log(searchQuery)
         const q = query(collection(db, 'Applicants'), 
         
         or(
@@ -64,10 +62,28 @@ const Search = () => {
         setDocuments(fetchedDocuments);
         setSearchResults(fetchedDocuments.map((doc) => doc.data));
       }
-      else if (searchQuery !== '' && isFullTimeChecked) {
+      if (searchQuery !== '' && !isFullTimeChecked && !isPartTimeChecked && searchRank) {
+        const q = query(collection(db, 'Applicants'), and(
+          where('rank', '==', searchRank),
+          or(
+          where('PfirstName', '==', searchQuery),
+          where('PlastName', '==', searchQuery),
+          where('SfirstName', '==', searchQuery),
+          where('SlastName', '==', searchQuery),
+        )));
+        
+    
+        const querySnapshot = await getDocs(q);
+        const fetchedDocuments = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          data: doc.data(),
+        }));
+        setDocuments(fetchedDocuments);
+        setSearchResults(fetchedDocuments.map((doc) => doc.data));
+      }
+      else if (searchQuery !== '' && isFullTimeChecked && !isPartTimeChecked && !searchRank) {
         const q = query(collection(db, 'Applicants'), and(
         where('fullDayCareChecked', '==', isFullTimeChecked),
-        where('rank', '==', searchRank),
         or(
           where('PfirstName', '==', searchQuery),
           where('PlastName', '==', searchQuery),
@@ -85,10 +101,9 @@ const Search = () => {
         setSearchResults(fetchedDocuments.map((doc) => doc.data));
       }
 
-      else if (searchQuery !== '' && isPartTimeChecked) {
+      else if (searchQuery !== '' && !isFullTimeChecked && isPartTimeChecked && !searchRank) {
         const q = query(collection(db, 'Applicants'), and( 
         where('preschoolOnlyChecked', '==', isPartTimeChecked),
-        where('rank', '==', searchRank),
         or(
           where('PfirstName', '==', searchQuery),
           where('PlastName', '==', searchQuery),
@@ -105,6 +120,29 @@ const Search = () => {
         setDocuments(fetchedDocuments);
         setSearchResults(fetchedDocuments.map((doc) => doc.data));
       }
+      else if (searchQuery !== '' && isFullTimeChecked && isPartTimeChecked && !searchRank) {
+
+        const q = query(collection(db, 'Applicants'), and(
+        or( 
+        where('preschoolOnlyChecked', '==', isPartTimeChecked),
+        ),
+        or(
+          where('PfirstName', '==', searchQuery),
+          where('PlastName', '==', searchQuery),
+          where('SfirstName', '==', searchQuery),
+          where('SlastName', '==', searchQuery),
+        )));
+   
+    
+        const querySnapshot = await getDocs(q);
+        const fetchedDocuments = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          data: doc.data(),
+        }));
+        setDocuments(fetchedDocuments);
+        setSearchResults(fetchedDocuments.map((doc) => doc.data));
+      }
+      
       else if (!searchQuery && searchRank && isPartTimeChecked) {
         const q = query(collection(db, 'Applicants'), and( 
         where('preschoolOnlyChecked', '==', isPartTimeChecked),
@@ -119,12 +157,26 @@ const Search = () => {
         setDocuments(fetchedDocuments);
         setSearchResults(fetchedDocuments.map((doc) => doc.data));
       }
-
       else if (!searchQuery && searchRank && isFullTimeChecked) {
         const q = query(collection(db, 'Applicants'), and( 
-        where('fullDayCareChecked', '==', isFullTimeChecked),
-        where('rank', '==', searchRank),
+          where('fullDayCareChecked', '==', isFullTimeChecked),
+          where('rank', '==', searchRank),
         ));
+    
+        const querySnapshot = await getDocs(q);
+        const fetchedDocuments = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          data: doc.data(),
+        }));
+        setDocuments(fetchedDocuments);
+        setSearchResults(fetchedDocuments.map((doc) => doc.data));
+      }
+
+      else if (!searchQuery && !searchRank && isFullTimeChecked) {
+        const q = query(collection(db, 'Applicants'), 
+        where('fullDayCareChecked', '==', isFullTimeChecked),
+        
+        );
     
         const querySnapshot = await getDocs(q);
         const fetchedDocuments = querySnapshot.docs.map((doc) => ({
@@ -151,25 +203,8 @@ const Search = () => {
       
       
    
-    else if (searchQuery && searchRank && !isFullTimeChecked && !isPartTimeChecked) {
-      const q = query(collection(db, 'Applicants'), and(
-      where('rank', '==', searchRank),
-      or(
-        where('PfirstName', '==', searchQuery),
-        where('PlastName', '==', searchQuery),
-        where('SfirstName', '==', searchQuery),
-        where('SlastName', '==', searchQuery),
-      )
-      ));
-  
-      const querySnapshot = await getDocs(q);
-      const fetchedDocuments = querySnapshot.docs.map((doc) => ({
-        id: doc.id,
-        data: doc.data(),
-      }));
-      setDocuments(fetchedDocuments);
-      setSearchResults(fetchedDocuments.map((doc) => doc.data));
-    }
+   
+    
   };
     
     
@@ -187,7 +222,7 @@ const Search = () => {
     return (
       <div>
       <nav className='right-nav'>
-      <Link className="cancel-button" to="/">Home</Link>
+      <Link className="home-button" to="/">Home</Link>
 
             </nav>
         <div>
