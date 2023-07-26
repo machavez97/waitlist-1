@@ -23,13 +23,7 @@ const routeChange = (path) => {
   navigate(path);
 };
 
-useEffect(() => {
-  let authToken = sessionStorage.getItem('Auth Token')
 
-  if (authToken) {
-    routeChange('/')
-  }
-}, [])
 const handleLogout = () => {
   const auth = getAuth();
   signOut(auth)
