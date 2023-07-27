@@ -185,91 +185,97 @@ const toggleLanguage = () => {
     e.preventDefault();
     let isValid = true;
     if (PfirstName.trim() === '' || PlastName.trim() === '' || Pcity.trim() === '' || Pstreet.trim === ''
-        || Pzip.trim() === ''){
+      || Pzip.trim() === '') {
       isValid = false;
-      alert("Please fill out all required fields\nPor favor llene todos los campos requeridos")
+      alert("Please fill out all required fields\nPor favor llene todos los campos requeridos");
     }
-    if (!fullDayCareChecked && !preschoolOnlyChecked){
+    if (!fullDayCareChecked && !preschoolOnlyChecked) {
       isValid = false;
-      alert("Please choose at least one type of care\nElija al menos un tipo de atención")
+      alert("Please choose at least one type of care\nElija al menos un tipo de atención");
     }
     /*if (children[0].name.trim() === ''){
       isValid = false;
       alert("Must list at least one child")
     }*/
+  
+    // Convert children array to the desired format with Timestamps
     const childrenWithTimestamps = children.map((child) => ({
       ...child,
       birthday: Timestamp.fromDate(new Date(child.birthday)),
     }));
-
-    if(isValid){
-    try {
-      const docRef = await addDoc(collection(db, "Applicants"), {
-        PfirstName,
-        PlastName,
-        PphoneNumber,
-        PtextOK,
-        Pemail,
-        Pstreet,
-        Pcity,
-        Pstate,
-        Pzip,
-        Pwages,
-        PchildSupport,
-        PAlimony, 
-        PSocialSecurity,
-        PCashAid,
-        POther,
-        incomeExplaination,
-        
-        SfirstName,
-        SlastName,
-        SphoneNumber,
-        StextOK,
-        Semail,
-        Sstreet,
-        Scity,
-        Sstate,
-        Szip,
-        SlivesInHome,
-        Swages,
-        SchildSupport,
-        SAlimony, 
-        SSocialSecurity,
-        SCashAid,
-        SOther,
-        preschoolOnlyChecked,
-        fullDayCareChecked,
-        Pworking,
-        PlookingForWorking,
-        PgoingToSchool,
-        PCPSorAtRisk,
-        PIncapacitated,
-        PIEPpreschoolOnly,
-        Sworking,
-        SlookingForWorking,
-        SgoingToSchool,
-        SCPSorAtRisk,
-        SIncapacitated,
-        SIEPpreschoolOnly,
-               
-        CALFresh,
-        CALWorks,
-        WIC,
-
-        childrenWithTimestamps,
-        
-       
-      });
-      console.log("Document written with ID: ", docRef.id);
-    } catch (e) {
-      console.error("Error adding document: ", e);
+  
+    if (isValid) {
+      try {
+        // Create the main applicant document
+        const applicantRef = await addDoc(collection(db, "Applicants"), {
+          PfirstName,
+          PlastName,
+          PphoneNumber,
+          PtextOK,
+          Pemail,
+          Pstreet,
+          Pcity,
+          Pstate,
+          Pzip,
+          Pwages,
+          PchildSupport,
+          PAlimony,
+          PSocialSecurity,
+          PCashAid,
+          POther,
+          incomeExplaination,
+  
+          SfirstName,
+          SlastName,
+          SphoneNumber,
+          StextOK,
+          Semail,
+          Sstreet,
+          Scity,
+          Sstate,
+          Szip,
+          SlivesInHome,
+          Swages,
+          SchildSupport,
+          SAlimony,
+          SSocialSecurity,
+          SCashAid,
+          SOther,
+          preschoolOnlyChecked,
+          fullDayCareChecked,
+          Pworking,
+          PlookingForWorking,
+          PgoingToSchool,
+          PCPSorAtRisk,
+          PIncapacitated,
+          PIEPpreschoolOnly,
+          Sworking,
+          SlookingForWorking,
+          SgoingToSchool,
+          SCPSorAtRisk,
+          SIncapacitated,
+          SIEPpreschoolOnly,
+  
+          CALFresh,
+          CALWorks,
+          WIC,
+        });
+  
+        // Create the "children" subcollection and add child documents
+        const childrenRef = collection(applicantRef, "children");
+        for (const child of childrenWithTimestamps) {
+          await addDoc(childrenRef, child);
+        }
+  
+        console.log("Document written with ID: ", applicantRef.id);
+      } catch (e) {
+        console.error("Error adding document: ", e);
+      }
+      alert("Submission Successful");
+      window.location.reload();
     }
-    alert("Submission Successful")
-    window.location.reload();
-
-  }
   };
+  
 
   return (
     <div>
@@ -568,13 +574,13 @@ const toggleLanguage = () => {
                       </div>
                       <div className="checkbox-group">
                         <label htmlFor={`child-full-time-${index}`} className="checkbox-label">
-                          IEP/ISFP:
+                          IEP/IFSP:
                         </label>
                         <input
                           type="checkbox"
-                          id={`child-full-time-${index}`}
+                          id={`child-iepifsp-${index}`}
                           checked={child.iepIfsp}
-                          onChange={(e) => handleChildFieldChange(index, "iepisfp", e.target.checked)} />
+                          onChange={(e) => handleChildFieldChange(index, "iepIfsp", e.target.checked)} />
                       </div>
 
                     </div>
@@ -1389,13 +1395,13 @@ const toggleLanguage = () => {
                       </div>
                       <div className="checkbox-group">
                         <label htmlFor={`child-full-time-${index}`} className="checkbox-label">
-                          IEP/ISFP:
+                          IEP/IFSP:
                         </label>
                         <input
                           type="checkbox"
-                          id={`child-full-time-${index}`}
+                          id={`child-iepifsp-${index}`}
                           checked={child.iepIfsp}
-                          onChange={(e) => handleChildFieldChange(index, "iepisfp", e.target.checked)} />
+                          onChange={(e) => handleChildFieldChange(index, "iepifsp", e.target.checked)} />
                       </div>
 
                     </div>

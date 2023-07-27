@@ -229,39 +229,51 @@ const Search = () => {
   if (startDate && endDate) {
     const startTimestamp = Timestamp.fromDate(new Date(startDate));
     const endTimestamp = Timestamp.fromDate(new Date(endDate));
-    const filteredChildren = await searchChildrenByBirthdayRange(startTimestamp, endTimestamp);
-    setSearchResults(filteredChildren);
+    const filteredChildren = await searchChildrenByBirthdayRange(startDate, endDate);
+    setSearchResults(filteredChildren.map((doc) => doc.data));
   }
 
-    // If iepIfspChecked is true, filter documents based on IEP/IFSP as well
-    if (iepIfspChecked) {
-      const filteredAndIEPDocs = searchChildrenWithIEP(filteredDocs);
-      setSearchResults(filteredAndIEPDocs.map((doc) => doc.data));
-    }
-  
-  
-  // If only iepIfspChecked is true, perform the search for children with IEP/IFSP
-  else if (iepIfspChecked) {
+  // If iepIfspChecked is true, filter documents based on IEP/IFSP
+  if (iepIfspChecked) {
     const filteredDocs = searchChildrenWithIEP(documents);
     setSearchResults(filteredDocs.map((doc) => doc.data));
   }
 };
 
-// Function to filter documents by date range
+// Function to filter documents by date range and search the subcollection for children with birthdays in the range
 const searchChildrenByBirthdayRange = async (start, end) => {
-  console.log(start)
+  console.log("start: " + start);
+  console.log("end: " + end);
 
   const parentsRef = collection(db, 'Applicants');
-  const q = query(parentsRef, where('children', 'array-contains-any', ['birthday', '>=', start], ['birthday', '<=', end]));
-  const querySnapshot = await getDocs(q);
-  const fetchedDocuments = querySnapshot.docs.map((doc) => ({
-    id: doc.id,
-    data: doc.data(),
-  }));
-  setDocuments(fetchedDocuments);
-  setSearchResults(fetchedDocuments.map((doc) => doc.data));
-  return fetchedDocuments;
+  const querySnapshot = await getDocs(parentsRef);
+
+  const filteredDocuments = [];
+
+  querySnapshot.forEach((doc) => {
+    const applicantData = doc.data();
+    const children = applicantData.children;
+    if (children && Array.isArray(children)) {
+      const filteredChildren = children.filter((child) => {
+        const birthdayTimestamp = child.birthday.toDate(); // Convert Firestore Timestamp to JavaScript Date object
+        return birthdayTimestamp >= new Date(start) && birthdayTimestamp <= new Date(end);
+      });
+
+      if (filteredChildren.length > 0) {
+        filteredDocuments.push({
+          id: doc.id,
+          data: {
+            ...applicantData,
+            children: filteredChildren,
+          },
+        });
+      }
+    }
+  });
+
+  return filteredDocuments;
 };
+
 
 // Function to filter documents by children with IEP/IFSP
 const searchChildrenWithIEP = (docs) => {
