@@ -293,6 +293,7 @@
   background-color: lightgray;
   width: 50px;
   height: fit-content;
+  margin-left: 5px;
 }
 .pdf-button:active {
   transform: translateY(4px);

@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import { useNavigate } from "react-router-dom";
-import { collection, addDoc } from "firebase/firestore";
+import { collection, addDoc, Timestamp } from "firebase/firestore";
 import { db } from '../firebase';
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 
@@ -85,7 +85,7 @@ const InputForm = () => {
   
 
   const [children, setChildren] = useState([
-    { name: "", birthday: "", needCare: false, iepIfsp: false},
+    { name: "", birthday: new Date(), needCare: false, iepIfsp: false},
   ]);
   useEffect(() => {
     const authToken = getAuth();
@@ -102,7 +102,7 @@ const toggleLanguage = () => {
 };
 
   const addChildField = () => {
-    setChildren([...children, { name: "", birthday: "", needCare: false, iepIfsp: false }]);
+    setChildren([...children, { name: "", birthday: new Date(), needCare: false, iepIfsp: false }]);
   };
 
   const handleDeleteChild = (index) => {
@@ -168,15 +168,40 @@ const toggleLanguage = () => {
     return formattedInput;
   };
 
+  const zipCodeFormat = (input) => {
+    // Remove any non-digit characters using regular expression
+    const digitsOnly = input.replace(/\D/g, '');
+  
+    // Limit the input to a maximum of 5 digits
+    const maxLength = 5;
+    const formattedZip = digitsOnly.slice(0, maxLength);
+  
+    return formattedZip;
+  };
+
 
   
   const submitForm = async (e) => {
     e.preventDefault();
     let isValid = true;
-    if (PfirstName.trim() === '' || PlastName.trim() === ''){
+    if (PfirstName.trim() === '' || PlastName.trim() === '' || Pcity.trim() === '' || Pstreet.trim === ''
+        || Pzip.trim() === ''){
       isValid = false;
-      alert("Please fill out all required fields")
+      alert("Please fill out all required fields\nPor favor llene todos los campos requeridos")
     }
+    if (!fullDayCareChecked && !preschoolOnlyChecked){
+      isValid = false;
+      alert("Please choose at least one type of care\nElija al menos un tipo de atención")
+    }
+    /*if (children[0].name.trim() === ''){
+      isValid = false;
+      alert("Must list at least one child")
+    }*/
+    const childrenWithTimestamps = children.map((child) => ({
+      ...child,
+      birthday: Timestamp.fromDate(new Date(child.birthday)),
+    }));
+
     if(isValid){
     try {
       const docRef = await addDoc(collection(db, "Applicants"), {
@@ -232,7 +257,7 @@ const toggleLanguage = () => {
         CALWorks,
         WIC,
 
-        children,
+        childrenWithTimestamps,
         
        
       });
@@ -292,7 +317,7 @@ const toggleLanguage = () => {
             <div className="group2">
 
               <label htmlFor="phone-number" className="input-label">
-                Phone Number:
+              <span className="required-indicator">*</span>Phone Number:
               </label>
               <input
                 type="text"
@@ -302,7 +327,9 @@ const toggleLanguage = () => {
                 onChange={changePPhone}
                 maxLength={14}
                 pattern="\(\d{0,3}\) \d{0,3}-\d{0,4}"
-                placeholder="(XXX) XXX-XXXX" />
+                placeholder="(XXX) XXX-XXXX" 
+                required />
+                
               <label htmlFor="text" className="checkbox-label">
                 Text OK:
               </label>
@@ -313,38 +340,41 @@ const toggleLanguage = () => {
                 onChange={(e) => PsettextOK(e.target.checked)} />
 
               <label htmlFor="email" className="input-label">
-                Email:
+              <span className="required-indicator">*</span>Email:
               </label>
               <input
                 type="text"
                 id="email"
                 className="input-box"
                 value={Pemail}
-                onChange={(e) => PsetEmail(e.target.value)} />
+                onChange={(e) => PsetEmail(e.target.value)} 
+                required />
 
             </div>
 
             <div className="group3">
 
               <label htmlFor="street" className="input-label">
-                Street:
+              <span className="required-indicator">*</span>Street:
               </label>
               <input
                 type="text"
                 id="street"
                 className="input-box"
                 value={Pstreet}
-                onChange={(e) => PsetStreet(e.target.value)} />
+                onChange={(e) => PsetStreet(e.target.value)} 
+                required />
 
               <label htmlFor="city" className="input-label">
-                City:
+              <span className="required-indicator">*</span>City:
               </label>
               <input
                 type="text"
                 id="city"
                 className="input-box"
                 value={Pcity}
-                onChange={(e) => PsetCity(e.target.value)} />
+                onChange={(e) => PsetCity(e.target.value)} 
+                required />
 
               <label htmlFor="state" className="input-label">
                 State: <span class="small-text">(must reside in CA)</span>
@@ -357,14 +387,15 @@ const toggleLanguage = () => {
                 onChange={(e) => PsetState('CA')} />
 
               <label htmlFor="zip" className="input-label">
-                Zip:
+              <span className="required-indicator">*</span>Zip:
               </label>
               <input
                 type="text"
                 id="zip"
                 className="input-box"
                 value={Pzip}
-                onChange={(e) => PsetZip(e.target.value)} />
+                onChange={(e) => PsetZip(zipCodeFormat(e.target.value))} 
+                required />
               <div>
 
               </div>
@@ -485,7 +516,7 @@ const toggleLanguage = () => {
                   id="zip"
                   className={`input-box ${SlivesInHome ? '' : 'disabled'}`}
                   value={Szip}
-                  onChange={(e) => SsetZip(e.target.value)}
+                  onChange={(e) => SsetZip(zipCodeFormat(e.target.value))}
                   disabled={!SlivesInHome} />
               </div>
             </div>
@@ -1107,7 +1138,7 @@ const toggleLanguage = () => {
             <div className="group2">
 
               <label htmlFor="phone-number" className="input-label">
-              Número de Teléfono:
+              <span className="required-indicator">*</span>Número de Teléfono:
               </label>
               <input
                 type="text"
@@ -1117,49 +1148,54 @@ const toggleLanguage = () => {
                 onChange={changePPhone}
                 maxLength={14}
                 pattern="\(\d{0,3}\) \d{0,3}-\d{0,4}"
-                placeholder="(XXX) XXX-XXXX" />
+                placeholder="(XXX) XXX-XXXX" 
+                required />
               <label htmlFor="text" className="checkbox-label">
-              ¿Aceptar mensajes de texto?
+              <span className="required-indicator">*</span>¿Aceptar mensajes de texto?
               </label>
               <input
                 type="checkbox"
                 id="text"
                 checked={PtextOK}
-                onChange={(e) => PsettextOK(e.target.checked)} />
+                onChange={(e) => PsettextOK(e.target.checked)} 
+                required />
 
               <label htmlFor="email" className="input-label">
-              Correo Electrónico:
+              <span className="required-indicator">*</span>Correo Electrónico:
               </label>
               <input
                 type="text"
                 id="email"
                 className="input-box"
                 value={Pemail}
-                onChange={(e) => PsetEmail(e.target.value)} />
+                onChange={(e) => PsetEmail(e.target.value)} 
+                required />
 
             </div>
 
             <div className="group3">
 
               <label htmlFor="street" className="input-label">
-                Calle:
+              <span className="required-indicator">*</span>Calle:
               </label>
               <input
                 type="text"
                 id="street"
                 className="input-box"
                 value={Pstreet}
-                onChange={(e) => PsetStreet(e.target.value)} />
+                onChange={(e) => PsetStreet(e.target.value)} 
+                required/>
 
               <label htmlFor="city" className="input-label">
-              Ciudad:
+              <span className="required-indicator">*</span>Ciudad:
               </label>
               <input
                 type="text"
                 id="city"
                 className="input-box"
                 value={Pcity}
-                onChange={(e) => PsetCity(e.target.value)} />
+                onChange={(e) => PsetCity(e.target.value)} 
+                required/>
 
               <label htmlFor="state" className="input-label">
               Estado: <span class="small-text">(debe residir en CA)</span>
@@ -1172,14 +1208,15 @@ const toggleLanguage = () => {
                 onChange={(e) => PsetState('CA')} />
 
               <label htmlFor="zip" className="input-label">
-              Código Postal:
+              <span className="required-indicator">*</span>Código Postal:
               </label>
               <input
                 type="text"
                 id="zip"
                 className="input-box"
                 value={Pzip}
-                onChange={(e) => PsetZip(e.target.value)} />
+                onChange={(e) => PsetZip(zipCodeFormat(e.target.value))}
+                required/>
               <div>
 
               </div>
@@ -1300,7 +1337,7 @@ const toggleLanguage = () => {
                   id="zip"
                   className={`input-box ${SlivesInHome ? '' : 'disabled'}`}
                   value={Szip}
-                  onChange={(e) => SsetZip(e.target.value)}
+                  onChange={(e) => SsetZip(zipCodeFormat(e.target.value))}
                   disabled={!SlivesInHome} />
               </div>
             </div>

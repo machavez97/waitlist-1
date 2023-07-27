@@ -3,7 +3,7 @@ import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../firebase';
 import { useNavigate } from 'react-router-dom'
 import { db } from '../firebase'
-import { collection, query, where, getDocs, updateDoc, doc, or, and } from 'firebase/firestore';
+import { collection,Timestamp, query, where, getDocs, updateDoc, doc, or, and } from 'firebase/firestore';
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { Link } from 'react-router-dom';
 
@@ -19,9 +19,9 @@ const Search = () => {
     const [documents, setDocuments] = useState([]);
     const [isFullTimeChecked, setIsFullTimeChecked] = useState(false);
     const [isPartTimeChecked, setIsPartTimeChecked] = useState(false);
-
-
-
+    const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
+  const [iepIfspChecked, setIepIfspChecked] = useState(false);
     
     const navigate = useNavigate();
 	const routeChange = () => {
@@ -39,10 +39,13 @@ const Search = () => {
         })
 
     }, [])
+
+    
    
     const handleSearch = async (e) => {
       e.preventDefault();
       setSearchResults([]);
+      
       if (searchQuery !== '' && !isFullTimeChecked && !isPartTimeChecked && !searchRank) {
         const q = query(collection(db, 'Applicants'), 
         
@@ -62,7 +65,7 @@ const Search = () => {
         setDocuments(fetchedDocuments);
         setSearchResults(fetchedDocuments.map((doc) => doc.data));
       }
-      if (searchQuery !== '' && !isFullTimeChecked && !isPartTimeChecked && searchRank) {
+      else if (searchQuery !== '' && !isFullTimeChecked && !isPartTimeChecked && searchRank) {
         const q = query(collection(db, 'Applicants'), and(
           where('rank', '==', searchRank),
           or(
@@ -200,18 +203,75 @@ const Search = () => {
         setDocuments(fetchedDocuments);
         setSearchResults(fetchedDocuments.map((doc) => doc.data));
       }
-      
-      
+
+      let filteredDocs = documents;
+
+  /*if (searchQuery !== '') {
+    // Apply the search query filter
+    const q = query(collection(db, 'Applicants'), 
+      or(
+        where('PfirstName', '==', searchQuery),
+        where('PlastName', '==', searchQuery),
+        where('SfirstName', '==', searchQuery),
+        where('SlastName', '==', searchQuery),
+      ));
+
+    const querySnapshot = await getDocs(q);
+    const fetchedDocuments = querySnapshot.docs.map((doc) => ({
+      id: doc.id,
+      data: doc.data(),
+    }));
+
+    // Update the filteredDocs with the search query results
+    filteredDocs = fetchedDocuments;
+  }*/
+
+  if (startDate && endDate) {
+    const startTimestamp = Timestamp.fromDate(new Date(startDate));
+    const endTimestamp = Timestamp.fromDate(new Date(endDate));
+    const filteredChildren = await searchChildrenByBirthdayRange(startTimestamp, endTimestamp);
+    setSearchResults(filteredChildren);
+  }
+
+    // If iepIfspChecked is true, filter documents based on IEP/IFSP as well
+    if (iepIfspChecked) {
+      const filteredAndIEPDocs = searchChildrenWithIEP(filteredDocs);
+      setSearchResults(filteredAndIEPDocs.map((doc) => doc.data));
+    }
+  
+  
+  // If only iepIfspChecked is true, perform the search for children with IEP/IFSP
+  else if (iepIfspChecked) {
+    const filteredDocs = searchChildrenWithIEP(documents);
+    setSearchResults(filteredDocs.map((doc) => doc.data));
+  }
+};
+
+// Function to filter documents by date range
+const searchChildrenByBirthdayRange = async (start, end) => {
+  console.log(start)
+
+  const parentsRef = collection(db, 'Applicants');
+  const q = query(parentsRef, where('children', 'array-contains-any', ['birthday', '>=', start], ['birthday', '<=', end]));
+  const querySnapshot = await getDocs(q);
+  const fetchedDocuments = querySnapshot.docs.map((doc) => ({
+    id: doc.id,
+    data: doc.data(),
+  }));
+  setDocuments(fetchedDocuments);
+  setSearchResults(fetchedDocuments.map((doc) => doc.data));
+  return fetchedDocuments;
+};
+
+// Function to filter documents by children with IEP/IFSP
+const searchChildrenWithIEP = (docs) => {
+  return docs.filter((doc) => {
+    const children = doc.data.children; // Access the "children" array correctly
+    return children.some((child) => child.iepIfsp);
+  });
+};
+
    
-   
-    
-  };
-    
-    
- 
-    
-    
-    
     
     const handleResultClick = (index) => {
       const selectedResult = documents[index];
@@ -234,7 +294,7 @@ const Search = () => {
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="First Name/Last Name"
             />
-            <div>
+           
             <input
               className='rank-box'
               type="text"
@@ -242,7 +302,28 @@ const Search = () => {
               onChange={(e) => setSearchRank(e.target.value)}
               placeholder="Rank"
             />
-            </div>
+
+              <div>
+                <label htmlFor="start-date">Start Date:</label>
+                <input
+                  type="date"
+                  id="start-date"
+                  value={startDate}
+                  onChange={(e) => setStartDate(e.target.value)}
+                />
+              </div>
+
+              <div>
+                <label htmlFor="end-date">End Date:</label>
+                <input
+                  type="date"
+                  id="end-date"
+                  value={endDate}
+                  onChange={(e) => setEndDate(e.target.value)}
+                />
+              </div>
+
+            
             <div>
         <input
           type="checkbox"
@@ -418,17 +499,12 @@ const Search = () => {
     </div>
     </div>
       ))}
-          </div>
-
-
-          
+          </div>  
 
       <div>
     
         <button className= 'submit-button' onClick={() => handleResultClick(index)}>Select</button>
 </div>
-
-
 
           </div>
           ))}
@@ -437,10 +513,6 @@ const Search = () => {
         ) : (
           <p>No search results found.</p>
         )}
-
-      
-
-
         
         </div>
         </div>
