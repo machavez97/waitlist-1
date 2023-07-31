@@ -201,7 +201,7 @@ const toggleLanguage = () => {
     // Convert children array to the desired format with Timestamps
     const childrenWithTimestamps = children.map((child) => ({
       ...child,
-      birthday: Timestamp.fromDate(new Date(child.birthday)),
+      birthday: new Date(child.birthday),
     }));
   
     if (isValid) {
@@ -1352,7 +1352,7 @@ const toggleLanguage = () => {
 
             <div className="children-section">
             <h3>Niños</h3>
-          <h6>Por favor, liste a todos los niños menores de 18 años</h6>
+          <h6>Por favor, ponga todos los niños menores de 18 años</h6>
 
 
 
@@ -1385,7 +1385,7 @@ const toggleLanguage = () => {
                       </div>
                       <div className="checkbox-group">
                         <label htmlFor={`child-need-care-${index}`} className="checkbox-label">
-                        ¿Necesita Cuidado?
+                        ¿Necesitan Cuidado?
                         </label>
                         <input
                           type="checkbox"
@@ -1407,13 +1407,13 @@ const toggleLanguage = () => {
                     </div>
                     {/* Delete Button */}
                     <button className="remove-child-button" onClick={() => handleDeleteChild(index)}>
-                    Eliminar
+                    Quita Niño
                     </button>
                   </div>
                 ))}
 
               </div>
-              <button type="button" className="add-child-button" onClick={addChildField}>Agregar Niño</button>
+              <button type="button" className="add-child-button" onClick={addChildField}>Agrega Niño</button>
 
 
             </div>
@@ -1705,11 +1705,10 @@ const toggleLanguage = () => {
                   </tbody>
                 </table>
 
-                {/* Notes */}
                 <div>
                   <div>
                     <label htmlFor="notes" className="input-label">
-                    Si no tiene ingresos, explique cómo se mantiene el hogar:
+                    Si no tienes ingresos, explique cómo se mantiene el hogar:
                     </label>
                   </div>
                   <textarea style={{ resize: "none" }} id="notes" rows="4" cols="50" value={incomeExplaination}
@@ -1882,7 +1881,7 @@ const toggleLanguage = () => {
                     id="preschool-only"
                     checked={preschoolOnlyChecked}
                     onChange={(e) => setPreschoolOnlyChecked(e.target.checked)} />
-                  <label htmlFor="preschool-only">Solo Preescolar</label>
+                  <label htmlFor="preschool-only">Solomente Preescolar</label>
                 </div>
 
                 {preschoolOnlyChecked && (

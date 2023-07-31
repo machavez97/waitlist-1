@@ -89,7 +89,7 @@ const SelectedResult = () => {
         ...prevFormData,
         children: [
           ...prevFormData.children,
-          { name: "", birthday: "", needCare: false, iepIfsp: false }
+          { name: "", birthday: new Date(), needCare: false, iepIfsp: false }
         ],
       }));
     };
@@ -481,7 +481,7 @@ const SelectedResult = () => {
         type="date"
         id={`child-birthday-${index}`}
         className="input-box"
-        value={child.birthday}
+        value={child.birthday.toDate().toISOString().split('T')[0]}
         onChange={(e) => handleChildFieldChange(index, "birthday", e.target.value)}
       />
         </div>
