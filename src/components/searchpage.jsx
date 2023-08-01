@@ -24,7 +24,6 @@ const Search = () => {
     const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
   const [iepIfspChecked, setIepIfspChecked] = useState(false);
-  const [childrenData, setChildrenData] = useState({});
 
     
     const navigate = useNavigate();
@@ -69,13 +68,13 @@ const Search = () => {
 
         setDocuments(fetchedDocuments);
         setSearchResults(fetchedDocuments.map((doc) => doc.data));
-        console.log("search results ", searchResults);
 
         const children = query(collectionGroup(db, 'children'));
         const childrenQuerySnapshot = await getDocs(children);
         const fetchedChildren = await fetchChildrenForAllParents(documents)
         setChildrenResults(fetchedChildren)
-        console.log(childrenResults);
+        console.log(fetchedChildren);
+        console.log("docs ", documents)
 
     }
       else if (searchQuery !== '' && !isFullTimeChecked && !isPartTimeChecked && searchRank) {
@@ -264,7 +263,11 @@ const fetchChildrenSubcollection = async (parentId) => {
 };
 const fetchChildrenForAllParents = async (documentsArray) => {
   try {
-    const promises = documentsArray.map((document) => fetchChildrenSubcollection(document.id));
+    const promises = documentsArray.map(async (document) => {
+      const childrenData = await fetchChildrenSubcollection(document.id);
+      return childrenData;
+    });
+
     const results = await Promise.all(promises);
     return results;
   } catch (error) {
@@ -272,6 +275,7 @@ const fetchChildrenForAllParents = async (documentsArray) => {
     return [];
   }
 };
+
 
 // Function to filter documents by date range and search the subcollection for children with birthdays in the range
 const searchChildrenByBirthdayRange = async (start, end) => {
@@ -489,12 +493,13 @@ const searchChildrenWithIEP = (docs) => {
           
         </div>
         
-        
+        {childrenResults.map((children, parentIndex) => (
+          <div key={parentIndex}>
         <h3>Children</h3> 
 
         <div className="children-display-container">
 
-      {childrenData.map((childDoc) => (
+      {children.map((childDoc) => (
         <div key={childDoc.id} className="child-display-field">
           <div className="child-display-info">
               <div className='stack'>
@@ -562,7 +567,8 @@ const searchChildrenWithIEP = (docs) => {
           </div>
       ))}
           </div>  
-
+          </div>
+        ))}
       <div>
     
         <button className= 'submit-button' onClick={() => handleResultClick(index)}>Select</button>
