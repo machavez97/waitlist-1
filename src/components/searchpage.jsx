@@ -247,6 +247,7 @@ const Search = () => {
         // Filter documents based on date range
         const filteredDocuments = await searchChildrenByBirthdayRange(fetchedDocuments, startTimestamp, endTimestamp);
         setSearchResults(filteredDocuments);
+        setDocuments(filteredDocuments)
     
         const fetchedChildren = await fetchChildrenForAllParents(filteredDocuments);
         setChildrenResults(fetchedChildren);
@@ -397,6 +398,7 @@ const searchChildrenWithIEP = (docs) => {
     
     const handleResultClick = (index) => {
       const selectedResult = documents[index];
+
       navigate(`/result/${selectedResult.id}`);
     };
   
@@ -628,9 +630,9 @@ const searchChildrenWithIEP = (docs) => {
 
           
       <div>
-    
+
         <button className= 'submit-button' onClick={() => handleResultClick(index)}>Select</button>
-</div>
+    </div>
 
           </div>
           ))}

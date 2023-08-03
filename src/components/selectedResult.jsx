@@ -3,7 +3,7 @@ import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../firebase';
 import { useNavigate, useParams } from 'react-router-dom'
 import { db } from '../firebase'
-import { collection, query, where, getDoc, getDocs, updateDoc, doc, deleteDoc, or } from 'firebase/firestore';
+import { collection, query, where, getDoc, getDocs, updateDoc, doc, deleteDoc, addDoc } from 'firebase/firestore';
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { Link } from 'react-router-dom';
 import html2canvas from 'html2canvas';
@@ -44,7 +44,6 @@ const SelectedResult = () => {
               setSearchResults([documentData]);
               setFormData(documentData);
               fetchChildrenSubcollection(id);
-              console.log(children)
             } else {
               setSearchResults([]);
               setFormData({});
@@ -65,6 +64,7 @@ const SelectedResult = () => {
         data: doc.data(),
       }));
       setChildren(childrenData);
+
     };
 
     const formatPhoneNumber = (input) => {
@@ -97,28 +97,53 @@ const SelectedResult = () => {
       setFormData({ ...formData, SphoneNumber: formattedNumber })
     };
 
-    const addChildField = () => {
-      setFormData((prevFormData) => ({
-        ...prevFormData,
-        children: [
-          ...prevFormData.children,
-          { name: "", birthday: new Date(), needCare: false, iepIfsp: false }
-        ],
-      }));
+    const addChildField = async (parentDocId) => {
+      try {
+        const newChild = {
+          name: "",
+          birthday: new Date(),
+          needCare: false,
+          iepIfsp: false,
+        };
+    
+        const childRef = await addDoc(collection(db, "Applicants", parentDocId, "children"), newChild);
+        const newChildData = { ...newChild, id: childRef.id };
+    
+       // setChildrenResults((prevChildrenResults) => [...prevChildrenResults, newChildData]);
+      } catch (error) {
+        console.error("Error adding child:", error);
+      }
     };
     
   
-    const handleDeleteChild = (index) => {
-      const updatedChildren = [...formData.children];
-      updatedChildren.splice(index, 1);
-      setFormData((prevFormData) => ({ ...prevFormData, children: updatedChildren }));
+    const handleDeleteChild = async (parentDocId, childDocId) => {
+      try {
+        await deleteDoc(doc(db, "Applicants", parentDocId, "children", childDocId));
+        //setChildrenResults((prevChildrenResults) => prevChildrenResults.filter((child) => child.id !== childDocId));
+      } catch (error) {
+        console.error("Error deleting child:", error);
+      }
     };
     
-    const handleChildFieldChange = (index, field, value) => {
-      const updatedChildren = [...formData.children];
-      updatedChildren[index][field] = value;
-      setFormData((prevFormData) => ({ ...prevFormData, children: updatedChildren }));
+    
+    const handleChildFieldChange = async (parentDocId, childDocId, field, value) => {
+      try {
+        await updateDoc(doc(db, "Applicants", parentDocId, "children", childDocId), {
+          [field]: value,
+        });
+    
+        /*setChildrenResults((prevChildrenResults) =>
+          prevChildrenResults.map((child) =>
+            child.id === childDocId ? { ...child, [field]: value } : child
+          )
+        );*/
+      } catch (error) {
+        console.error("Error updating child field:", error);
+      }
     };
+    
+
+    
     // Helper function to format input as dollar and cents
   const formatCurrencyInput = (input) => {
     // Remove non-numeric characters from input
@@ -484,7 +509,7 @@ const SelectedResult = () => {
           id={`child-name-${index}`}
           className="input-box"
           value={child.data.name}
-          onChange={(e) => handleChildFieldChange(index, "name", e.target.value)}
+          onChange={(e) => handleChildFieldChange(id, index.id, "name", e.target.value)}
         />
       </div>
       <div>
@@ -496,7 +521,7 @@ const SelectedResult = () => {
         id={`child-birthday-${index}`}
         className="input-box"
         value={child.data.birthday.toDate().toISOString().split('T')[0]}
-        onChange={(e) => handleChildFieldChange(index, "birthday", e.target.value)}
+        onChange={(e) => handleChildFieldChange(id, index.id, "birthday", e.target.value)}
       />
         </div>
         <div className="checkbox-group">
@@ -507,7 +532,7 @@ const SelectedResult = () => {
             type="checkbox"
             id={`child-need-care-${index}`}
             checked={child.data.needCare}
-            onChange={(e) => handleChildFieldChange(index, "needCare", e.target.checked)}
+            onChange={(e) => handleChildFieldChange(id, index.id, "needCare", e.target.checked)}
           />
         </div>
       <div className="checkbox-group">
@@ -518,13 +543,13 @@ const SelectedResult = () => {
           type="checkbox"
           id={`child-full-time-${index}`}
           checked={child.data.iepIfsp}
-          onChange={(e) => handleChildFieldChange(index, "iepisfp", e.target.checked)}
+          onChange={(e) => handleChildFieldChange(id, index.id, "iepisfp", e.target.checked)}
         />
       </div>
       
 </div>
 {/* Delete Button */}
-<button className="remove-child-button" onClick={() => handleDeleteChild(index)}>
+<button className="remove-child-button" onClick={() => handleDeleteChild(id, index.id)}>
   Remove Child
 </button>
 </div>
@@ -532,7 +557,7 @@ const SelectedResult = () => {
 </div>
         ): console.log('no')}
         
-<button type="button" className="add-child-button" onClick={addChildField}>Add Child</button>
+<button type="button" className="add-child-button" onClick={addChildField(id)}>Add Child</button>
 
 
           <div>
