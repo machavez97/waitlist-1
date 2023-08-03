@@ -16,6 +16,8 @@ const Search = () => {
     const [searchRank, setSearchRank] = useState('');
     const [searchResults, setSearchResults] = useState([]);
     const [childrenResults, setChildrenResults] = useState([]);
+    const [childrenData, setChildrenData] = useState([]);
+
 
     const [docID, setDocID] = useState('');
     const [documents, setDocuments] = useState([]);
@@ -49,7 +51,7 @@ const Search = () => {
       e.preventDefault();
       setSearchResults([]);
       
-      if (searchQuery !== '' && !isFullTimeChecked && !isPartTimeChecked && !searchRank) {
+      if (searchQuery !== '' && !isFullTimeChecked && !isPartTimeChecked && !searchRank && !startDate & !endDate) {
         const q = query(collection(db, 'Applicants'), 
         
         or(
@@ -69,12 +71,8 @@ const Search = () => {
         setDocuments(fetchedDocuments);
         setSearchResults(fetchedDocuments.map((doc) => doc.data));
 
-        const children = query(collectionGroup(db, 'children'));
-        const childrenQuerySnapshot = await getDocs(children);
-        const fetchedChildren = await fetchChildrenForAllParents(documents)
+        const fetchedChildren = await fetchChildrenForAllParents(fetchedDocuments)
         setChildrenResults(fetchedChildren)
-        console.log(fetchedChildren);
-        console.log("docs ", documents)
 
     }
       else if (searchQuery !== '' && !isFullTimeChecked && !isPartTimeChecked && searchRank) {
@@ -95,6 +93,8 @@ const Search = () => {
         }));
         setDocuments(fetchedDocuments);
         setSearchResults(fetchedDocuments.map((doc) => doc.data));
+        const fetchedChildren = await fetchChildrenForAllParents(fetchedDocuments)
+        setChildrenResults(fetchedChildren)
       }
       else if (searchQuery !== '' && isFullTimeChecked && !isPartTimeChecked && !searchRank) {
         const q = query(collection(db, 'Applicants'), and(
@@ -114,6 +114,8 @@ const Search = () => {
         }));
         setDocuments(fetchedDocuments);
         setSearchResults(fetchedDocuments.map((doc) => doc.data));
+        const fetchedChildren = await fetchChildrenForAllParents(fetchedDocuments)
+        setChildrenResults(fetchedChildren)
       }
 
       else if (searchQuery !== '' && !isFullTimeChecked && isPartTimeChecked && !searchRank) {
@@ -134,6 +136,8 @@ const Search = () => {
         }));
         setDocuments(fetchedDocuments);
         setSearchResults(fetchedDocuments.map((doc) => doc.data));
+        const fetchedChildren = await fetchChildrenForAllParents(fetchedDocuments)
+        setChildrenResults(fetchedChildren)
       }
       else if (searchQuery !== '' && isFullTimeChecked && isPartTimeChecked && !searchRank) {
 
@@ -156,6 +160,8 @@ const Search = () => {
         }));
         setDocuments(fetchedDocuments);
         setSearchResults(fetchedDocuments.map((doc) => doc.data));
+        const fetchedChildren = await fetchChildrenForAllParents(fetchedDocuments)
+        setChildrenResults(fetchedChildren)
       }
       
       else if (!searchQuery && searchRank && isPartTimeChecked) {
@@ -171,6 +177,8 @@ const Search = () => {
         }));
         setDocuments(fetchedDocuments);
         setSearchResults(fetchedDocuments.map((doc) => doc.data));
+        const fetchedChildren = await fetchChildrenForAllParents(fetchedDocuments)
+        setChildrenResults(fetchedChildren)
       }
       else if (!searchQuery && searchRank && isFullTimeChecked) {
         const q = query(collection(db, 'Applicants'), and( 
@@ -185,6 +193,8 @@ const Search = () => {
         }));
         setDocuments(fetchedDocuments);
         setSearchResults(fetchedDocuments.map((doc) => doc.data));
+        const fetchedChildren = await fetchChildrenForAllParents(fetchedDocuments)
+        setChildrenResults(fetchedChildren)
       }
 
       else if (!searchQuery && !searchRank && isFullTimeChecked) {
@@ -200,6 +210,8 @@ const Search = () => {
         }));
         setDocuments(fetchedDocuments);
         setSearchResults(fetchedDocuments.map((doc) => doc.data));
+        const fetchedChildren = await fetchChildrenForAllParents(fetchedDocuments)
+        setChildrenResults(fetchedChildren)
       }
 
       else if (!searchQuery && searchRank && !isFullTimeChecked && !isPartTimeChecked) {
@@ -214,44 +226,85 @@ const Search = () => {
         }));
         setDocuments(fetchedDocuments);
         setSearchResults(fetchedDocuments.map((doc) => doc.data));
+        const fetchedChildren = await fetchChildrenForAllParents(fetchedDocuments)
+        setChildrenResults(fetchedChildren)
       }
 
-      let filteredDocs = documents;
 
-  /*if (searchQuery !== '') {
-    // Apply the search query filter
-    const q = query(collection(db, 'Applicants'), 
-      or(
-        where('PfirstName', '==', searchQuery),
-        where('PlastName', '==', searchQuery),
-        where('SfirstName', '==', searchQuery),
-        where('SlastName', '==', searchQuery),
-      ));
 
-    const querySnapshot = await getDocs(q);
-    const fetchedDocuments = querySnapshot.docs.map((doc) => ({
-      id: doc.id,
-      data: doc.data(),
-    }));
-
-    // Update the filteredDocs with the search query results
-    filteredDocs = fetchedDocuments;
-  }*/
-
-  if (startDate && endDate) {
-    const startTimestamp = new Date(startDate);
-    const endTimestamp = new Date(endDate);
-    const filteredDocuments = await searchChildrenByBirthdayRange(startTimestamp, endTimestamp);
-    setSearchResults(filteredDocuments);
-  }
+      else if (startDate && endDate && !searchQuery) {
+        const startTimestamp = new Date(startDate);
+        const endTimestamp = new Date(endDate);
+    
+        // Fetch all parent documents
+        const q = collection(db, 'Applicants');
+        const querySnapshot = await getDocs(q);
+        const fetchedDocuments = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          data: doc.data(),
+        }));
+    
+        // Filter documents based on date range
+        const filteredDocuments = await searchChildrenByBirthdayRange(fetchedDocuments, startTimestamp, endTimestamp);
+        setSearchResults(filteredDocuments);
+    
+        const fetchedChildren = await fetchChildrenForAllParents(filteredDocuments);
+        setChildrenResults(fetchedChildren);
+      }
+      else if (startDate && endDate && searchQuery) {
+        const startTimestamp = new Date(startDate);
+        const endTimestamp = new Date(endDate);
+    
+        // Fetch parent documents that match the searchQuery
+        const q = query(collection(db, 'Applicants'), 
+          or(
+            where('PfirstName', '==', searchQuery),
+            where('PlastName', '==', searchQuery),
+            where('SfirstName', '==', searchQuery),
+            where('SlastName', '==', searchQuery),
+          )
+        );
+        
+        const querySnapshot = await getDocs(q);
+        const fetchedDocuments = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          data: doc.data(),
+        }));
+        // Filter documents based on date range and searchQuery
+        const filteredDocuments = await searchChildrenByBirthdayRange(fetchedDocuments, startTimestamp, endTimestamp);
+        setSearchResults(filteredDocuments);
+    
+        const fetchedChildren = await fetchChildrenForAllParents(filteredDocuments);
+        setChildrenResults(fetchedChildren);
+      }
+      else if (startDate && endDate && searchRank) {
+        const startTimestamp = new Date(startDate);
+        const endTimestamp = new Date(endDate);
+    
+        const q = query(collection(db, 'Applicants'), 
+        where('rank', '==', searchRank),
+        );
+        
+        const querySnapshot = await getDocs(q);
+        const fetchedDocuments = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          data: doc.data(),
+        }));
+        // Filter documents based on date range and searchQuery
+        const filteredDocuments = await searchChildrenByBirthdayRange(fetchedDocuments, startTimestamp, endTimestamp);
+        setSearchResults(filteredDocuments);
+    
+        const fetchedChildren = await fetchChildrenForAllParents(filteredDocuments);
+        setChildrenResults(fetchedChildren);
+      }
 
   // If iepIfspChecked is true, filter documents based on IEP/IFSP
   if (iepIfspChecked) {
     const filteredDocs = searchChildrenWithIEP(documents);
     setSearchResults(filteredDocs.map((doc) => doc.data));
   }
-  //console.log(fetchChildrenData());
 };
+
 const fetchChildrenSubcollection = async (parentId) => {
   const childrenRef = collection(db, 'Applicants', parentId, 'children');
   const querySnapshot = await getDocs(childrenRef);
@@ -261,6 +314,7 @@ const fetchChildrenSubcollection = async (parentId) => {
   }));
   return childrenData;
 };
+
 const fetchChildrenForAllParents = async (documentsArray) => {
   try {
     const promises = documentsArray.map(async (document) => {
@@ -278,47 +332,50 @@ const fetchChildrenForAllParents = async (documentsArray) => {
 
 
 // Function to filter documents by date range and search the subcollection for children with birthdays in the range
-const searchChildrenByBirthdayRange = async (start, end) => {
+const searchChildrenByBirthdayRange = async (documentsArray, start, end) => {
+  try {
+    const filteredDocuments = [];
 
-  const parentsRef = collection(db, 'Applicants');
-  const parentQuerySnapshot = await getDocs(parentsRef);
+    for (const document of documentsArray) {
+      const parentId = document.id;
+      const parentData = document.data;
+      const childrenRef = collection(db, 'Applicants', parentId, 'children');
+      const childrenQuerySnapshot = await getDocs(childrenRef);
+      const filteredChildren = [];
+      childrenQuerySnapshot.forEach((childDoc) => {
+        const childData = childDoc.data();
 
-  const filteredDocuments = [];
+        // Check if childData.birthday exists and is not undefined
+        if (childData && childData.birthday) {
+          const birthdayTimestamp = childData.birthday.toDate();
 
-  // Loop through parent documents
-  for (const parentDoc of parentQuerySnapshot.docs) {
-    const parentId = parentDoc.id;
-    const parentData = parentDoc.data();
+          if (birthdayTimestamp >= new Date(start) && birthdayTimestamp <= new Date(end)) {
+            filteredChildren.push({
+              id: childDoc.id,
+              ...childData,
 
-    // Get the "children" subcollection reference for the current parent document
-    const childrenRef = collection(db, 'Applicants', parentId, 'children');
-    const childrenQuerySnapshot = await getDocs(childrenRef);
+            });
+          }
+        }
+      });
 
-    // Check if any child has a birthday within the date range
-    const filteredChildren = [];
-    childrenQuerySnapshot.forEach((childDoc) => {
-      const childData = childDoc.data();
-      const birthdayTimestamp = childData.birthday.toDate();
-      if (birthdayTimestamp >= new Date(start) && birthdayTimestamp <= new Date(end)) {
-        filteredChildren.push({
-          id: childDoc.id,
-          ...childData,
+      if (filteredChildren.length > 0) {
+        filteredDocuments.push({
+          id: parentId,
+          ...parentData,
+          children: filteredChildren,
         });
       }
-    });
-
-    // If at least one child matches the date range, include the parent document in the results
-    if (filteredChildren.length > 0) {
-      filteredDocuments.push({
-        id: parentId,
-        ...parentData,
-        children: filteredChildren,
-      });
     }
-  }
 
-  return filteredDocuments;
+    return filteredDocuments;
+  } catch (error) {
+    console.error('Error searching children by birthday range:', error);
+    return [];
+  }
 };
+
+
 
 
 // Function to filter documents by children with IEP/IFSP
@@ -493,16 +550,14 @@ const searchChildrenWithIEP = (docs) => {
           
         </div>
         
-        {childrenResults.map((children, parentIndex) => (
-          <div key={parentIndex}>
-        <h3>Children</h3> 
-
-        <div className="children-display-container">
-
-      {children.map((childDoc) => (
-        <div key={childDoc.id} className="child-display-field">
-          <div className="child-display-info">
-              <div className='stack'>
+        
+        <h3>Children</h3>
+{childrenResults[index] && childrenResults[index].length > 0 ? (
+  <div className="children-display-container">
+    {childrenResults[index].map((childDoc) => (
+      <div key={childDoc.id} className="child-display-field">
+        <div className="child-display-info">
+          <div className="stack">
             <label htmlFor={`child-name-${childDoc.id}`} className="input-label">
               Full Name:
             </label>
@@ -510,10 +565,10 @@ const searchChildrenWithIEP = (docs) => {
               type="text"
               id={`child-name-${childDoc.id}`}
               className="input-box"
-              value={childDoc.name}
+              value={childDoc.data.name}
               readOnly
             />
-        
+
             <label htmlFor={`child-birthday-${childDoc.id}`} className="input-label">
               Birthday:
             </label>
@@ -521,54 +576,57 @@ const searchChildrenWithIEP = (docs) => {
               type="date"
               id={`child-birthday-${childDoc.id}`}
               className="input-box"
-              value={childDoc.birthday.toDate().toISOString().split('T')[0]}
+              value={childDoc.data.birthday.toDate().toISOString().split('T')[0]}
               readOnly
             />
-          
-          <div className="checkbox-group">
-            <label htmlFor={`child-need-care-${childDoc.id}`} className="checkbox-label">
-              Need Care:
-            </label>
-            <input
-              type="checkbox"
-              id={`child-need-care-${childDoc.id}`}
-              checked={childDoc.needCare}
-              readOnly
-            />
-          </div>
 
-          <div className="checkbox-group">
-            <label htmlFor={`child-full-time-${childDoc.id}`} className="checkbox-label">
-              Full Time:
-            </label>
-            <input
-              type="checkbox"
-              id={`child-full-time-${childDoc.id}`}
-              checked={childDoc.fullTime}
-              readOnly
-              disabled={!childDoc.needCare || childDoc.partTime}
-            />
+            <div className="checkbox-group">
+              <label htmlFor={`child-need-care-${childDoc.id}`} className="checkbox-label">
+                Need Care:
+              </label>
+              <input
+                type="checkbox"
+                id={`child-need-care-${childDoc.id}`}
+                checked={childDoc.data.needCare}
+                readOnly
+              />
+            </div>
+
+            <div className="checkbox-group">
+              <label htmlFor={`child-full-time-${childDoc.id}`} className="checkbox-label">
+                Full Time:
+              </label>
+              <input
+                type="checkbox"
+                id={`child-full-time-${childDoc.id}`}
+                checked={childDoc.data.fullTime}
+                readOnly
+                disabled={!childDoc.needCare || childDoc.partTime}
+              />
+            </div>
+
+            <div>
+              <label htmlFor={`child-part-time-${childDoc.id}`} className="checkbox-label">
+                Part Time:
+              </label>
+              <input
+                type="checkbox"
+                id={`child-part-time-${childDoc.id}`}
+                checked={childDoc.partTime}
+                readOnly
+                disabled={!childDoc.needCare || childDoc.fullTime}
+              />
+            </div>
           </div>
+        </div>
+      </div>
+    ))}
+  </div>
+) : (
+  <p>No children found for the selected document.</p>
+)}
+
           
-          <div>
-            <label htmlFor={`child-part-time-${childDoc.id}`} className="checkbox-label">
-              Part Time:
-            </label>
-            <input
-              type="checkbox"
-              id={`child-part-time-${childDoc.id}`}
-              checked={childDoc.partTime}
-              readOnly
-              disabled={!childDoc.needCare || childDoc.fullTime}
-            />
-          </div>
-          </div>
-          </div>
-          </div>
-      ))}
-          </div>  
-          </div>
-        ))}
       <div>
     
         <button className= 'submit-button' onClick={() => handleResultClick(index)}>Select</button>

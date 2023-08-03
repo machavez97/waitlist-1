@@ -3,7 +3,7 @@ import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../firebase';
 import { useNavigate, useParams } from 'react-router-dom'
 import { db } from '../firebase'
-import { collection, query, where, getDoc, updateDoc, doc, deleteDoc, or } from 'firebase/firestore';
+import { collection, query, where, getDoc, getDocs, updateDoc, doc, deleteDoc, or } from 'firebase/firestore';
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { Link } from 'react-router-dom';
 import html2canvas from 'html2canvas';
@@ -21,6 +21,8 @@ const SelectedResult = () => {
     const [rank, setRank] = useState('');
     const [officeNotes, setOfficeNotes] = useState('');
     const [formData, setFormData] = useState({});
+    const [children, setChildren] = useState({});
+
 
 
     
@@ -41,6 +43,8 @@ const SelectedResult = () => {
               const documentData = documentSnapshot.data();
               setSearchResults([documentData]);
               setFormData(documentData);
+              fetchChildrenSubcollection(id);
+              console.log(children)
             } else {
               setSearchResults([]);
               setFormData({});
@@ -53,6 +57,15 @@ const SelectedResult = () => {
   
       fetchData();
     }, [id]);
+    const fetchChildrenSubcollection = async (parentId) => {
+      const childrenRef = collection(db, 'Applicants', parentId, 'children');
+      const querySnapshot = await getDocs(childrenRef);
+      const childrenData = querySnapshot.docs.map((doc) => ({
+        id: doc.id,
+        data: doc.data(),
+      }));
+      setChildren(childrenData);
+    };
 
     const formatPhoneNumber = (input) => {
       const digitsOnly = input.replace(/\D/g, '');
@@ -457,8 +470,9 @@ const SelectedResult = () => {
         <h3>Children</h3> 
 
 
-        <div className="children-display-container">
-  {formData.children.map((child, index) => (
+        {children.length > 0 ? (
+  <div className="children-display-container">
+  {children.map((child, index) => (
     <div key={index} className="child-field">
     <div className="child-info">
       <div>
@@ -469,7 +483,7 @@ const SelectedResult = () => {
           type="text"
           id={`child-name-${index}`}
           className="input-box"
-          value={child.name}
+          value={child.data.name}
           onChange={(e) => handleChildFieldChange(index, "name", e.target.value)}
         />
       </div>
@@ -481,7 +495,7 @@ const SelectedResult = () => {
         type="date"
         id={`child-birthday-${index}`}
         className="input-box"
-        value={child.birthday.toDate().toISOString().split('T')[0]}
+        value={child.data.birthday.toDate().toISOString().split('T')[0]}
         onChange={(e) => handleChildFieldChange(index, "birthday", e.target.value)}
       />
         </div>
@@ -492,7 +506,7 @@ const SelectedResult = () => {
           <input
             type="checkbox"
             id={`child-need-care-${index}`}
-            checked={child.needCare}
+            checked={child.data.needCare}
             onChange={(e) => handleChildFieldChange(index, "needCare", e.target.checked)}
           />
         </div>
@@ -503,7 +517,7 @@ const SelectedResult = () => {
         <input
           type="checkbox"
           id={`child-full-time-${index}`}
-          checked={child.iepIfsp}
+          checked={child.data.iepIfsp}
           onChange={(e) => handleChildFieldChange(index, "iepisfp", e.target.checked)}
         />
       </div>
@@ -516,8 +530,9 @@ const SelectedResult = () => {
 </div>
   ))}
 </div>
+        ): console.log('no')}
+        
 <button type="button" className="add-child-button" onClick={addChildField}>Add Child</button>
-
 
 
           <div>
