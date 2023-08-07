@@ -1,9 +1,7 @@
 import React, {useState, useEffect} from 'react';
-import { signInWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '../firebase';
 import { useNavigate } from 'react-router-dom'
 import { db } from '../firebase'
-import { collection,Timestamp, query, where, getDocs, collectionGroup, doc, or, and } from 'firebase/firestore';
+import { collection, query, where, getDocs, or, and } from 'firebase/firestore';
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { Link } from 'react-router-dom';
 
@@ -16,10 +14,8 @@ const Search = () => {
     const [searchRank, setSearchRank] = useState('');
     const [searchResults, setSearchResults] = useState([]);
     const [childrenResults, setChildrenResults] = useState([]);
-    const [childrenData, setChildrenData] = useState([]);
 
 
-    const [docID, setDocID] = useState('');
     const [documents, setDocuments] = useState([]);
     const [isFullTimeChecked, setIsFullTimeChecked] = useState(false);
     const [isPartTimeChecked, setIsPartTimeChecked] = useState(false);
@@ -43,15 +39,34 @@ const Search = () => {
             }
         })
 
-    }, [])
+    })
 
     
    
     const handleSearch = async (e) => {
       e.preventDefault();
       setSearchResults([]);
+      if (!searchQuery && !isFullTimeChecked && !isPartTimeChecked && !searchRank && !startDate && !endDate) {
+        const q = query(collection(db, 'Applicants'), 
+        
+        );
+        
+    
+        const querySnapshot = await getDocs(q);
+        const fetchedDocuments = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          data: doc.data(),
+        }));
+
+        setDocuments(fetchedDocuments);
+        setSearchResults(fetchedDocuments.map((doc) => doc.data));
+
+        const fetchedChildren = await fetchChildrenForAllParents(fetchedDocuments)
+        setChildrenResults(fetchedChildren)
+
+    }
       
-      if (searchQuery !== '' && !isFullTimeChecked && !isPartTimeChecked && !searchRank && !startDate && !endDate) {
+      else if (searchQuery !== '' && !isFullTimeChecked && !isPartTimeChecked && !searchRank && !startDate && !endDate) {
         const q = query(collection(db, 'Applicants'), 
         
         or(
@@ -338,24 +353,146 @@ const Search = () => {
         const fetchedChildren = await fetchChildrenForAllParents(filteredDocuments);
         setChildrenResults(fetchedChildren);
       }
+      else if (startDate && endDate && isFullTimeChecked) {
+        const startTimestamp = new Date(startDate);
+        const endTimestamp = new Date(endDate);
+    
+        const q = query(collection(db, 'Applicants'), 
+        where('fullDayCareChecked', '==', isFullTimeChecked),
+        );
+        
+        const querySnapshot = await getDocs(q);
+        const fetchedDocuments = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          data: doc.data(),
+        }));
+        // Filter documents based on date range and searchQuery
+        const filteredDocuments = await searchChildrenByBirthdayRange(fetchedDocuments, startTimestamp, endTimestamp);
+        setSearchResults(filteredDocuments);
+    
+        const fetchedChildren = await fetchChildrenForAllParents(filteredDocuments);
+        setChildrenResults(fetchedChildren);
+      }
+      else if (startDate && endDate && isPartTimeChecked) {
+        const startTimestamp = new Date(startDate);
+        const endTimestamp = new Date(endDate);
+    
+        const q = query(collection(db, 'Applicants'), 
+        where('preschoolOnlyChecked', '==', isPartTimeChecked),
+        );
+        
+        const querySnapshot = await getDocs(q);
+        const fetchedDocuments = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          data: doc.data(),
+        }));
+        // Filter documents based on date range and searchQuery
+        const filteredDocuments = await searchChildrenByBirthdayRange(fetchedDocuments, startTimestamp, endTimestamp);
+        setSearchResults(filteredDocuments);
+    
+        const fetchedChildren = await fetchChildrenForAllParents(filteredDocuments);
+        setChildrenResults(fetchedChildren);
+      }
 
-  // If iepIfspChecked is true, filter documents based on IEP/IFSP
-  else if (iepIfspChecked) {
-    // Fetch all parent documents
-    const q = collection(db, 'Applicants');
-    const querySnapshot = await getDocs(q);
-    const fetchedDocuments = querySnapshot.docs.map((doc) => ({
-      id: doc.id,
-      data: doc.data(),
-    }));
+        // If iepIfspChecked is true, filter documents based on IEP/IFSP
+        else if (iepIfspChecked) {
+          // Fetch all parent documents
+          const q = collection(db, 'Applicants');
+          const querySnapshot = await getDocs(q);
+          const fetchedDocuments = querySnapshot.docs.map((doc) => ({
+            id: doc.id,
+            data: doc.data(),
+          }));
 
-    const filteredDocs = await searchChildrenWithIEP(fetchedDocuments);
-    setSearchResults(filteredDocs);
-    setDocuments(filteredDocs)
-    const fetchedChildren = await fetchChildrenForAllParents(filteredDocs);
-    setChildrenResults(fetchedChildren);
-  }
-};
+          const filteredDocs = await searchChildrenWithIEP(fetchedDocuments);
+          setSearchResults(filteredDocs);
+          setDocuments(filteredDocs)
+          const fetchedChildren = await fetchChildrenForAllParents(filteredDocs);
+          setChildrenResults(fetchedChildren);
+        }
+      
+      // If iepIfspChecked is true, filter documents based on IEP/IFSP
+      else if (iepIfspChecked && searchQuery !== '') {
+        // Fetch all parent documents
+        const q = query(collection(db, 'Applicants'), 
+        
+        or(
+          where('PfirstName', '==', searchQuery),
+          where('PlastName', '==', searchQuery),
+          where('SfirstName', '==', searchQuery),
+          where('SlastName', '==', searchQuery),
+        ));
+        const querySnapshot = await getDocs(q);
+        const fetchedDocuments = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          data: doc.data(),
+        }));
+
+        const filteredDocs = await searchChildrenWithIEP(fetchedDocuments);
+        setSearchResults(filteredDocs);
+        setDocuments(filteredDocs)
+        const fetchedChildren = await fetchChildrenForAllParents(filteredDocs);
+        setChildrenResults(fetchedChildren);
+      }
+      else if (iepIfspChecked && searchRank) {
+        // Fetch all parent documents
+        const q = query(collection(db, 'Applicants'), 
+        
+        where('rank', '==', searchRank)
+        );
+        const querySnapshot = await getDocs(q);
+        const fetchedDocuments = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          data: doc.data(),
+        }));
+
+        const filteredDocs = await searchChildrenWithIEP(fetchedDocuments);
+        setSearchResults(filteredDocs);
+        setDocuments(filteredDocs)
+        const fetchedChildren = await fetchChildrenForAllParents(filteredDocs);
+        setChildrenResults(fetchedChildren);
+      }
+      else if (iepIfspChecked && isFullTimeChecked) {
+        // Fetch all parent documents
+        const q = query(collection(db, 'Applicants'), 
+        
+        where('fullDayCareChecked', '==', isFullTimeChecked),
+        );
+        const querySnapshot = await getDocs(q);
+        const fetchedDocuments = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          data: doc.data(),
+        }));
+
+        const filteredDocs = await searchChildrenWithIEP(fetchedDocuments);
+        setSearchResults(filteredDocs);
+        setDocuments(filteredDocs)
+        const fetchedChildren = await fetchChildrenForAllParents(filteredDocs);
+        setChildrenResults(fetchedChildren);
+      }
+      else if (iepIfspChecked && isPartTimeChecked) {
+        // Fetch all parent documents
+        const q = query(collection(db, 'Applicants'), 
+        
+        where('preschoolOnlyChecked', '==', isPartTimeChecked),
+        );
+        const querySnapshot = await getDocs(q);
+        const fetchedDocuments = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          data: doc.data(),
+        }));
+
+        const filteredDocs = await searchChildrenWithIEP(fetchedDocuments);
+        setSearchResults(filteredDocs);
+        setDocuments(filteredDocs)
+        const fetchedChildren = await fetchChildrenForAllParents(filteredDocs);
+        setChildrenResults(fetchedChildren);
+      }
+      else{
+        alert('Invalid search parameters')
+      }
+    
+    };
 
 const fetchChildrenSubcollection = async (parentId) => {
   const childrenRef = collection(db, 'Applicants', parentId, 'children');

@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import { useNavigate } from "react-router-dom";
-import { collection, addDoc, Timestamp } from "firebase/firestore";
+import { collection, addDoc } from "firebase/firestore";
 import { db } from '../firebase';
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 
@@ -383,7 +383,7 @@ const toggleLanguage = () => {
                 required />
 
               <label htmlFor="state" className="input-label">
-                State: <span class="small-text">(must reside in CA)</span>
+                State: <span className="small-text">(must reside in CA)</span>
               </label>
               <input
                 type="text"
@@ -905,11 +905,14 @@ const toggleLanguage = () => {
               </div>
 
               <table className="grid">
+                <thead>
                 <tr>
                   <th>CALWorks</th>
                   <th>CALFresh</th>
                   <th>WIC</th>
                 </tr>
+                </thead>
+                <tbody>
                 <tr>
                   <td>
                     <input
@@ -945,6 +948,7 @@ const toggleLanguage = () => {
                       } } />
                   </td>
                 </tr>
+                </tbody>
               </table>
             </div>
             <div>
@@ -1204,7 +1208,7 @@ const toggleLanguage = () => {
                 required/>
 
               <label htmlFor="state" className="input-label">
-              Estado: <span class="small-text">(debe residir en CA)</span>
+              Estado: <span className="small-text">(debe residir en CA)</span>
               </label>
               <input
                 type="text"
@@ -1325,7 +1329,7 @@ const toggleLanguage = () => {
                   disabled={!SlivesInHome} />
 
                 <label htmlFor="state" className="input-label">
-                Estado: <span class="small-text">(debe residir en CA)</span>
+                Estado: <span className="small-text">(debe residir en CA)</span>
                 </label>
                 <input
                   type="text"
