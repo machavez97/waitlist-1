@@ -3,7 +3,7 @@ import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../firebase';
 import { useNavigate, useParams } from 'react-router-dom'
 import { db } from '../firebase'
-import { collection, query, where, getDoc, getDocs, updateDoc, doc, deleteDoc, addDoc } from 'firebase/firestore';
+import { collection, query, writeBatch, getDoc, getDocs, updateDoc, doc, deleteDoc,Timestamp, addDoc } from 'firebase/firestore';
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { Link } from 'react-router-dom';
 import html2canvas from 'html2canvas';
@@ -21,7 +21,9 @@ const SelectedResult = () => {
     const [rank, setRank] = useState('');
     const [officeNotes, setOfficeNotes] = useState('');
     const [formData, setFormData] = useState({});
-    const [children, setChildren] = useState({});
+    //const [children, setChildren] = useState({});
+    const [children, setChildren] = useState([]); // Initialize as an empty array, not an object
+
 
 
 
@@ -97,49 +99,42 @@ const SelectedResult = () => {
       setFormData({ ...formData, SphoneNumber: formattedNumber })
     };
 
-    const addChildField = async (parentDocId) => {
+    const addChildField = () => {
+      setChildren([...children, { data: { name: "", 
+      birthday: Timestamp.fromDate(new Date()), // Convert JavaScript Date to Firestore Timestamp
+      needCare: false, 
+      iepIfsp: false } }]);
+      console.log(children)
+    };
+    
+    
+    
+    const handleDeleteChild = async (parentId, childId) => {
+
+      console.log("parent id: ", parentId, "child id: ", childId)
       try {
-        const newChild = {
-          name: "",
-          birthday: new Date(),
-          needCare: false,
-          iepIfsp: false,
-        };
+        // Delete the child document from the subcollection of the parent document
+        await deleteDoc(doc(db, 'Applicants', parentId, 'children', childId));
     
-        const childRef = await addDoc(collection(db, "Applicants", parentDocId, "children"), newChild);
-        const newChildData = { ...newChild, id: childRef.id };
-    
-       // setChildrenResults((prevChildrenResults) => [...prevChildrenResults, newChildData]);
+        // Update the local state to remove the child
+        setChildren((prevChildren) => prevChildren.filter((child) => child.id !== childId));
       } catch (error) {
-        console.error("Error adding child:", error);
+        console.error('Error deleting child:', error);
       }
     };
     
   
-    const handleDeleteChild = async (parentDocId, childDocId) => {
-      try {
-        await deleteDoc(doc(db, "Applicants", parentDocId, "children", childDocId));
-        //setChildrenResults((prevChildrenResults) => prevChildrenResults.filter((child) => child.id !== childDocId));
-      } catch (error) {
-        console.error("Error deleting child:", error);
-      }
-    };
     
-    
-    const handleChildFieldChange = async (parentDocId, childDocId, field, value) => {
-      try {
-        await updateDoc(doc(db, "Applicants", parentDocId, "children", childDocId), {
+    const handleChildFieldChange = (index, field, value) => {
+      const updatedChildren = [...children];
+      updatedChildren[index] = {
+        ...updatedChildren[index],
+        data: {
+          ...(updatedChildren[index].data || {}),
           [field]: value,
-        });
-    
-        /*setChildrenResults((prevChildrenResults) =>
-          prevChildrenResults.map((child) =>
-            child.id === childDocId ? { ...child, [field]: value } : child
-          )
-        );*/
-      } catch (error) {
-        console.error("Error updating child field:", error);
-      }
+        },
+      };
+            setChildren(updatedChildren);
     };
     
 
@@ -167,12 +162,42 @@ const SelectedResult = () => {
     return formattedInput;
   };
     
-    const submitForm = async (e) => {
-      e.preventDefault();
+
+const deleteAllDocumentsInCollection = async (collectionRef) => {
+  const snapshot = await getDocs(collectionRef);
+  snapshot.forEach(async (doc) => {
+    await deleteDoc(doc.ref);
+  });
+};
+
+const submitForm = async (e) => {
+  e.preventDefault();
+
+  try {
+    // Update the parent document with the form data
+    const applicantRef = doc(db, "Applicants", id);
+    await updateDoc(applicantRef, formData);
+
+    /*// Delete all documents in the "children" subcollection
+    const childrenRef = collection(applicantRef, "children");
+    await deleteAllDocumentsInCollection(childrenRef);
+
+    // Add child documents to the "children" subcollection
+    for (const child of children) {
+      await addDoc(childrenRef, child);
+    }
+    fetchChildrenSubcollection(id);*/
+
+
+    window.location.reload();
+  } catch (error) {
+    console.error("Error updating document:", error);
+  }
+};
+
   
-      await updateDoc(doc(db, 'Applicants', id), formData);
-      window.location.reload();
-    };
+  
+  
 
     const handleDelete = async () => {
       const confirmed = window.confirm('Are you sure you would like to delete this application?');
@@ -497,67 +522,78 @@ const SelectedResult = () => {
 
         {children.length > 0 ? (
   <div className="children-display-container">
-  {children.map((child, index) => (
-    <div key={index} className="child-field">
-    <div className="child-info">
-      <div>
-        <label htmlFor={`child-name-${index}`} className="input-label">
-          Full Name:
-        </label>
-        <input
-          type="text"
-          id={`child-name-${index}`}
-          className="input-box"
-          value={child.data.name}
-          onChange={(e) => handleChildFieldChange(id, index.id, "name", e.target.value)}
-        />
-      </div>
-      <div>
-      <label htmlFor={`child-birthday-${index}`} className="input-label">
-        Birthday:
-      </label>
-      <input
-        type="date"
-        id={`child-birthday-${index}`}
-        className="input-box"
-        value={child.data.birthday.toDate().toISOString().split('T')[0]}
-        onChange={(e) => handleChildFieldChange(id, index.id, "birthday", e.target.value)}
-      />
+    {children.map((child, index) => (
+      <div key={index} className="child-field">
+        <div className="child-info">
+          <div>
+            <label htmlFor={`child-name-${index}`} className="input-label">
+              Full Name:
+            </label>
+            <input
+              type="text"
+              id={`child-name-${index}`}
+              className="input-box"
+              value={(child.data && child.data.name) ? child.data.name : ""}
+              readOnly
+              onChange={(e) => handleChildFieldChange(index, "name", e.target.value)}
+            />
+          </div>
+          <div>
+            <label htmlFor={`child-birthday-${index}`} className="input-label">
+              Birthday:
+            </label>
+            <input
+              type="date"
+              id={`child-birthday-${index}`}
+              className="input-box"
+              value={
+                (child.data && child.data.birthday.toDate && child.data.birthday.toDate().toISOString().split('T')[0]) || '' || child.data.birthday
+              }
+              readOnly
+              onChange={(e) => handleChildFieldChange(index, "birthday", e.target.value)}
+            />
+          </div>
+          <div className="checkbox-group">
+            <label htmlFor={`child-need-care-${index}`} className="checkbox-label">
+              Need Care:
+            </label>
+            <input
+              type="checkbox"
+              id={`child-need-care-${index}`}
+              checked={(child.data && child.data.needCare) || false}
+              readOnly
+              onChange={(e) => handleChildFieldChange(index, "needCare", e.target.checked)}
+            />
+          </div>
+          <div className="checkbox-group">
+            <label htmlFor={`child-full-time-${index}`} className="checkbox-label">
+              IEP/ISFP:
+            </label>
+            <input
+              type="checkbox"
+              id={`child-full-time-${index}`}
+              checked={(child.data && child.data.iepIfsp) || false}
+              readOnly
+              onChange={(e) => handleChildFieldChange(index, "iepIfsp", e.target.checked)}
+            />
+          </div>
         </div>
-        <div className="checkbox-group">
-          <label htmlFor={`child-need-care-${index}`} className="checkbox-label">
-            Need Care:
-          </label>
-          <input
-            type="checkbox"
-            id={`child-need-care-${index}`}
-            checked={child.data.needCare}
-            onChange={(e) => handleChildFieldChange(id, index.id, "needCare", e.target.checked)}
-          />
-        </div>
-      <div className="checkbox-group">
-        <label htmlFor={`child-full-time-${index}`} className="checkbox-label">
-          IEP/ISFP:
-        </label>
-        <input
-          type="checkbox"
-          id={`child-full-time-${index}`}
-          checked={child.data.iepIfsp}
-          onChange={(e) => handleChildFieldChange(id, index.id, "iepisfp", e.target.checked)}
-        />
+        {/* Delete Button */}
+       {/*} <button className="remove-child-button" onClick={() => handleDeleteChild(id, child.id)}>
+          Remove Child
+            </button>*/}
       </div>
-      
-</div>
-{/* Delete Button */}
-<button className="remove-child-button" onClick={() => handleDeleteChild(id, index.id)}>
-  Remove Child
-</button>
-</div>
-  ))}
-</div>
-        ): console.log('no')}
+    ))}
+  </div>
+) : (
+  <div>No children to display</div>
+)}
+
+
         
-<button type="button" className="add-child-button" onClick={addChildField(id)}>Add Child</button>
+      {/*}  <button type="button" className="add-child-button" onClick={() => addChildField()}>
+  Add Child
+</button>*/}
 
 
           <div>
