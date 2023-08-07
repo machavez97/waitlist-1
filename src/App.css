@@ -185,6 +185,9 @@
 }
 
 .language-button{
+  position: fixed;
+  top: 10px;
+  left: 20px;
   background-color: white; 
   color: #000000;
   border: 2px solid rgb(93, 181, 222);
@@ -192,7 +195,7 @@
   text-align: center;
   text-decoration-color: #000000;
   display: inline-block;
-  font-size: 14px;
+  font-size: 18px;
   border-radius: 10px;
   margin-bottom: 10px;
 }

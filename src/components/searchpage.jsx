@@ -637,18 +637,18 @@ const searchChildrenByBirthdayRange = async (documentsArray, start, end) => {
             />
 
               <div>
-                <label htmlFor="start-date">Start Date:</label>
+                <label className="input-label" htmlFor="start-date">Start Date:</label>
                 <input
+                className='search-box'
                   type="date"
                   id="start-date"
                   value={startDate}
                   onChange={(e) => setStartDate(e.target.value)}
                 />
-              </div>
-
-              <div>
-                <label htmlFor="end-date">End Date:</label>
+              
+                <label className="input-label" htmlFor="end-date">End Date:</label>
                 <input
+                className='search-box'
                   type="date"
                   id="end-date"
                   value={endDate}

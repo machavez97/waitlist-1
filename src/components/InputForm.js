@@ -278,8 +278,9 @@ const toggleLanguage = () => {
   
 
   return (
+    
     <div>
-      <div>
+      <div className='language-form'>
        <button className= 'language-button' type="button" onClick={toggleLanguage}>
         {language === 'english' ? 'Español' : 'English'}
       </button>
