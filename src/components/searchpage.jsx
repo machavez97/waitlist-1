@@ -626,19 +626,9 @@ const exportToCSV = () => {
           rowData[`${childKey}_Name`] = childData.data.name;
 
           // Convert date of birth to local time and format to "mm/dd/yyyy"
-          const dateOfBirth = childData.data.birthday.toDate();
-          const formattedDateOfBirth = dateOfBirth.toLocaleDateString('en-US', {
-            month: '2-digit',
-            day: '2-digit',
-            year: 'numeric',
-            // Add slashes between the month, day, and year
-            // You can customize the separator as per your preference
-            // For example, you can use a hyphen '-', a dot '.', etc.
-            // Just replace the slash '/' below with your desired separator
-            // For example, format: 'MM-DD-YYYY'
-            format: 'MM/DD/YYYY',
-          });
-          rowData[`${childKey}_DateOfBirth`] = formattedDateOfBirth;
+          const dateOfBirth = childData.data.birthday.toDate().toISOString().split('T')[0];
+          
+          rowData[`${childKey}_DateOfBirth`] = dateOfBirth;
         });
       }
 
