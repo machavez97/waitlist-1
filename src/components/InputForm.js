@@ -352,7 +352,7 @@ const toggleLanguage = () => {
               <input
                 type="text"
                 id="email"
-                className="input-box"
+                className="email-input-box"
                 value={Pemail}
                 onChange={(e) => PsetEmail(e.target.value)} 
                 required />

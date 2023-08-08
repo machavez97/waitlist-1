@@ -615,8 +615,15 @@ const exportToCSV = () => {
 
       // Create an object to hold the parent data
       const rowData = {
-        FirstName: result.PfirstName,
-        LastName: result.PlastName,
+        Primary_FirstName: result.PfirstName,
+        Primary_LastName: result.PlastName,
+        Primary_Phone: result.PphoneNumber,
+        Primary_Email: result.Pemail,
+
+        Secondary_FirstName: result.SfirstName,
+        Secondary_LastName: result.SlastName,
+        Secondary_Phone: result.SphoneNumber,
+        Secondary_Email: result.Semail,
       };
 
       // Add children data as separate columns
@@ -654,13 +661,6 @@ const exportToCSV = () => {
     // Handle error (e.g., show an error message to the user)
   }
 };
-
-
-
-
-
-
-
 
     
     const handleResultClick = (index) => {
@@ -750,7 +750,7 @@ const exportToCSV = () => {
           {searchResults.length > 0 ? (
           <div className="results-container">
             <h3>Search Results:</h3>
-            <button className="export-button" onClick={exportToCSV}>Export to CSV</button>
+            <button className="pdf-button" onClick={exportToCSV}>Export to Excel</button>
 
             {searchResults.map((result, index) => (
               
