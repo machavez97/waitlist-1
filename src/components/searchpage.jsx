@@ -4,6 +4,7 @@ import { db } from '../firebase'
 import { collection, query, where, getDocs, or, and } from 'firebase/firestore';
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { Link } from 'react-router-dom';
+import Papa from 'papaparse';
 
 
 
@@ -604,6 +605,73 @@ const searchChildrenByBirthdayRange = async (documentsArray, start, end) => {
     return [];
   }
 };
+
+const exportToCSV = () => {
+  try {
+    // Prepare the data to be exported
+    const dataToExport = searchResults.map((result, index) => {
+      const childrenData = childrenResults[index];
+      console.log(childrenData);
+
+      // Create an object to hold the parent data
+      const rowData = {
+        FirstName: result.PfirstName,
+        LastName: result.PlastName,
+      };
+
+      // Add children data as separate columns
+      if (childrenData && childrenData.length > 0) {
+        childrenData.forEach((childData, childIndex) => {
+          const childKey = `Child_${childIndex + 1}`;
+          rowData[`${childKey}_Name`] = childData.data.name;
+
+          // Convert date of birth to local time and format to "mm/dd/yyyy"
+          const dateOfBirth = childData.data.birthday.toDate();
+          const formattedDateOfBirth = dateOfBirth.toLocaleDateString('en-US', {
+            month: '2-digit',
+            day: '2-digit',
+            year: 'numeric',
+            // Add slashes between the month, day, and year
+            // You can customize the separator as per your preference
+            // For example, you can use a hyphen '-', a dot '.', etc.
+            // Just replace the slash '/' below with your desired separator
+            // For example, format: 'MM-DD-YYYY'
+            format: 'MM/DD/YYYY',
+          });
+          rowData[`${childKey}_DateOfBirth`] = formattedDateOfBirth;
+        });
+      }
+
+      return rowData;
+    });
+
+    // Convert data to CSV format
+    const csvData = Papa.unparse(dataToExport);
+
+    // Create a Blob with the CSV data
+    const blob = new Blob([csvData], { type: 'text/csv' });
+
+    // Create a temporary anchor element to trigger the download
+    const anchor = document.createElement('a');
+    anchor.href = window.URL.createObjectURL(blob);
+    anchor.download = 'search_results.csv';
+    anchor.click();
+
+    // Clean up the temporary URL object
+    window.URL.revokeObjectURL(anchor.href);
+  } catch (error) {
+    console.error('Error exporting data to CSV:', error);
+    // Handle error (e.g., show an error message to the user)
+  }
+};
+
+
+
+
+
+
+
+
     
     const handleResultClick = (index) => {
       const selectedResult = documents[index];
@@ -692,6 +760,8 @@ const searchChildrenByBirthdayRange = async (documentsArray, start, end) => {
           {searchResults.length > 0 ? (
           <div className="results-container">
             <h3>Search Results:</h3>
+            <button className="export-button" onClick={exportToCSV}>Export to CSV</button>
+
             {searchResults.map((result, index) => (
               
               <div key={result.id}>
