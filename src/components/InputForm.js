@@ -1017,92 +1017,115 @@ const toggleLanguage = () => {
                     <h5>Please provide information as applicable to your reason for requesting full-day service.<h6>(Select all that apply)</h6></h5>
 
                     <h3 className="header">Primary Parent/Guardian</h3>
-
-
                     <table className="grid">
-                      <thead>
-                        <tr>
-                          <th className="tableCheckHeader">Working</th>
-                          <th className="tableCheckHeader">Looking for Work</th>
-                          <th className="tableCheckHeader">Going to School</th>
-                          <th className="tableCheckHeader">CPS or At Risk</th>
-                          <th className="tableCheckHeader">Incapacitated w/ Dr Note</th>
-                          <th className="tableCheckHeader">IEP Preschool Only</th>
-                        </tr>
-                      </thead>
+                      
                       <tbody>
                         <tr>
                           <td>
+                          <div className='table-element'>
+                          <th className="tableCheckHeader">Working</th>
                             <input type="checkbox" checked={Pworking}
                               onChange={(e) => Psetworking(e.target.checked)} />
+                              </div>
                           </td>
                           <td>
+                          <div className='table-element'>
+                          <th className="tableCheckHeader">Looking for Work</th>
                             <input type="checkbox" checked={PlookingForWorking}
                               onChange={(e) => PsetlookingForWorking(e.target.checked)} />
+                              </div>
                           </td>
                           <td>
+                          <div className='table-element'>
+                          <th className="tableCheckHeader">Going to School</th>
                             <input type="checkbox" checked={PgoingToSchool}
                               onChange={(e) => PsetgoingToSchool(e.target.checked)} />
+                              </div>
                           </td>
                           <td>
+                          <div className='table-element'>
+                          <th className="tableCheckHeader">CPS or At Risk</th>
                             <input type="checkbox" checked={PCPSorAtRisk}
                               onChange={(e) => PsetCPSorAtRisk(e.target.checked)} />
+                              </div>
                           </td>
                           <td>
+                          <div className='table-element'>
+                          <th className="tableCheckHeader">Incapacitated w/ Dr Note</th>
                             <input type="checkbox" checked={PIncapacitated}
                               onChange={(e) => PsetIncapacitate(e.target.checked)} />
+                              </div>
                           </td>
                           <td>
+                          <div className='table-element'>
+                          <th className="tableCheckHeader">IEP Preschool Only</th>
                             <input type="checkbox" checked={PIEPpreschoolOnly}
                               onChange={(e) => PsetIEPpreschoolOnly(e.target.checked)} />
+                              </div>
                           </td>
                         </tr>
                       </tbody>
                     </table>
 
                     <div>
-                      <h3>Secondary Parent/Guardian</h3>
+                    <h3>Secondary Parent/Guardian</h3>
 
                       <table className="grid">
                         <thead>
                           <tr>
-                            <th className="tableCheckHeader">Working</th>
-                            <th className="tableCheckHeader">Looking for Work</th>
-                            <th className="tableCheckHeader">Going to School</th>
-                            <th className="tableCheckHeader">CPS or At Risk</th>
-                            <th className="tableCheckHeader">Incapacitated w/ Dr Note</th>
-                            <th className="tableCheckHeader">IEP Preschool Only</th>
                           </tr>
                         </thead>
                         <tbody>
                           <tr>
                             <td>
+                            <div className='table-element'>
+                            <th className="tableCheckHeader">Working</th>
                               <input type="checkbox" checked={Sworking}
                                 onChange={(e) => Ssetworking(e.target.checked)} />
+                                </div>
                             </td>
                             <td>
+                            <div className='table-element'>
+                            <th className="tableCheckHeader">Looking for Work</th>
                               <input type="checkbox" checked={SlookingForWorking}
                                 onChange={(e) => SsetlookingForWorking(e.target.checked)} />
+                                </div>
                             </td>
                             <td>
+                            <div className='table-element'>
+                            <th className="tableCheckHeader">Going to School</th>
                               <input type="checkbox" checked={SgoingToSchool}
                                 onChange={(e) => SsetgoingToSchool(e.target.checked)} />
+                                </div>
                             </td>
                             <td>
+                            <div className='table-element'>
+                            <th className="tableCheckHeader">CPS or At Risk</th>
                               <input type="checkbox" checked={SCPSorAtRisk}
                                 onChange={(e) => SsetCPSorAtRisk(e.target.checked)} />
+                                </div>
                             </td>
                             <td>
+                            <div className='table-element'>
+                            <th className="tableCheckHeader">Incapacitated w/ Dr Note</th>
                               <input type="checkbox" checked={SIncapacitated}
                                 onChange={(e) => SsetIncapacitate(e.target.checked)} />
+                                </div>
+
                             </td>
                             <td>
+                            <div className='table-element'>
+                            <th className="tableCheckHeader">IEP Preschool Only</th>
                               <input type="checkbox" checked={SIEPpreschoolOnly}
                                 onChange={(e) => SsetIEPpreschoolOnly(e.target.checked)} />
+                                </div>
                             </td>
                           </tr>
                         </tbody>
                       </table>
+
+
+                    
                     </div>
                   </div>
 
@@ -1479,20 +1502,14 @@ const toggleLanguage = () => {
                 <h3>Padre/Guardián Principal</h3>
                 {/* Primary Parent column */}
                 <table className="grid">
-                  <thead>
-                    <tr>
-                      <th>Salarios</th>
-                      <th>Manutención de Menores</th>
-                      <th>Pensión Alimenticia</th>
-                      <th>Seguridad Social</th>
-                      <th>Ayuda en Efectivo</th>
-                      <th>Otros</th>
-                    </tr>
-                  </thead>
+                  
                   <tbody>
                     <tr>
 
                       <td>
+                      <div className='table-element'>
+                      <th>Salarios</th>
+
                         <input
                           type="text"
                           className="input-box"
@@ -1512,8 +1529,12 @@ const toggleLanguage = () => {
                           <option value="weekly">Semanal</option>
                           <option value="monthly">Mensual</option>
                         </select>
+                        </div>
+
                       </td>
                       <td>
+                      <div className='table-element'>
+                      <th>Manutención de Menores</th>
                         <input
                           type="text"
                           className="input-box"
@@ -1532,8 +1553,11 @@ const toggleLanguage = () => {
                           <option value="weekly">Semanal</option>
                           <option value="monthly">Mensual</option>
                         </select>
+                        </div>
                       </td>
                       <td>
+                      <div className='table-element'>
+                      <th>Pensión Alimenticia</th>
                         <input
                           type="text"
                           className="input-box"
@@ -1552,8 +1576,11 @@ const toggleLanguage = () => {
                           <option value="weekly">Semanal</option>
                           <option value="monthly">Mensual</option>
                         </select>
+                        </div>
                       </td>
                       <td>
+                      <div className='table-element'>
+                      <th>Seguridad Social</th>
                         <input
                           type="text"
                           className="input-box"
@@ -1572,8 +1599,11 @@ const toggleLanguage = () => {
                           <option value="weekly">Semanal</option>
                           <option value="monthly">Mensual</option>
                         </select>
+                        </div>
                       </td>
                       <td>
+                      <div className='table-element'>
+                      <th>Ayuda en Efectivo</th>
                         <input
                           type="text"
                           className="input-box"
@@ -1592,8 +1622,11 @@ const toggleLanguage = () => {
                           <option value="weekly">Semanal</option>
                           <option value="monthly">Mensual</option>
                         </select>
+                        </div>
                       </td>
                       <td>
+                      <div className='table-element'>
+                      <th>Otros</th>
                         <input
                           type="text"
                           className="input-box"
@@ -1612,6 +1645,8 @@ const toggleLanguage = () => {
                           <option value="weekly">Semanal</option>
                           <option value="monthly">Mensual</option>
                         </select>
+                        </div>
+
                       </td>
                     </tr>
                   </tbody>
@@ -1620,19 +1655,13 @@ const toggleLanguage = () => {
                 <h3>Padre/Guardián Secundario</h3>
                 {/* Secondary Parent column */}
                 <table className="grid">
-                  <thead>
-                    <tr>
-                      <th>Salarios</th>
-                      <th>Manutención de Menores</th>
-                      <th>Pensión Alimenticia</th>
-                      <th>Seguridad Social</th>
-                      <th>Ayuda en Efectivo</th>
-                      <th>Otros</th>
-                    </tr>
-                  </thead>
+                 
                   <tbody>
                     <tr>
                       <td>
+                      <div className='table-element'>
+                      <th>Salarios</th>
+
                         <input
                           type="text"
                           className="input-box"
@@ -1652,8 +1681,11 @@ const toggleLanguage = () => {
                           <option value="weekly">Semanal</option>
                           <option value="monthly">Mensual</option>
                         </select>
+                        </div>
                       </td>
                       <td>
+                      <div className='table-element'>
+                      <th>Manutención de Menores</th>
                         <input
                           type="text"
                           className="input-box"
@@ -1672,8 +1704,11 @@ const toggleLanguage = () => {
                           <option value="weekly">Semanal</option>
                           <option value="monthly">Mensual</option>
                         </select>
+                        </div>
                       </td>
                       <td>
+                      <div className='table-element'>
+                      <th>Pensión Alimenticia</th>
                         <input
                           type="text"
                           className="input-box"
@@ -1692,8 +1727,11 @@ const toggleLanguage = () => {
                           <option value="weekly">Semanal</option>
                           <option value="monthly">Mensual</option>
                         </select>
+                        </div>
                       </td>
                       <td>
+                      <div className='table-element'>
+                      <th>Seguridad Social</th>
                         <input
                           type="text"
                           className="input-box"
@@ -1712,8 +1750,11 @@ const toggleLanguage = () => {
                           <option value="weekly">Semanal</option>
                           <option value="monthly">Mensual</option>
                         </select>
+                        </div>
                       </td>
                       <td>
+                      <div className='table-element'>
+                      <th>Ayuda en Efectivo</th>
                         <input
                           type="text"
                           className="input-box"
@@ -1732,8 +1773,11 @@ const toggleLanguage = () => {
                           <option value="weekly">Semanal</option>
                           <option value="monthly">Mensual</option>
                         </select>
+                        </div>
                       </td>
                       <td>
+                      <div className='table-element'>
+                      <th>Otros</th>
                         <input
                           type="text"
                           className="input-box"
@@ -1752,6 +1796,7 @@ const toggleLanguage = () => {
                           <option value="weekly">Semanal</option>
                           <option value="monthly">Mensual</option>
                         </select>
+                        </div>
                       </td>
                     </tr>
                   </tbody>
@@ -1777,13 +1822,11 @@ const toggleLanguage = () => {
               </div>
 
               <table className="grid">
-                <tr>
-                  <th>CALWorks</th>
-                  <th>CALFresh</th>
-                  <th>WIC</th>
-                </tr>
+                
                 <tr>
                   <td>
+                  <div className='table-element'>
+                  <th>CALWorks</th>
                     <input
                       placeholder="Cantidad por mes"
                       type="text"
@@ -1793,8 +1836,11 @@ const toggleLanguage = () => {
                         const inputVal = e.target.value.replace(/[^0-9.]/g, '');
                         setCalWorks(inputVal);
                       } } />
+                      </div>
                   </td>
                   <td>
+                  <div className='table-element'>
+                  <th>CALFresh</th>
                     <input
                       placeholder="Cantidad por mes"
                       type="text"
@@ -1804,8 +1850,11 @@ const toggleLanguage = () => {
                         const inputVal = e.target.value.replace(/[^0-9.]/g, '');
                         setCALFresh(inputVal);
                       } } />
+                      </div>
                   </td>
                   <td>
+                  <div className='table-element'>
+                  <th>WIC</th>
                     <input
                       placeholder="Cantidad por mes"
                       type="text"
@@ -1815,6 +1864,7 @@ const toggleLanguage = () => {
                         const inputVal = e.target.value.replace(/[^0-9.]/g, '');
                         setWIC(inputVal);
                       } } />
+                      </div>
                   </td>
                 </tr>
               </table>
@@ -1823,13 +1873,14 @@ const toggleLanguage = () => {
             <h1>Motivo de los servicios</h1>
               <div>
                 <h3>Tipo de Servicio Solicitado</h3>
-                <div>
+                <div className='table-element'>
+                <label htmlFor="full-day-care">Cuidado de Día Completo</label>
+
                   <input
                     type="checkbox"
                     id="full-day-care"
                     checked={fullDayCareChecked}
                     onChange={(e) => setFullDayCareChecked(e.target.checked)} />
-                  <label htmlFor="full-day-care">Cuidado de Día Completo</label>
                 </div>
 
                 {fullDayCareChecked && (
@@ -1839,41 +1890,50 @@ const toggleLanguage = () => {
 
 
                     <table className="grid">
-                      <thead>
-                        <tr>
-                          <th className="tableCheckHeader">Trabajando</th>
-                          <th className="tableCheckHeader">Buscando Trabajo</th>
-                          <th className="tableCheckHeader">Asistiendo a la Escuela</th>
-                          <th className="tableCheckHeader">CPS o en Riesgo</th>
-                          <th className="tableCheckHeader">Incapacitado con Nota del Médico</th>
-                          <th className="tableCheckHeader">IEP Solo Preescolar</th>
-                        </tr>
-                      </thead>
+                      
                       <tbody>
                         <tr>
                           <td>
+                          <div className='table-element'>
+                            <th>Buscando Trabajando</th>
                             <input type="checkbox" checked={Pworking}
                               onChange={(e) => Psetworking(e.target.checked)} />
+                              </div>
                           </td>
                           <td>
+                          <div className='table-element'>
+                          <th>Buscando Trabajando</th>
                             <input type="checkbox" checked={PlookingForWorking}
                               onChange={(e) => PsetlookingForWorking(e.target.checked)} />
+                              </div>
                           </td>
                           <td>
+                          <div className='table-element'>
+                          <th>Asistiendo a la Escuela</th>
                             <input type="checkbox" checked={PgoingToSchool}
                               onChange={(e) => PsetgoingToSchool(e.target.checked)} />
+                              </div>
                           </td>
                           <td>
+                          <div className='table-element'>
+                          <th className="tableCheckHeader">CPS o en Riesgo</th>
                             <input type="checkbox" checked={PCPSorAtRisk}
                               onChange={(e) => PsetCPSorAtRisk(e.target.checked)} />
+                              </div>
                           </td>
                           <td>
+                          <div className='table-element'>
+                          <th className="tableCheckHeader">Incapacitado con Nota del Médico</th>
                             <input type="checkbox" checked={PIncapacitated}
                               onChange={(e) => PsetIncapacitate(e.target.checked)} />
+                              </div>
                           </td>
                           <td>
+                          <div className='table-element'>
+                          <th className="tableCheckHeader">IEP Solo Preescolar</th>
                             <input type="checkbox" checked={PIEPpreschoolOnly}
                               onChange={(e) => PsetIEPpreschoolOnly(e.target.checked)} />
+                              </div>
                           </td>
                         </tr>
                       </tbody>
@@ -1885,39 +1945,52 @@ const toggleLanguage = () => {
                       <table className="grid">
                         <thead>
                           <tr>
-                          <th className="tableCheckHeader">Trabajando</th>
-                          <th className="tableCheckHeader">Buscando Trabajo</th>
-                          <th className="tableCheckHeader">Asistiendo a la Escuela</th>
-                          <th className="tableCheckHeader">CPS o en Riesgo</th>
-                          <th className="tableCheckHeader">Incapacitado con Nota del Médico</th>
-                          <th className="tableCheckHeader">IEP Solo Preescolar</th>
                           </tr>
                         </thead>
                         <tbody>
                           <tr>
                             <td>
+                            <div className='table-element'>
+                            <th className="tableCheckHeader">Trabajando</th>
                               <input type="checkbox" checked={Sworking}
                                 onChange={(e) => Ssetworking(e.target.checked)} />
+                                </div>
                             </td>
                             <td>
+                            <div className='table-element'>
+                            <th className="tableCheckHeader">Buscando Trabajo</th>
                               <input type="checkbox" checked={SlookingForWorking}
                                 onChange={(e) => SsetlookingForWorking(e.target.checked)} />
+                                </div>
                             </td>
                             <td>
+                            <div className='table-element'>
+                            <th className="tableCheckHeader">Asistiendo a la Escuela</th>
                               <input type="checkbox" checked={SgoingToSchool}
                                 onChange={(e) => SsetgoingToSchool(e.target.checked)} />
+                                </div>
                             </td>
                             <td>
+                            <div className='table-element'>
+                            <th className="tableCheckHeader">CPS o en Riesgo</th>
                               <input type="checkbox" checked={SCPSorAtRisk}
                                 onChange={(e) => SsetCPSorAtRisk(e.target.checked)} />
+                                </div>
                             </td>
                             <td>
+                            <div className='table-element'>
+                            <th className="tableCheckHeader">Incapacitado con Nota del Médico</th>
                               <input type="checkbox" checked={SIncapacitated}
                                 onChange={(e) => SsetIncapacitate(e.target.checked)} />
+                                </div>
+
                             </td>
                             <td>
+                            <div className='table-element'>
+                            <th className="tableCheckHeader">IEP Solo Preescolar</th>
                               <input type="checkbox" checked={SIEPpreschoolOnly}
                                 onChange={(e) => SsetIEPpreschoolOnly(e.target.checked)} />
+                                </div>
                             </td>
                           </tr>
                         </tbody>
@@ -1927,13 +2000,13 @@ const toggleLanguage = () => {
 
                 )}
 
-                <div>
+                <div className='table-element'>
+                <label htmlFor="preschool-only">Solomente Preescolar</label>
                   <input
                     type="checkbox"
                     id="preschool-only"
                     checked={preschoolOnlyChecked}
                     onChange={(e) => setPreschoolOnlyChecked(e.target.checked)} />
-                  <label htmlFor="preschool-only">Solomente Preescolar</label>
                 </div>
 
                 {preschoolOnlyChecked && (
