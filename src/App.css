@@ -421,6 +421,71 @@ select:disabled {
   max-width: 100%; /* Ensure the input doesn't exceed its container */
 }
 
+/* Base styles for mobile devices */
+.Form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem; /* Add spacing between input fields */
+}
+
+/* Media query for mobile devices (e.g., smartphones) */
+@media (max-width: 767px) {
+  .Form {
+    /* Reset flex-direction and alignment */
+    flex-direction: column;
+    align-items: center;
+
+    /* Add padding to the form to prevent cutoff */
+    padding: 1rem; /* Adjust as needed */
+  }
+  
+
+  /* Adjust individual input styles as needed */
+  .Form label {
+    width: 100%; /* Full width for labels on mobile */
+    margin-bottom: 0.5rem; /* Add spacing between labels */
+    text-align: left; /* Align labels to the left */
+  }
+
+  .Form input {
+    width: 100%; /* Full width for input fields on mobile */
+  }
+
+ /* Media query for mobile devices (e.g., smartphones) */
+  .grid {
+    display: block; /* Stack columns vertically */
+    text-align: center;
+  }
+
+  .grid thead,
+  .grid tbody {
+    display: block; /* Display table parts as block */
+  }
+
+  .grid tr {
+    display: flex; /* Use flex layout for rows */
+    flex-direction: column; /* Stack cells vertically */
+    margin-bottom: 1rem; /* Add spacing between rows */
+  }
+
+  .grid th,
+  .grid td {
+    width: 100%; /* Full width for table cells on mobile */
+    text-align: left; /* Align text to the left */
+  }
+  
+
+
+}
+  
+
+.table-element{
+  align-items: center;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+}
 
 
 

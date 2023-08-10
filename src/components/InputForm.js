@@ -292,9 +292,11 @@ const toggleLanguage = () => {
           onClick={() => (window.location.href = 'https://concordchildcare.org/eligibility%2F-enrollment#355f4dda-9cba-48c0-9e75-a6ffbc980258')}
         >
           Back to Website
-        </button><div>
+        </button>
+        <div>
             <h1>Family Information</h1>
-          </div><div className="Form">
+          </div>
+          <div className="Form">
             <h3>Primary Parent/Guardian</h3>
             <div className="group1">
               <label htmlFor="first-name" className="input-label">
@@ -409,7 +411,7 @@ const toggleLanguage = () => {
             </div>
             <h3>Secondary Parent/Guardian</h3>
             <div className="group1">
-              <div>
+             
                 <label htmlFor="lives-in-home" className="checkbox-label">
                   Lives in home:
                 </label>
@@ -418,7 +420,7 @@ const toggleLanguage = () => {
                   id="lives-in-home"
                   checked={SlivesInHome}
                   onChange={(e) => SsetLivesInHome(e.target.checked)} />
-              </div>
+             
 
               <div>
                 <label htmlFor="first-name" className="input-label">
@@ -609,18 +611,15 @@ const toggleLanguage = () => {
                 <table className="grid">
                   <thead>
                     <tr>
-                      <th>Wages</th>
-                      <th>Child Support</th>
-                      <th>Alimony</th>
-                      <th>Social Security</th>
-                      <th>Cash Aid</th>
-                      <th>Other</th>
                     </tr>
                   </thead>
                   <tbody>
                     <tr>
+                      
 
                       <td>
+                        <div className='table-element'>
+                      <th>Wages</th>
                         <input
                           type="text"
                           className="input-box"
@@ -640,8 +639,14 @@ const toggleLanguage = () => {
                           <option value="weekly">Weekly</option>
                           <option value="monthly">Monthly</option>
                         </select>
+                        </div>
+
                       </td>
                       <td>
+                      <div className='table-element'>
+
+                      <th>Child Support</th>
+
                         <input
                           type="text"
                           className="input-box"
@@ -660,8 +665,13 @@ const toggleLanguage = () => {
                           <option value="weekly">Weekly</option>
                           <option value="monthly">Monthly</option>
                         </select>
+                          </div>
                       </td>
                       <td>
+                      <div className='table-element'>
+
+                      <th>Alimony</th>
+
                         <input
                           type="text"
                           className="input-box"
@@ -680,8 +690,13 @@ const toggleLanguage = () => {
                           <option value="weekly">Weekly</option>
                           <option value="monthly">Monthly</option>
                         </select>
+                          </div>
                       </td>
                       <td>
+                      <div className='table-element'>
+
+                      <th>Social Security</th>
+
                         <input
                           type="text"
                           className="input-box"
@@ -700,8 +715,13 @@ const toggleLanguage = () => {
                           <option value="weekly">Weekly</option>
                           <option value="monthly">Monthly</option>
                         </select>
+                          </div>
                       </td>
                       <td>
+                      <div className='table-element'>
+
+                      <th>Cash Aid</th>
+
                         <input
                           type="text"
                           className="input-box"
@@ -720,8 +740,13 @@ const toggleLanguage = () => {
                           <option value="weekly">Weekly</option>
                           <option value="monthly">Monthly</option>
                         </select>
+                        </div>
                       </td>
                       <td>
+                      <div className='table-element'>
+
+                      <th>Other</th>
+
                         <input
                           type="text"
                           className="input-box"
@@ -740,6 +765,7 @@ const toggleLanguage = () => {
                           <option value="weekly">Weekly</option>
                           <option value="monthly">Monthly</option>
                         </select>
+                        </div>
                       </td>
                     </tr>
                   </tbody>
@@ -748,19 +774,12 @@ const toggleLanguage = () => {
                 <h3>Secondary Parent/Guardian</h3>
                 {/* Secondary Parent column */}
                 <table className="grid">
-                  <thead>
-                    <tr>
-                      <th>Wages</th>
-                      <th>Child Support</th>
-                      <th>Alimony</th>
-                      <th>Social Security</th>
-                      <th>Cash Aid</th>
-                      <th>Other</th>
-                    </tr>
-                  </thead>
+                 
                   <tbody>
                     <tr>
                       <td>
+                      <div className='table-element'>
+                      <th>Wages</th>
                         <input
                           type="text"
                           className="input-box"
@@ -780,8 +799,12 @@ const toggleLanguage = () => {
                           <option value="weekly">Weekly</option>
                           <option value="monthly">Monthly</option>
                         </select>
+                        </div>
                       </td>
                       <td>
+                      <div className='table-element'>
+
+                      <th>Child Support</th>
                         <input
                           type="text"
                           className="input-box"
@@ -800,8 +823,13 @@ const toggleLanguage = () => {
                           <option value="weekly">Weekly</option>
                           <option value="monthly">Monthly</option>
                         </select>
+                        </div>
                       </td>
                       <td>
+                      <div className='table-element'>
+
+                      <th>Alimony</th>
+
                         <input
                           type="text"
                           className="input-box"
@@ -820,8 +848,12 @@ const toggleLanguage = () => {
                           <option value="weekly">Weekly</option>
                           <option value="monthly">Monthly</option>
                         </select>
+                        </div>
                       </td>
                       <td>
+                      <div className='table-element'>
+
+                      <th>Social Security</th>
                         <input
                           type="text"
                           className="input-box"
@@ -840,8 +872,12 @@ const toggleLanguage = () => {
                           <option value="weekly">Weekly</option>
                           <option value="monthly">Monthly</option>
                         </select>
+                        </div>
                       </td>
                       <td>
+                      <div className='table-element'>
+
+                      <th>Cash Aid</th>
                         <input
                           type="text"
                           className="input-box"
@@ -860,8 +896,12 @@ const toggleLanguage = () => {
                           <option value="weekly">Weekly</option>
                           <option value="monthly">Monthly</option>
                         </select>
+                        </div>
                       </td>
                       <td>
+                      <div className='table-element'>
+
+                      <th>Other</th>
                         <input
                           type="text"
                           className="input-box"
@@ -880,6 +920,7 @@ const toggleLanguage = () => {
                           <option value="weekly">Weekly</option>
                           <option value="monthly">Monthly</option>
                         </select>
+                        </div>
                       </td>
                     </tr>
                   </tbody>
@@ -906,16 +947,13 @@ const toggleLanguage = () => {
               </div>
 
               <table className="grid">
-                <thead>
-                <tr>
-                  <th>CALWorks</th>
-                  <th>CALFresh</th>
-                  <th>WIC</th>
-                </tr>
-                </thead>
+                
                 <tbody>
                 <tr>
                   <td>
+                  <div className='table-element'>
+
+                    <th>CALWorks</th>
                     <input
                       placeholder="Amount per month"
                       type="text"
@@ -925,8 +963,12 @@ const toggleLanguage = () => {
                         const inputVal = e.target.value.replace(/[^0-9.]/g, '');
                         setCalWorks(inputVal);
                       } } />
+                      </div>
                   </td>
                   <td>
+                  <div className='table-element'>
+
+                  <th>CALFresh</th>
                     <input
                       placeholder="Amount per month"
                       type="text"
@@ -936,8 +978,12 @@ const toggleLanguage = () => {
                         const inputVal = e.target.value.replace(/[^0-9.]/g, '');
                         setCALFresh(inputVal);
                       } } />
+                      </div>
                   </td>
                   <td>
+                  <div className='table-element'>
+
+                  <th>WIC</th>
                     <input
                       placeholder="Amount per month"
                       type="text"
@@ -947,6 +993,7 @@ const toggleLanguage = () => {
                         const inputVal = e.target.value.replace(/[^0-9.]/g, '');
                         setWIC(inputVal);
                       } } />
+                      </div>
                   </td>
                 </tr>
                 </tbody>
