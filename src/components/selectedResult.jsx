@@ -445,6 +445,7 @@ const submitForm = async (e) => {
               maxLength={14}
               pattern="\(\d{0,3}\) \d{0,3}-\d{0,4}"
             />
+            <div className="table-element">
             <label htmlFor="text" className="checkbox-label">
                  Text OK:
             </label>
@@ -455,6 +456,7 @@ const submitForm = async (e) => {
                 onChange={(e) => setFormData({...formData, StextOK: e.target.checked})}
 
                 />
+                </div>
          
             <label htmlFor="email" className="input-label">
               Email:

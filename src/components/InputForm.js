@@ -1243,6 +1243,7 @@ const toggleLanguage = () => {
                 pattern="\(\d{0,3}\) \d{0,3}-\d{0,4}"
                 placeholder="(XXX) XXX-XXXX" 
                 required />
+                <div className='table-element'>
               <label htmlFor="text" className="checkbox-label">
               <span className="required-indicator">*</span>¿Aceptar mensajes de texto?
               </label>
@@ -1252,6 +1253,7 @@ const toggleLanguage = () => {
                 checked={PtextOK}
                 onChange={(e) => PsettextOK(e.target.checked)} 
                 required />
+                </div>
 
               <label htmlFor="email" className="input-label">
               <span className="required-indicator">*</span>Correo Electrónico:
@@ -1316,7 +1318,7 @@ const toggleLanguage = () => {
             </div>
             <h3>Padre/Guardián Secundario</h3>
             <div className="group1">
-              <div>
+              <div className='table-element'>
                 <label htmlFor="lives-in-home" className="checkbox-label">
                 Vive en casa:
                 </label>
@@ -1365,6 +1367,8 @@ const toggleLanguage = () => {
                   pattern="\(\d{0,3}\) \d{0,3}-\d{0,4}"
                   placeholder="(XXX) XXX-XXXX"
                   disabled={!SlivesInHome} />
+                <div className='table-element'>
+
 
                 <label htmlFor="text" className="checkbox-label">
                 ¿Aceptar mensajes de texto?
@@ -1375,6 +1379,7 @@ const toggleLanguage = () => {
                   checked={StextOK}
                   onChange={(e) => SsettextOK(e.target.checked)}
                   disabled={!SlivesInHome} />
+                  </div>
 
                 <label htmlFor="email" className="input-label">
                 Correo Electrónico:
@@ -1471,6 +1476,7 @@ const toggleLanguage = () => {
                           onChange={(e) => handleChildFieldChange(index, "birthday", e.target.value)} />
                       </div>
                       <div className='checkbox-group'>
+                        <div>
                         <label htmlFor={`child-need-care-${index}`} className="checkbox-label">
                         ¿Necesitan Cuidado?
                         </label>
@@ -1488,6 +1494,7 @@ const toggleLanguage = () => {
                           id={`child-iepifsp-${index}`}
                           checked={child.iepIfsp}
                           onChange={(e) => handleChildFieldChange(index, "iepifsp", e.target.checked)} />
+                      </div>
                       </div>
 
                     </div>
