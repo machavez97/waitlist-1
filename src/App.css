@@ -428,6 +428,22 @@ select:disabled {
   align-items: center;
   gap: 1rem; /* Add spacing between input fields */
 }
+.group2{
+  align-items: center;
+  text-align: center;
+  display: flex;
+  flex-direction: row;
+}
+.grid {
+  text-align: center;
+  vertical-align: middle;
+}
+.table-element{
+  align-items: center;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+}
 
 /* Media query for mobile devices (e.g., smartphones) */
 @media (max-width: 767px) {
@@ -461,6 +477,7 @@ select:disabled {
   .grid thead,
   .grid tbody {
     display: block; /* Display table parts as block */
+    
   }
 
   .grid tr {
@@ -474,18 +491,26 @@ select:disabled {
     width: 100%; /* Full width for table cells on mobile */
     text-align: left; /* Align text to the left */
   }
-  
+  .table-element{
+    align-items: center;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+  }
+  .group2{
+    align-items: center;
+    text-align: center;
+    display: block;
+    flex-direction: column;
+    width: 100%;
+  }
+ 
 
 
 }
   
 
-.table-element{
-  align-items: center;
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-}
+
 
 
 

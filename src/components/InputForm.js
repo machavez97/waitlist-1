@@ -338,7 +338,8 @@ const toggleLanguage = () => {
                 pattern="\(\d{0,3}\) \d{0,3}-\d{0,4}"
                 placeholder="(XXX) XXX-XXXX" 
                 required />
-                
+
+              <div className='table-element'>
               <label htmlFor="text" className="checkbox-label">
                 Text OK:
               </label>
@@ -347,6 +348,7 @@ const toggleLanguage = () => {
                 id="text"
                 checked={PtextOK}
                 onChange={(e) => PsettextOK(e.target.checked)} />
+                </div>
 
               <label htmlFor="email" className="input-label">
               <span className="required-indicator">*</span>Email:
@@ -411,7 +413,8 @@ const toggleLanguage = () => {
             </div>
             <h3>Secondary Parent/Guardian</h3>
             <div className="group1">
-             
+            <div className='table-element'>
+
                 <label htmlFor="lives-in-home" className="checkbox-label">
                   Lives in home:
                 </label>
@@ -420,7 +423,7 @@ const toggleLanguage = () => {
                   id="lives-in-home"
                   checked={SlivesInHome}
                   onChange={(e) => SsetLivesInHome(e.target.checked)} />
-             
+             </div>
 
               <div>
                 <label htmlFor="first-name" className="input-label">
@@ -461,15 +464,16 @@ const toggleLanguage = () => {
                   placeholder="(XXX) XXX-XXXX"
                   disabled={!SlivesInHome} />
 
-                <label htmlFor="text" className="checkbox-label">
-                  Text OK:
-                </label>
-                <input
-                  type="checkbox"
-                  id="text"
-                  checked={StextOK}
-                  onChange={(e) => SsettextOK(e.target.checked)}
-                  disabled={!SlivesInHome} />
+              <div className='table-element'>
+              <label htmlFor="text" className="checkbox-label">
+                Text OK:
+              </label>
+              <input
+                type="checkbox"
+                id="text"
+                checked={PtextOK}
+                onChange={(e) => PsettextOK(e.target.checked)} />
+                </div>
 
                 <label htmlFor="email" className="input-label">
                   Email:
@@ -566,6 +570,8 @@ const toggleLanguage = () => {
                           onChange={(e) => handleChildFieldChange(index, "birthday", e.target.value)} />
                       </div>
                       <div className="checkbox-group">
+                      <div>
+
                         <label htmlFor={`child-need-care-${index}`} className="checkbox-label">
                           Need Care:
                         </label>
@@ -574,8 +580,9 @@ const toggleLanguage = () => {
                           id={`child-need-care-${index}`}
                           checked={child.needCare}
                           onChange={(e) => handleChildFieldChange(index, "needCare", e.target.checked)} />
-                      </div>
-                      <div className="checkbox-group">
+                         
+
+                    
                         <label htmlFor={`child-full-time-${index}`} className="checkbox-label">
                           IEP/IFSP:
                         </label>
@@ -584,6 +591,7 @@ const toggleLanguage = () => {
                           id={`child-iepifsp-${index}`}
                           checked={child.iepIfsp}
                           onChange={(e) => handleChildFieldChange(index, "iepIfsp", e.target.checked)} />
+                          </div>
                       </div>
 
                     </div>
@@ -609,10 +617,7 @@ const toggleLanguage = () => {
                 <h3>Primary Parent/Guardian</h3>
                 {/* Primary Parent column */}
                 <table className="grid">
-                  <thead>
-                    <tr>
-                    </tr>
-                  </thead>
+                 
                   <tbody>
                     <tr>
                       
@@ -1004,12 +1009,15 @@ const toggleLanguage = () => {
               <div>
                 <h3>Type of Service Requested</h3>
                 <div>
+                  <div className='table-element'>
+                  <label htmlFor="full-day-care">Full Day Care</label>
+
                   <input
                     type="checkbox"
                     id="full-day-care"
                     checked={fullDayCareChecked}
                     onChange={(e) => setFullDayCareChecked(e.target.checked)} />
-                  <label htmlFor="full-day-care">Full Day Care</label>
+                  </div>
                 </div>
 
                 {fullDayCareChecked && (
@@ -1132,25 +1140,29 @@ const toggleLanguage = () => {
                 )}
 
                 <div>
+                <div className='table-element'>
+                <label htmlFor="preschool-only">Preschool Only</label>
+
                   <input
                     type="checkbox"
                     id="preschool-only"
                     checked={preschoolOnlyChecked}
                     onChange={(e) => setPreschoolOnlyChecked(e.target.checked)} />
-                  <label htmlFor="preschool-only">Preschool Only</label>
+                  </div>
                 </div>
 
                 {preschoolOnlyChecked && (
-                  <div className="partDayYearCheckbox">
+                  <div className="table-element">
+                    <label htmlFor="part-day-year-checkbox">
+                      I understand this is part day/year
+                    </label>
                     <input
                       type="checkbox"
                       id="part-day-year-checkbox"
                       checked={understandPartDayYear}
                       onChange={(e) => setUnderstandPartDayYear(e.target.checked)}
                       required />
-                    <label htmlFor="part-day-year-checkbox">
-                      I understand this is part day/year
-                    </label>
+                    
                   </div>
                 )}
               </div>
@@ -1458,7 +1470,7 @@ const toggleLanguage = () => {
                           value={child.birthday}
                           onChange={(e) => handleChildFieldChange(index, "birthday", e.target.value)} />
                       </div>
-                      <div className="checkbox-group">
+                      <div className='checkbox-group'>
                         <label htmlFor={`child-need-care-${index}`} className="checkbox-label">
                         ¿Necesitan Cuidado?
                         </label>
@@ -1467,8 +1479,7 @@ const toggleLanguage = () => {
                           id={`child-need-care-${index}`}
                           checked={child.needCare}
                           onChange={(e) => handleChildFieldChange(index, "needCare", e.target.checked)} />
-                      </div>
-                      <div className="checkbox-group">
+                   
                         <label htmlFor={`child-full-time-${index}`} className="checkbox-label">
                           IEP/IFSP:
                         </label>
@@ -2010,16 +2021,17 @@ const toggleLanguage = () => {
                 </div>
 
                 {preschoolOnlyChecked && (
-                  <div className="partDayYearCheckbox">
+                  <div className="table-element">
+                    <label htmlFor="part-day-year-checkbox">
+                    Entiendo que esto es de medio día/año
+                    </label>
                     <input
                       type="checkbox"
                       id="part-day-year-checkbox"
                       checked={understandPartDayYear}
                       onChange={(e) => setUnderstandPartDayYear(e.target.checked)}
                       required />
-                    <label htmlFor="part-day-year-checkbox">
-                    Entiendo que esto es de medio día/año
-                    </label>
+                    
                   </div>
                 )}
               </div>

@@ -1,9 +1,7 @@
 import React, {useState, useEffect} from 'react';
-import { signInWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '../firebase';
 import { useNavigate, useParams } from 'react-router-dom'
 import { db } from '../firebase'
-import { collection, query, writeBatch, getDoc, getDocs, updateDoc, doc, deleteDoc,Timestamp, addDoc } from 'firebase/firestore';
+import { collection, query, getDoc, getDocs, updateDoc, doc, deleteDoc,Timestamp, addDoc } from 'firebase/firestore';
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { Link } from 'react-router-dom';
 import html2canvas from 'html2canvas';
@@ -16,10 +14,7 @@ import jsPDF from 'jspdf';
 const SelectedResult = () => {
     
     const { id } = useParams();
-    const [searchQuery, setSearchQuery] = useState('');
     const [searchResults, setSearchResults] = useState([]);
-    const [rank, setRank] = useState('');
-    const [officeNotes, setOfficeNotes] = useState('');
     const [formData, setFormData] = useState({});
     //const [children, setChildren] = useState({});
     const [children, setChildren] = useState([]); // Initialize as an empty array, not an object
@@ -29,10 +24,21 @@ const SelectedResult = () => {
 
     
     const navigate = useNavigate();
-	const routeChange = () => {
-        let path = '/login';
-        navigate(path);
-    };
+    const routeChange = () => {
+          let path = '/login';
+          navigate(path);
+      };
+     
+      useEffect(() => {
+          const authToken = getAuth();
+          onAuthStateChanged(authToken, (user) =>{
+              if (!user) {
+                  routeChange();
+  
+              }
+          })
+  
+      })
 
     useEffect(() => {
       const fetchData = async () => {
@@ -213,14 +219,7 @@ const submitForm = async (e) => {
       }
     };
     
-    useEffect(() => {
-      const authToken = getAuth();
-      onAuthStateChanged(authToken, (user) => {
-        if (!user) {
-          routeChange();
-        }
-      });
-    }, []);
+   
     
     const generatePDF = () => {
       // Select the element to convert to PDF
@@ -286,6 +285,7 @@ const submitForm = async (e) => {
                 value={formData.officeNotes}
                 onChange={(e) => setFormData({ ...formData, officeNotes: e.target.value })}></textarea>
               </div>
+              <div className='Form'>
                 <h3>Primary Parent/Guardian</h3>
                 <div className="group1">
                <label htmlFor="first-name" className="input-label">
@@ -326,6 +326,8 @@ const submitForm = async (e) => {
               maxLength={14}
               pattern="\(\d{0,3}\) \d{0,3}-\d{0,4}"
             />
+             <div className='table-element'>
+
             <label htmlFor="text" className="checkbox-label">
                  Text OK:
             </label>
@@ -336,6 +338,8 @@ const submitForm = async (e) => {
                 onChange={(e) => setFormData({...formData, PtextOK: e.target.checked})}
 
                 />
+             </div>
+
          
             <label htmlFor="email" className="input-label">
               Email:
@@ -605,20 +609,14 @@ const submitForm = async (e) => {
           <h3>Primary Parent/Guardian</h3>
         {/* Primary Parent column */}
         <table className="grid">
-          <thead>
-            <tr>
-              <th>Wages</th>
-              <th>Child Support</th>
-              <th>Alimony</th>
-              <th>Social Security</th>
-              <th>Cash Aid</th>
-              <th>Other</th>
-            </tr>
-          </thead>
+          
           <tbody>
             <tr>
               
               <td>
+              <div className='table-element'>
+
+              <th>Wages</th>
               <input
                 type="text"
                 className="input-box"
@@ -636,8 +634,12 @@ const submitForm = async (e) => {
                 <option value="weekly">Weekly</option>
                 <option value="monthly">Monthly</option>
               </select>
+              </div>
               </td>
               <td>
+              <div className='table-element'>
+
+              <th>Child Support</th>
               <input
                 type="text"
                 className="input-box"
@@ -655,8 +657,12 @@ const submitForm = async (e) => {
                 <option value="weekly">Weekly</option>
                 <option value="monthly">Monthly</option>
               </select>
+              </div>
               </td>
               <td>
+              <div className='table-element'>
+
+              <th>Alimony</th>
               <input
                 type="text"
                 className="input-box"
@@ -674,8 +680,12 @@ const submitForm = async (e) => {
                 <option value="weekly">Weekly</option>
                 <option value="monthly">Monthly</option>
               </select>
+              </div>
               </td>
               <td>
+              <div className='table-element'>
+
+              <th>Social Security</th>
               <input
                 type="text"
                 className="input-box"
@@ -694,8 +704,12 @@ const submitForm = async (e) => {
                     <option value="weekly">Weekly</option>
                     <option value="monthly">Monthly</option>
                   </select>
+                  </div>
               </td>
               <td>
+              <div className='table-element'>
+
+              <th>Cash Aid</th>
               <input
                 type="text"
                 className="input-box"
@@ -714,8 +728,12 @@ const submitForm = async (e) => {
                     <option value="weekly">Weekly</option>
                     <option value="monthly">Monthly</option>
                   </select>
+                  </div>
               </td>
               <td>
+              <div className='table-element'>
+
+              <th>Other</th>
               <input
                 type="text"
                 className="input-box"
@@ -734,6 +752,7 @@ const submitForm = async (e) => {
                     <option value="weekly">Weekly</option>
                     <option value="monthly">Monthly</option>
                   </select>
+                  </div>
               </td>
             </tr>
           </tbody>
@@ -742,20 +761,14 @@ const submitForm = async (e) => {
         <h3>Secondary Parent/Guardian</h3>
         {/* Secondary Parent column */}
         <table className="grid">
-          <thead>
-            <tr>
-              <th>Wages</th>
-              <th>Child Support</th>
-              <th>Alimony</th>
-              <th>Social Security</th>
-              <th>Cash Aid</th>
-              <th>Other</th>
-            </tr>
-          </thead>
+         
           <tbody>
             <tr>
               
               <td>
+              <div className='table-element'>
+
+              <th>Wages</th>
               <input
                 type="text"
                 className="input-box"
@@ -773,8 +786,12 @@ const submitForm = async (e) => {
                 <option value="weekly">Weekly</option>
                 <option value="monthly">Monthly</option>
               </select>
+              </div>
               </td>
               <td>
+              <div className='table-element'>
+
+              <th>Child Support</th>
               <input
                 type="text"
                 className="input-box"
@@ -792,8 +809,12 @@ const submitForm = async (e) => {
                 <option value="weekly">Weekly</option>
                 <option value="monthly">Monthly</option>
               </select>
+              </div>
               </td>
               <td>
+              <div className='table-element'>
+
+              <th>Alimony</th>
               <input
                 type="text"
                 className="input-box"
@@ -811,8 +832,12 @@ const submitForm = async (e) => {
                 <option value="weekly">Weekly</option>
                 <option value="monthly">Monthly</option>
               </select>
+              </div>
               </td>
               <td>
+              <div className='table-element'>
+
+              <th>Social Security</th>
               <input
                 type="text"
                 className="input-box"
@@ -831,8 +856,12 @@ const submitForm = async (e) => {
                     <option value="weekly">Weekly</option>
                     <option value="monthly">Monthly</option>
                   </select>
+                  </div>
               </td>
               <td>
+              <div className='table-element'>
+
+              <th>Cash Aid</th>
               <input
                 type="text"
                 className="input-box"
@@ -851,8 +880,12 @@ const submitForm = async (e) => {
                     <option value="weekly">Weekly</option>
                     <option value="monthly">Monthly</option>
                   </select>
+                  </div>
               </td>
               <td>
+              <div className='table-element'>
+
+              <th>Other</th>
               <input
                 type="text"
                 className="input-box"
@@ -871,6 +904,7 @@ const submitForm = async (e) => {
                     <option value="weekly">Weekly</option>
                     <option value="monthly">Monthly</option>
                   </select>
+                  </div>
               </td>
             </tr>
           </tbody>
@@ -898,35 +932,43 @@ const submitForm = async (e) => {
         </div>
 
         <table className="grid">
-          <tr>
-            <th>CALWorks</th>
-            <th>CALFresh</th>
-            <th>WIC</th>
-          </tr>
+          
           <tr>
             <td>
+            <div className='table-element'>
+
+            <th>CALWorks</th>
               <input placeholder="Amount per month" type="text" className="input-box" 
               value={formData.CALWorks === '' ? '' : formatCurrencyInput(formData.CALWorks)}
               onChange={(e) => {
                 const inputVal = e.target.value.replace(/[^0-9.]/g, '');
                 setFormData({...formData, CALWorks: inputVal});
               }}/>
+              </div>
             </td>
             <td>
+            <div className='table-element'>
+
+            <th>CALFresh</th>
               <input placeholder="Amount per month" type="text" className="input-box" 
               value={formData.CALFresh === '' ? '' : formatCurrencyInput(formData.CALFresh)}
               onChange={(e) => {
                 const inputVal = e.target.value.replace(/[^0-9.]/g, '');
                 setFormData({...formData, CALFresh: inputVal});
               }}/>
+              </div>
             </td>
             <td>
+            <div className='table-element'>
+
+            <th>WIC</th>
               <input placeholder="Amount per month" type="text" className="input-box" 
               value={formData.WIC === '' ? '' : formatCurrencyInput(formData.WIC)}
               onChange={(e) => {
                 const inputVal = e.target.value.replace(/[^0-9.]/g, '');
                 setFormData({...formData, WIC: inputVal});
               }}/>
+              </div>
             </td>
           </tr>
         </table>
@@ -936,14 +978,15 @@ const submitForm = async (e) => {
     <h1>Reason for Services</h1>
     <div>
          <h3>Type of Service Requested</h3>
-         <div>
+         <div className='table-element'>
+         <label htmlFor="full-day-care">Full Day Care</label>
+
         <input
           type="checkbox"
           id="full-day-care"
           checked={formData.fullDayCareChecked}
           onChange={(e) => setFormData({...formData, fullDayCareChecked: e.target.checked})}
         />
-        <label htmlFor="full-day-care">Full Day Care</label>
       </div>
 
       {formData.fullDayCareChecked && (
@@ -954,41 +997,50 @@ const submitForm = async (e) => {
 
 
             <table className="grid">
-          <thead>
-            <tr>
-              <th className="tableCheckHeader">Working</th>
-              <th className="tableCheckHeader">Looking for Care</th>
-              <th className="tableCheckHeader">Going to School</th>
-              <th className="tableCheckHeader">CPS or At Risk</th>
-              <th className="tableCheckHeader">Incapacitated w/ Dr Note</th>
-              <th className="tableCheckHeader">IEP Preschool Only</th>
-            </tr>
-          </thead>
+          
           <tbody>
             <tr>
               <td>
+              <div className='table-element'>
+              <th className="tableCheckHeader">Working</th>
                 <input type="checkbox" checked={formData.Pworking}
                 onChange={(e) => setFormData({...formData, Pworking: e.target.checked})}/>
+                </div>
                 </td>
               <td>
+              <div className='table-element'>
+              <th className="tableCheckHeader">Looking for Care</th>
                 <input type="checkbox" checked={formData.PlookingForWorking}
                 onChange={(e) => setFormData({...formData, PlookingForWorking: e.target.checked})}/>
+                </div>
                 </td>
               <td>
+              <div className='table-element'>
+              <th className="tableCheckHeader">Going to School</th>
                 <input type="checkbox" checked={formData.PgoingToSchool}
                 onChange={(e) => setFormData({...formData, PgoingToSchool: e.target.checked})}/>
+                </div>
                 </td>
               <td>
+              <div className='table-element'>
+              <th className="tableCheckHeader">CPS or At Risk</th>
                 <input type="checkbox" checked={formData.PCPSorAtRisk}
                 onChange={(e) => setFormData({...formData, PCPSorAtRisk: e.target.checked})}/>
+                </div>
                 </td>
               <td>
+              <div className='table-element'>
+              <th className="tableCheckHeader">Incapacitated w/ Dr Note</th>
                 <input type="checkbox" checked={formData.PsetIncapacitate}
                 onChange={(e) => setFormData({...formData, PsetIncapacitate: e.target.checked})}/>
+                </div>
                 </td>
               <td>
+              <div className='table-element'>
+              <th className="tableCheckHeader">IEP Preschool Only</th>
                 <input type="checkbox" checked={formData.PIEPpreschoolOnly}
                 onChange={(e) => setFormData({...formData, PIEPpreschoolOnly: e.target.checked})}/>
+                </div>
                 </td>
             </tr>
           </tbody>
@@ -998,41 +1050,50 @@ const submitForm = async (e) => {
       <h3>Secondary Parent/Guardian</h3>
 
         <table className="grid">
-          <thead>
-            <tr>
-              <th className="tableCheckHeader">Working</th>
-              <th className="tableCheckHeader">Looking for Care</th>
-              <th className="tableCheckHeader">Going to School</th>
-              <th className="tableCheckHeader">CPS or At Risk</th>
-              <th className="tableCheckHeader">Incapacitated w/ Dr Note</th>
-              <th className="tableCheckHeader">IEP Preschool Only</th>
-            </tr>
-          </thead>
+         
           <tbody>
           <tr>
               <td>
+              <div className='table-element'>
+              <th className="tableCheckHeader">Working</th>
                 <input type="checkbox" checked={formData.Sworking}
                 onChange={(e) => setFormData({...formData, Sworking: e.target.checked})}/>
+                </div>
                 </td>
               <td>
+              <div className='table-element'>
+              <th className="tableCheckHeader">Looking for Care</th>
                 <input type="checkbox" checked={formData.SlookingForWorking}
                 onChange={(e) => setFormData({...formData, SlookingForWorking: e.target.checked})}/>
+                </div>
                 </td>
               <td>
+              <div className='table-element'>
+              <th className="tableCheckHeader">Going to School</th>
                 <input type="checkbox" checked={formData.SgoingToSchool}
                 onChange={(e) => setFormData({...formData, SgoingToSchool: e.target.checked})}/>
+                </div>
                 </td>
               <td>
+              <div className='table-element'>
+              <th className="tableCheckHeader">CPS or At Risk</th>
                 <input type="checkbox" checked={formData.SCPSorAtRisk}
                 onChange={(e) => setFormData({...formData, SCPSorAtRisk: e.target.checked})}/>
+                </div>
                 </td>
               <td>
+              <div className='table-element'>
+              <th className="tableCheckHeader">Incapacitated w/ Dr Note</th>
                 <input type="checkbox" checked={formData.SsetIncapacitate}
                 onChange={(e) => setFormData({...formData, SsetIncapacitate: e.target.checked})}/>
+                </div>
                 </td>
               <td>
+              <div className='table-element'>
+              <th className="tableCheckHeader">IEP Preschool Only</th>
                 <input type="checkbox" checked={formData.SIEPpreschoolOnly}
                 onChange={(e) => setFormData({...formData, SIEPpreschoolOnly: e.target.checked})}/>
+                </div>
                 </td>
             </tr>
           </tbody>
@@ -1043,15 +1104,31 @@ const submitForm = async (e) => {
       )}
 
       <div>
+      <div className='table-element'>
+
+      <label htmlFor="preschool-only">Preschool Only</label>
+
         <input
           type="checkbox"
           id="preschool-only"
           checked={formData.preschoolOnlyChecked}
           onChange={(e) => setFormData({...formData, preschoolOnlyChecked: e.target.checked})}/>
-         
-        <label htmlFor="preschool-only">Preschool Only</label>
+         </div>
       </div>
-
+          {formData.preschoolOnlyChecked && (
+                  <div className="table-element">
+                    <label htmlFor="part-day-year-checkbox">
+                      I understand this is part day/year
+                    </label>
+                    <input
+                      type="checkbox"
+                      id="part-day-year-checkbox"
+                      checked={formData.understandPartDayYear}
+                      onChange={(e) => setFormData({...formData, understandPartDayYear: e.target.checked})}
+                      required />
+                    
+                  </div>
+                )}
       
     </div>
     
@@ -1060,6 +1137,8 @@ const submitForm = async (e) => {
 
 
           </div>
+          </div>
+
           </div>
           ))}
           <button className='pdf-button' onClick={generatePDF}>Generate PDF</button>

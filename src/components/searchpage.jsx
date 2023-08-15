@@ -870,9 +870,8 @@ const exportToCSV = () => {
                 checked={childDoc.data.needCare}
                 readOnly
               />
-            </div>
+            
 
-            <div className="checkbox-group">
             <label htmlFor={`child-full-time-${index}`} className="checkbox-label">
               IEP/ISFP:
             </label>
