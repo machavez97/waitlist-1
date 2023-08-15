@@ -615,6 +615,7 @@ const exportToCSV = () => {
 
       // Create an object to hold the parent data
       const rowData = {
+        Entry: index,
         Primary_FirstName: result.PfirstName,
         Primary_LastName: result.PlastName,
         Primary_Phone: result.PphoneNumber,
