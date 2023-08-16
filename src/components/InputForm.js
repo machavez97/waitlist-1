@@ -569,8 +569,8 @@ const toggleLanguage = () => {
                           value={child.birthday}
                           onChange={(e) => handleChildFieldChange(index, "birthday", e.target.value)} />
                       </div>
-                      <div className="checkbox-group">
-                      <div>
+                      <div className="table-element">
+                      
 
                         <label htmlFor={`child-need-care-${index}`} className="checkbox-label">
                           Need Care:
@@ -591,7 +591,7 @@ const toggleLanguage = () => {
                           id={`child-iepifsp-${index}`}
                           checked={child.iepIfsp}
                           onChange={(e) => handleChildFieldChange(index, "iepIfsp", e.target.checked)} />
-                          </div>
+                          
                       </div>
 
                     </div>

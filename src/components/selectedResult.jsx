@@ -558,7 +558,7 @@ const submitForm = async (e) => {
               onChange={(e) => handleChildFieldChange(index, "birthday", e.target.value)}
             />
           </div>
-          <div className="checkbox-group">
+          <div className="table-element">
             <label htmlFor={`child-need-care-${index}`} className="checkbox-label">
               Need Care:
             </label>
@@ -569,8 +569,7 @@ const submitForm = async (e) => {
               readOnly
               onChange={(e) => handleChildFieldChange(index, "needCare", e.target.checked)}
             />
-          </div>
-          <div className="checkbox-group">
+          
             <label htmlFor={`child-full-time-${index}`} className="checkbox-label">
               IEP/ISFP:
             </label>
