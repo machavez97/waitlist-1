@@ -110,14 +110,12 @@ const SelectedResult = () => {
       birthday: Timestamp.fromDate(new Date()), // Convert JavaScript Date to Firestore Timestamp
       needCare: false, 
       iepIfsp: false } }]);
-      console.log(children)
     };
     
     
     
     const handleDeleteChild = async (parentId, childId) => {
 
-      console.log("parent id: ", parentId, "child id: ", childId)
       try {
         // Delete the child document from the subcollection of the parent document
         await deleteDoc(doc(db, 'Applicants', parentId, 'children', childId));

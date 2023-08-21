@@ -267,7 +267,6 @@ const toggleLanguage = () => {
           await addDoc(childrenRef, child);
         }
   
-        console.log("Document written with ID: ", applicantRef.id);
       } catch (e) {
         console.error("Error adding document: ", e);
       }

@@ -26,7 +26,6 @@ const Login = () => {
             const errorCode = error.code;
             const errorMessage = error.message;
             alert('Invaild email/password')
-            console.log(errorCode, errorMessage);
         });
        
     }

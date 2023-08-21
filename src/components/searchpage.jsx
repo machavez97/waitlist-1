@@ -611,7 +611,6 @@ const exportToCSV = () => {
     // Prepare the data to be exported
     const dataToExport = searchResults.map((result, index) => {
       const childrenData = childrenResults[index];
-      console.log(childrenData);
 
       // Create an object to hold the parent data
       const rowData = {
