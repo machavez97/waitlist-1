@@ -621,9 +621,10 @@ const toggleLanguage = () => {
                     <tr>
                       
 
-                      <td>
-                        <div className='table-element'>
+                    <td>
+                      <div className="table-element">
                       <th>Wages</th>
+
                         <input
                           type="text"
                           className="input-box"
@@ -631,21 +632,29 @@ const toggleLanguage = () => {
                           onChange={(e) => {
                             const inputVal = e.target.value.replace(/[^0-9.]/g, '');
                             PsetWages(inputVal);
-                          } } />
+                          }}
+                        />
+                        
+                        {Pwages !== '' && (
+                          <>
+                          <div className="inline-alert">
+                              Please select Weekly or Monthly.
+                            </div>
+                            <select 
+                            required
+                            value={PwagesFrequency} onChange={(e) => setPwagesFrequency(e.target.value)}>
+                                <option value="" disabled>
+                                  Select Weekly/Monthly
+                                </option>
+                                <option value="weekly">Weekly</option>
+                                <option value="monthly">Monthly</option>
+                                
+                              </select></>
 
-                        <select
-                          value={PwagesFrequency}
-                          onChange={(e) => setPwagesFrequency(e.target.value)}
-                        >
-                          <option value="" disabled>
-                            Select Weekly/Monthly
-                          </option>
-                          <option value="weekly">Weekly</option>
-                          <option value="monthly">Monthly</option>
-                        </select>
-                        </div>
+                        )}
+                      </div>
+                    </td>
 
-                      </td>
                       <td>
                       <div className='table-element'>
 
@@ -659,6 +668,11 @@ const toggleLanguage = () => {
                             const inputVal = e.target.value.replace(/[^0-9.]/g, '');
                             PsetChildSupport(inputVal);
                           } } />
+                          {PchildSupport !== '' && (
+                          <>
+                          <div className="inline-alert">
+                              Please select Weekly or Monthly.
+                            </div>
                         <select
                           value={PchildSupportFrequency}
                           onChange={(e) => setPchildSupportFrequency(e.target.value)}
@@ -668,7 +682,8 @@ const toggleLanguage = () => {
                           </option>
                           <option value="weekly">Weekly</option>
                           <option value="monthly">Monthly</option>
-                        </select>
+                        </select></>
+                          )}
                           </div>
                       </td>
                       <td>
@@ -684,6 +699,11 @@ const toggleLanguage = () => {
                             const inputVal = e.target.value.replace(/[^0-9.]/g, '');
                             PsetAlimony(inputVal);
                           } } />
+                          {PAlimony !== '' && (
+                          <>
+                          <div className="inline-alert">
+                              Please select Weekly or Monthly.
+                            </div>
                         <select
                           value={PAlimonyFrequency}
                           onChange={(e) => setPAlimonyFrequency(e.target.value)}
@@ -693,7 +713,8 @@ const toggleLanguage = () => {
                           </option>
                           <option value="weekly">Weekly</option>
                           <option value="monthly">Monthly</option>
-                        </select>
+                        </select></>
+                          )}
                           </div>
                       </td>
                       <td>
@@ -709,6 +730,11 @@ const toggleLanguage = () => {
                             const inputVal = e.target.value.replace(/[^0-9.]/g, '');
                             PsetSocialSecurity(inputVal);
                           } } />
+                          {PSocialSecurity !== '' && (
+                          <>
+                          <div className="inline-alert">
+                              Please select Weekly or Monthly.
+                            </div>
                         <select
                           value={PSocialSecurityFrequency}
                           onChange={(e) => setPSocialSecurityFrequency(e.target.value)}
@@ -718,7 +744,8 @@ const toggleLanguage = () => {
                           </option>
                           <option value="weekly">Weekly</option>
                           <option value="monthly">Monthly</option>
-                        </select>
+                        </select></>
+                          )}
                           </div>
                       </td>
                       <td>
@@ -734,6 +761,11 @@ const toggleLanguage = () => {
                             const inputVal = e.target.value.replace(/[^0-9.]/g, '');
                             PsetCashAid(inputVal);
                           } } />
+                        {PCashAid !== '' && (
+                          <>
+                          <div className="inline-alert">
+                              Please select Weekly or Monthly.
+                            </div>
                         <select
                           value={PCashAidFrequency}
                           onChange={(e) => setPCashAidFrequency(e.target.value)}
@@ -743,7 +775,8 @@ const toggleLanguage = () => {
                           </option>
                           <option value="weekly">Weekly</option>
                           <option value="monthly">Monthly</option>
-                        </select>
+                        </select></>
+                        )}
                         </div>
                       </td>
                       <td>
@@ -759,6 +792,11 @@ const toggleLanguage = () => {
                             const inputVal = e.target.value.replace(/[^0-9.]/g, '');
                             PsetOther(inputVal);
                           } } />
+                          {POther !== '' && (
+                          <>
+                          <div className="inline-alert">
+                              Please select Weekly or Monthly.
+                            </div>
                         <select
                           value={POtherFrequency}
                           onChange={(e) => setPOtherFrequency(e.target.value)}
@@ -768,7 +806,8 @@ const toggleLanguage = () => {
                           </option>
                           <option value="weekly">Weekly</option>
                           <option value="monthly">Monthly</option>
-                        </select>
+                        </select></>
+                          )}
                         </div>
                       </td>
                     </tr>
@@ -792,6 +831,11 @@ const toggleLanguage = () => {
                             const inputVal = e.target.value.replace(/[^0-9.]/g, '');
                             SsetWages(inputVal);
                           } } />
+                          {Swages !== '' && (
+                          <>
+                          <div className="inline-alert">
+                              Please select Weekly or Monthly.
+                            </div>
 
                         <select
                           value={SwagesFrequency}
@@ -802,7 +846,8 @@ const toggleLanguage = () => {
                           </option>
                           <option value="weekly">Weekly</option>
                           <option value="monthly">Monthly</option>
-                        </select>
+                        </select></>
+                          )}
                         </div>
                       </td>
                       <td>
@@ -817,6 +862,11 @@ const toggleLanguage = () => {
                             const inputVal = e.target.value.replace(/[^0-9.]/g, '');
                             SsetChildSupport(inputVal);
                           } } />
+                          {SchildSupport !== '' && (
+                          <>
+                          <div className="inline-alert">
+                              Please select Weekly or Monthly.
+                            </div>
                         <select
                           value={SchildSupportFrequency}
                           onChange={(e) => setSchildSupportFrequency(e.target.value)}
@@ -826,7 +876,8 @@ const toggleLanguage = () => {
                           </option>
                           <option value="weekly">Weekly</option>
                           <option value="monthly">Monthly</option>
-                        </select>
+                        </select></>
+                          )}
                         </div>
                       </td>
                       <td>
@@ -842,6 +893,11 @@ const toggleLanguage = () => {
                             const inputVal = e.target.value.replace(/[^0-9.]/g, '');
                             SsetAlimony(inputVal);
                           } } />
+                          {SAlimony !== '' && (
+                          <>
+                          <div className="inline-alert">
+                              Please select Weekly or Monthly.
+                            </div>
                         <select
                           value={SAlimonyFrequency}
                           onChange={(e) => setSAlimonyFrequency(e.target.value)}
@@ -851,7 +907,8 @@ const toggleLanguage = () => {
                           </option>
                           <option value="weekly">Weekly</option>
                           <option value="monthly">Monthly</option>
-                        </select>
+                        </select></>
+                          )}
                         </div>
                       </td>
                       <td>
@@ -866,6 +923,11 @@ const toggleLanguage = () => {
                             const inputVal = e.target.value.replace(/[^0-9.]/g, '');
                             SsetSocialSecurity(inputVal);
                           } } />
+                          {SSocialSecurity !== '' && (
+                          <>
+                          <div className="inline-alert">
+                              Please select Weekly or Monthly.
+                            </div>
                         <select
                           value={SSocialSecurityFrequency}
                           onChange={(e) => setSSocialSecurityFrequency(e.target.value)}
@@ -875,7 +937,8 @@ const toggleLanguage = () => {
                           </option>
                           <option value="weekly">Weekly</option>
                           <option value="monthly">Monthly</option>
-                        </select>
+                        </select></>
+                          )}
                         </div>
                       </td>
                       <td>
@@ -890,6 +953,11 @@ const toggleLanguage = () => {
                             const inputVal = e.target.value.replace(/[^0-9.]/g, '');
                             SsetCashAid(inputVal);
                           } } />
+                          {SCashAid !== '' && (
+                          <>
+                          <div className="inline-alert">
+                              Please select Weekly or Monthly.
+                            </div>
                         <select
                           value={SCashAidFrequency}
                           onChange={(e) => setSCashAidFrequency(e.target.value)}
@@ -899,7 +967,8 @@ const toggleLanguage = () => {
                           </option>
                           <option value="weekly">Weekly</option>
                           <option value="monthly">Monthly</option>
-                        </select>
+                        </select></>
+                          )}
                         </div>
                       </td>
                       <td>
@@ -914,6 +983,11 @@ const toggleLanguage = () => {
                             const inputVal = e.target.value.replace(/[^0-9.]/g, '');
                             SsetOther(inputVal);
                           } } />
+                          {SOther !== '' && (
+                          <>
+                          <div className="inline-alert">
+                              Please select Weekly or Monthly.
+                            </div>
                         <select
                           value={SOtherFrequency}
                           onChange={(e) => setSOtherFrequency(e.target.value)}
@@ -923,7 +997,8 @@ const toggleLanguage = () => {
                           </option>
                           <option value="weekly">Weekly</option>
                           <option value="monthly">Monthly</option>
-                        </select>
+                        </select></>
+                          )}
                         </div>
                       </td>
                     </tr>
@@ -1063,13 +1138,7 @@ const toggleLanguage = () => {
                               onChange={(e) => PsetIncapacitate(e.target.checked)} />
                               </div>
                           </td>
-                          <td>
-                          <div className='table-element'>
-                          <th className="tableCheckHeader">IEP Preschool Only</th>
-                            <input type="checkbox" checked={PIEPpreschoolOnly}
-                              onChange={(e) => PsetIEPpreschoolOnly(e.target.checked)} />
-                              </div>
-                          </td>
+                          
                         </tr>
                       </tbody>
                     </table>
@@ -1120,13 +1189,7 @@ const toggleLanguage = () => {
                                 </div>
 
                             </td>
-                            <td>
-                            <div className='table-element'>
-                            <th className="tableCheckHeader">IEP Preschool Only</th>
-                              <input type="checkbox" checked={SIEPpreschoolOnly}
-                                onChange={(e) => SsetIEPpreschoolOnly(e.target.checked)} />
-                                </div>
-                            </td>
+                            
                           </tr>
                         </tbody>
                       </table>
@@ -1153,7 +1216,7 @@ const toggleLanguage = () => {
                 {preschoolOnlyChecked && (
                   <div className="table-element">
                     <label htmlFor="part-day-year-checkbox">
-                      I understand this is part day/year
+                      I understand this is 3 hr per day preschool
                     </label>
                     <input
                       type="checkbox"
@@ -1535,7 +1598,11 @@ const toggleLanguage = () => {
                             const inputVal = e.target.value.replace(/[^0-9.]/g, '');
                             PsetWages(inputVal);
                           } } />
-
+                          {Pwages !== '' && (
+                          <>
+                          <div className="inline-alert">
+                            Seleccione Semanal o Mensual.
+                            </div>
                         <select
                           value={PwagesFrequency}
                           onChange={(e) => setPwagesFrequency(e.target.value)}
@@ -1545,7 +1612,8 @@ const toggleLanguage = () => {
                           </option>
                           <option value="weekly">Semanal</option>
                           <option value="monthly">Mensual</option>
-                        </select>
+                        </select></>
+                          )}
                         </div>
 
                       </td>
@@ -1560,6 +1628,11 @@ const toggleLanguage = () => {
                             const inputVal = e.target.value.replace(/[^0-9.]/g, '');
                             PsetChildSupport(inputVal);
                           } } />
+                          {PchildSupport !== '' && (
+                          <>
+                          <div className="inline-alert">
+                            Seleccione Semanal o Mensual.
+                            </div>
                         <select
                           value={PchildSupportFrequency}
                           onChange={(e) => setPchildSupportFrequency(e.target.value)}
@@ -1569,7 +1642,8 @@ const toggleLanguage = () => {
                           </option>
                           <option value="weekly">Semanal</option>
                           <option value="monthly">Mensual</option>
-                        </select>
+                        </select></>
+                          )}
                         </div>
                       </td>
                       <td>
@@ -1583,6 +1657,11 @@ const toggleLanguage = () => {
                             const inputVal = e.target.value.replace(/[^0-9.]/g, '');
                             PsetAlimony(inputVal);
                           } } />
+                          {PAlimony !== '' && (
+                          <>
+                          <div className="inline-alert">
+                            Seleccione Semanal o Mensual.
+                            </div>
                         <select
                           value={PAlimonyFrequency}
                           onChange={(e) => setPAlimonyFrequency(e.target.value)}
@@ -1592,7 +1671,8 @@ const toggleLanguage = () => {
                           </option>
                           <option value="weekly">Semanal</option>
                           <option value="monthly">Mensual</option>
-                        </select>
+                        </select></>
+                          )}
                         </div>
                       </td>
                       <td>
@@ -1606,6 +1686,11 @@ const toggleLanguage = () => {
                             const inputVal = e.target.value.replace(/[^0-9.]/g, '');
                             PsetSocialSecurity(inputVal);
                           } } />
+                          {PSocialSecurity !== '' && (
+                          <>
+                          <div className="inline-alert">
+                            Seleccione Semanal o Mensual.
+                            </div>
                         <select
                           value={PSocialSecurityFrequency}
                           onChange={(e) => setPSocialSecurityFrequency(e.target.value)}
@@ -1615,7 +1700,8 @@ const toggleLanguage = () => {
                           </option>
                           <option value="weekly">Semanal</option>
                           <option value="monthly">Mensual</option>
-                        </select>
+                        </select></>
+                          )}
                         </div>
                       </td>
                       <td>
@@ -1629,6 +1715,11 @@ const toggleLanguage = () => {
                             const inputVal = e.target.value.replace(/[^0-9.]/g, '');
                             PsetCashAid(inputVal);
                           } } />
+                          {PCashAid !== '' && (
+                          <>
+                          <div className="inline-alert">
+                            Seleccione Semanal o Mensual.
+                            </div>
                         <select
                           value={PCashAidFrequency}
                           onChange={(e) => setPCashAidFrequency(e.target.value)}
@@ -1638,7 +1729,8 @@ const toggleLanguage = () => {
                           </option>
                           <option value="weekly">Semanal</option>
                           <option value="monthly">Mensual</option>
-                        </select>
+                        </select></>
+                          )}
                         </div>
                       </td>
                       <td>
@@ -1652,6 +1744,11 @@ const toggleLanguage = () => {
                             const inputVal = e.target.value.replace(/[^0-9.]/g, '');
                             PsetOther(inputVal);
                           } } />
+                          {POther !== '' && (
+                          <>
+                          <div className="inline-alert">
+                            Seleccione Semanal o Mensual.
+                            </div>
                         <select
                           value={POtherFrequency}
                           onChange={(e) => setPOtherFrequency(e.target.value)}
@@ -1661,7 +1758,8 @@ const toggleLanguage = () => {
                           </option>
                           <option value="weekly">Semanal</option>
                           <option value="monthly">Mensual</option>
-                        </select>
+                        </select></>
+                          )}
                         </div>
 
                       </td>
@@ -1687,6 +1785,11 @@ const toggleLanguage = () => {
                             const inputVal = e.target.value.replace(/[^0-9.]/g, '');
                             SsetWages(inputVal);
                           } } />
+                          {Swages !== '' && (
+                          <>
+                          <div className="inline-alert">
+                            Seleccione Semanal o Mensual.
+                            </div>
 
                         <select
                           value={SwagesFrequency}
@@ -1697,7 +1800,8 @@ const toggleLanguage = () => {
                           </option>
                           <option value="weekly">Semanal</option>
                           <option value="monthly">Mensual</option>
-                        </select>
+                        </select></>
+                          )}
                         </div>
                       </td>
                       <td>
@@ -1711,6 +1815,11 @@ const toggleLanguage = () => {
                             const inputVal = e.target.value.replace(/[^0-9.]/g, '');
                             SsetChildSupport(inputVal);
                           } } />
+                          {SchildSupport !== '' && (
+                          <>
+                          <div className="inline-alert">
+                            Seleccione Semanal o Mensual.
+                            </div>
                         <select
                           value={SchildSupportFrequency}
                           onChange={(e) => setSchildSupportFrequency(e.target.value)}
@@ -1720,7 +1829,8 @@ const toggleLanguage = () => {
                           </option>
                           <option value="weekly">Semanal</option>
                           <option value="monthly">Mensual</option>
-                        </select>
+                        </select></>
+                          )}
                         </div>
                       </td>
                       <td>
@@ -1734,6 +1844,11 @@ const toggleLanguage = () => {
                             const inputVal = e.target.value.replace(/[^0-9.]/g, '');
                             SsetAlimony(inputVal);
                           } } />
+                          {SAlimony !== '' && (
+                          <>
+                          <div className="inline-alert">
+                            Seleccione Semanal o Mensual.
+                            </div>
                         <select
                           value={SAlimonyFrequency}
                           onChange={(e) => setSAlimonyFrequency(e.target.value)}
@@ -1743,7 +1858,8 @@ const toggleLanguage = () => {
                           </option>
                           <option value="weekly">Semanal</option>
                           <option value="monthly">Mensual</option>
-                        </select>
+                        </select></>
+                          )}
                         </div>
                       </td>
                       <td>
@@ -1757,6 +1873,11 @@ const toggleLanguage = () => {
                             const inputVal = e.target.value.replace(/[^0-9.]/g, '');
                             SsetSocialSecurity(inputVal);
                           } } />
+                          {SSocialSecurity !== '' && (
+                          <>
+                          <div className="inline-alert">
+                            Seleccione Semanal o Mensual.
+                            </div>
                         <select
                           value={SSocialSecurityFrequency}
                           onChange={(e) => setSSocialSecurityFrequency(e.target.value)}
@@ -1766,7 +1887,8 @@ const toggleLanguage = () => {
                           </option>
                           <option value="weekly">Semanal</option>
                           <option value="monthly">Mensual</option>
-                        </select>
+                        </select></>
+                          )}
                         </div>
                       </td>
                       <td>
@@ -1780,6 +1902,11 @@ const toggleLanguage = () => {
                             const inputVal = e.target.value.replace(/[^0-9.]/g, '');
                             SsetCashAid(inputVal);
                           } } />
+                          {SCashAid !== '' && (
+                          <>
+                          <div className="inline-alert">
+                            Seleccione Semanal o Mensual.
+                            </div>
                         <select
                           value={SCashAidFrequency}
                           onChange={(e) => setSCashAidFrequency(e.target.value)}
@@ -1789,7 +1916,8 @@ const toggleLanguage = () => {
                           </option>
                           <option value="weekly">Semanal</option>
                           <option value="monthly">Mensual</option>
-                        </select>
+                        </select></>
+                          )}
                         </div>
                       </td>
                       <td>
@@ -1803,6 +1931,11 @@ const toggleLanguage = () => {
                             const inputVal = e.target.value.replace(/[^0-9.]/g, '');
                             SsetOther(inputVal);
                           } } />
+                          {SOther !== '' && (
+                          <>
+                          <div className="inline-alert">
+                            Seleccione Semanal o Mensual.
+                            </div>
                         <select
                           value={SOtherFrequency}
                           onChange={(e) => setSOtherFrequency(e.target.value)}
@@ -1812,7 +1945,8 @@ const toggleLanguage = () => {
                           </option>
                           <option value="weekly">Semanal</option>
                           <option value="monthly">Mensual</option>
-                        </select>
+                        </select></>
+                          )}
                         </div>
                       </td>
                     </tr>
@@ -1945,13 +2079,7 @@ const toggleLanguage = () => {
                               onChange={(e) => PsetIncapacitate(e.target.checked)} />
                               </div>
                           </td>
-                          <td>
-                          <div className='table-element'>
-                          <th className="tableCheckHeader">IEP Solo Preescolar</th>
-                            <input type="checkbox" checked={PIEPpreschoolOnly}
-                              onChange={(e) => PsetIEPpreschoolOnly(e.target.checked)} />
-                              </div>
-                          </td>
+                          
                         </tr>
                       </tbody>
                     </table>
@@ -2002,13 +2130,7 @@ const toggleLanguage = () => {
                                 </div>
 
                             </td>
-                            <td>
-                            <div className='table-element'>
-                            <th className="tableCheckHeader">IEP Solo Preescolar</th>
-                              <input type="checkbox" checked={SIEPpreschoolOnly}
-                                onChange={(e) => SsetIEPpreschoolOnly(e.target.checked)} />
-                                </div>
-                            </td>
+                            
                           </tr>
                         </tbody>
                       </table>
@@ -2029,7 +2151,7 @@ const toggleLanguage = () => {
                 {preschoolOnlyChecked && (
                   <div className="table-element">
                     <label htmlFor="part-day-year-checkbox">
-                    Entiendo que esto es de medio día/año
+                    Entiendo que esto es 3 horas por día en preescolar                
                     </label>
                     <input
                       type="checkbox"

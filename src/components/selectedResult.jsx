@@ -1008,7 +1008,7 @@ const submitForm = async (e) => {
                 </td>
               <td>
               <div className='table-element'>
-              <th className="tableCheckHeader">Looking for Care</th>
+              <th className="tableCheckHeader">Looking for Work</th>
                 <input type="checkbox" checked={formData.PlookingForWorking}
                 onChange={(e) => setFormData({...formData, PlookingForWorking: e.target.checked})}/>
                 </div>
@@ -1034,13 +1034,7 @@ const submitForm = async (e) => {
                 onChange={(e) => setFormData({...formData, PsetIncapacitate: e.target.checked})}/>
                 </div>
                 </td>
-              <td>
-              <div className='table-element'>
-              <th className="tableCheckHeader">IEP Preschool Only</th>
-                <input type="checkbox" checked={formData.PIEPpreschoolOnly}
-                onChange={(e) => setFormData({...formData, PIEPpreschoolOnly: e.target.checked})}/>
-                </div>
-                </td>
+              
             </tr>
           </tbody>
         </table>
@@ -1061,7 +1055,7 @@ const submitForm = async (e) => {
                 </td>
               <td>
               <div className='table-element'>
-              <th className="tableCheckHeader">Looking for Care</th>
+              <th className="tableCheckHeader">Looking for Work</th>
                 <input type="checkbox" checked={formData.SlookingForWorking}
                 onChange={(e) => setFormData({...formData, SlookingForWorking: e.target.checked})}/>
                 </div>
@@ -1087,13 +1081,7 @@ const submitForm = async (e) => {
                 onChange={(e) => setFormData({...formData, SsetIncapacitate: e.target.checked})}/>
                 </div>
                 </td>
-              <td>
-              <div className='table-element'>
-              <th className="tableCheckHeader">IEP Preschool Only</th>
-                <input type="checkbox" checked={formData.SIEPpreschoolOnly}
-                onChange={(e) => setFormData({...formData, SIEPpreschoolOnly: e.target.checked})}/>
-                </div>
-                </td>
+              
             </tr>
           </tbody>
         </table>
@@ -1117,7 +1105,7 @@ const submitForm = async (e) => {
           {formData.preschoolOnlyChecked && (
                   <div className="table-element">
                     <label htmlFor="part-day-year-checkbox">
-                      I understand this is part day/year
+                    I understand this is 3 hr per day preschool
                     </label>
                     <input
                       type="checkbox"

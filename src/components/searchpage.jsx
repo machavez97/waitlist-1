@@ -21,8 +21,8 @@ const Search = () => {
     const [isFullTimeChecked, setIsFullTimeChecked] = useState(false);
     const [isPartTimeChecked, setIsPartTimeChecked] = useState(false);
     const [startDate, setStartDate] = useState('');
-  const [endDate, setEndDate] = useState('');
-  const [iepIfspChecked, setIepIfspChecked] = useState(false);
+    const [endDate, setEndDate] = useState('');
+    const [iepIfspChecked, setIepIfspChecked] = useState(false);
 
     
     const navigate = useNavigate();
@@ -47,7 +47,7 @@ const Search = () => {
     const handleSearch = async (e) => {
       e.preventDefault();
       setSearchResults([]);
-      if (!searchQuery && !isFullTimeChecked && !isPartTimeChecked && !searchRank && !startDate && !endDate) {
+      if (!searchQuery && !isFullTimeChecked && !isPartTimeChecked && !searchRank && !startDate && !endDate && !iepIfspChecked) {
         const q = query(collection(db, 'Applicants'), 
         
         );
@@ -67,7 +67,7 @@ const Search = () => {
 
     }
       
-      else if (searchQuery !== '' && !isFullTimeChecked && !isPartTimeChecked && !searchRank && !startDate && !endDate) {
+      else if (searchQuery !== '' && !isFullTimeChecked && !isPartTimeChecked && !searchRank && !startDate && !endDate && !iepIfspChecked) {
         const q = query(collection(db, 'Applicants'), 
         
         or(
@@ -91,7 +91,7 @@ const Search = () => {
         setChildrenResults(fetchedChildren)
 
     }
-      else if (searchQuery !== '' && !isFullTimeChecked && !isPartTimeChecked && searchRank && !startDate && !endDate) {
+      else if (searchQuery !== '' && !isFullTimeChecked && !isPartTimeChecked && searchRank && !startDate && !endDate && !iepIfspChecked) {
         const q = query(collection(db, 'Applicants'), and(
           where('rank', '==', searchRank),
           or(
@@ -112,7 +112,7 @@ const Search = () => {
         const fetchedChildren = await fetchChildrenForAllParents(fetchedDocuments)
         setChildrenResults(fetchedChildren)
       }
-      else if (searchQuery !== '' && isFullTimeChecked && !isPartTimeChecked && !searchRank && !startDate && !endDate) {
+      else if (searchQuery !== '' && isFullTimeChecked && !isPartTimeChecked && !searchRank && !startDate && !endDate && !iepIfspChecked) {
         const q = query(collection(db, 'Applicants'), and(
         where('fullDayCareChecked', '==', isFullTimeChecked),
         or(
@@ -134,7 +134,7 @@ const Search = () => {
         setChildrenResults(fetchedChildren) 
       }
 
-      else if (searchQuery !== '' && !isFullTimeChecked && isPartTimeChecked && !searchRank && !startDate && !endDate) {
+      else if (searchQuery !== '' && !isFullTimeChecked && isPartTimeChecked && !searchRank && !startDate && !endDate && !iepIfspChecked) {
         const q = query(collection(db, 'Applicants'), and( 
         where('preschoolOnlyChecked', '==', isPartTimeChecked),
         or(
@@ -155,7 +155,7 @@ const Search = () => {
         const fetchedChildren = await fetchChildrenForAllParents(fetchedDocuments)
         setChildrenResults(fetchedChildren)
       }
-      else if (searchQuery !== '' && isFullTimeChecked && !isPartTimeChecked && searchRank && !startDate && !endDate) {
+      else if (searchQuery !== '' && isFullTimeChecked && !isPartTimeChecked && searchRank && !startDate && !endDate && !iepIfspChecked) {
 
         const q = query(collection(db, 'Applicants'), and(
         
@@ -179,7 +179,7 @@ const Search = () => {
         const fetchedChildren = await fetchChildrenForAllParents(fetchedDocuments)
         setChildrenResults(fetchedChildren)
       }
-      else if (searchQuery !== '' && !isFullTimeChecked && isPartTimeChecked && searchRank && !startDate && !endDate) {
+      else if (searchQuery !== '' && !isFullTimeChecked && isPartTimeChecked && searchRank && !startDate && !endDate && !iepIfspChecked) {
 
         const q = query(collection(db, 'Applicants'), and(
         
@@ -204,7 +204,7 @@ const Search = () => {
         setChildrenResults(fetchedChildren)
       }
       
-      else if (!searchQuery && searchRank && isPartTimeChecked && !startDate && !endDate) {
+      else if (!searchQuery && searchRank && isPartTimeChecked && !startDate && !endDate && !iepIfspChecked) {
         const q = query(collection(db, 'Applicants'), and( 
         where('preschoolOnlyChecked', '==', isPartTimeChecked),
         where('rank', '==', searchRank),
@@ -220,7 +220,7 @@ const Search = () => {
         const fetchedChildren = await fetchChildrenForAllParents(fetchedDocuments)
         setChildrenResults(fetchedChildren)
       }
-      else if (!searchQuery && searchRank && isFullTimeChecked && !startDate && !endDate) {
+      else if (!searchQuery && searchRank && isFullTimeChecked && !startDate && !endDate && !iepIfspChecked) {
         const q = query(collection(db, 'Applicants'), and( 
           where('fullDayCareChecked', '==', isFullTimeChecked),
           where('rank', '==', searchRank),
@@ -237,7 +237,7 @@ const Search = () => {
         setChildrenResults(fetchedChildren)
       }
 
-      else if (!searchQuery && !searchRank && isFullTimeChecked) {
+      else if (!searchQuery && !searchRank && isFullTimeChecked && !iepIfspChecked) {
         const q = query(collection(db, 'Applicants'), 
         where('fullDayCareChecked', '==', isFullTimeChecked),
         
@@ -253,7 +253,7 @@ const Search = () => {
         const fetchedChildren = await fetchChildrenForAllParents(fetchedDocuments)
         setChildrenResults(fetchedChildren)
       }
-      else if (!searchQuery && !searchRank && isPartTimeChecked) {
+      else if (!searchQuery && !searchRank && isPartTimeChecked && !iepIfspChecked) {
         const q = query(collection(db, 'Applicants'), 
         where('preschoolOnlyChecked', '==', isPartTimeChecked),
         
@@ -270,7 +270,9 @@ const Search = () => {
         setChildrenResults(fetchedChildren)
       }
 
-      else if (!searchQuery && searchRank && !isFullTimeChecked && !isPartTimeChecked ) {
+      else if (!searchQuery && searchRank && !isFullTimeChecked && !isPartTimeChecked && !iepIfspChecked && !startDate && !iepIfspChecked) {
+        
+
         const q = query(collection(db, 'Applicants'), 
         where('rank', '==', searchRank),
         );
@@ -396,7 +398,7 @@ const Search = () => {
       }
 
         // If iepIfspChecked is true, filter documents based on IEP/IFSP
-        else if (iepIfspChecked) {
+        else if (iepIfspChecked && !searchQuery && !isFullTimeChecked && !isPartTimeChecked && !searchRank && !startDate && !endDate) {
           // Fetch all parent documents
           const q = collection(db, 'Applicants');
           const querySnapshot = await getDocs(q);
@@ -415,6 +417,7 @@ const Search = () => {
       // If iepIfspChecked is true, filter documents based on IEP/IFSP
       else if (iepIfspChecked && searchQuery !== '') {
         // Fetch all parent documents
+
         const q = query(collection(db, 'Applicants'), 
         
         or(
@@ -523,7 +526,9 @@ const fetchChildrenForAllParents = async (documentsArray) => {
 const searchChildrenWithIEP = async (docs) => {
   const filteredDocuments = [];
 
+
   for (const document of docs) {
+
     const parentId = document.id;
     const parentData = document.data;
     const childrenRef = collection(db, 'Applicants', parentId, 'children');
@@ -736,11 +741,12 @@ const exportToCSV = () => {
       <div>
         <input
           type="checkbox"
-          id="preschool-only"
+          id="IEP"
           checked={iepIfspChecked}
-          onChange={(e) => setIepIfspChecked(e.target.checked)}
+          onChange={(e) => {
+            setIepIfspChecked(e.target.checked)}}
         />
-        <label htmlFor="preschool-only">IEP/IFSP</label>
+        <label htmlFor="IEP">IEP/IFSP</label>
       </div>
             <div>
             <button className="submit-button" type="submit" onClick={handleSearch}>Search</button>
