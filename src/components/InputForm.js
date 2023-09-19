@@ -1203,7 +1203,7 @@ const toggleLanguage = () => {
 
                 <div>
                 <div className='table-element'>
-                <label htmlFor="preschool-only">Preschool Only</label>
+                <label htmlFor="preschool-only">Morning Preschool Only</label>
 
                   <input
                     type="checkbox"
@@ -2140,7 +2140,7 @@ const toggleLanguage = () => {
                 )}
 
                 <div className='table-element'>
-                <label htmlFor="preschool-only">Solomente Preescolar</label>
+                <label htmlFor="preschool-only">Preescolar Solo por la Mañana</label>
                   <input
                     type="checkbox"
                     id="preschool-only"

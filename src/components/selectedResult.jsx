@@ -1093,7 +1093,7 @@ const submitForm = async (e) => {
       <div>
       <div className='table-element'>
 
-      <label htmlFor="preschool-only">Preschool Only</label>
+      <label htmlFor="preschool-only">Morning Preschool Only</label>
 
         <input
           type="checkbox"
